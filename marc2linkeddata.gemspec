@@ -17,6 +17,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'marc'
   s.add_dependency 'linkeddata'
+  s.add_dependency 'hiredis'
+  s.add_dependency 'redis'
 
   s.add_development_dependency 'pry'
   s.add_development_dependency 'pry-doc'
