@@ -12,10 +12,12 @@ require_relative 'viaf'
 class ParseMarcAuthority
 
   # TODO: provide iterator pattern on an entire file of records.
+  # @leader = ParseMarcAuthority::parse_leader(marc_file)
+  # raw = marc_file.read(@leader[:length])
+  # @record = MARC::Reader.decode(raw)
+
+
   def initialize(record)
-    # @leader = ParseMarcAuthority::parse_leader(marc_file)
-    # raw = marc_file.read(@leader[:length])
-    # @record = MARC::Reader.decode(raw)
     @record = record
   end
 

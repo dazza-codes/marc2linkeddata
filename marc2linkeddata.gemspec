@@ -15,8 +15,10 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 1.3.6'
   s.required_ruby_version = '>= 2.1.0'
 
-  s.add_dependency 'marc'
+  s.add_dependency 'addressable'
   s.add_dependency 'linkeddata'
+  s.add_dependency 'marc'
+
   s.add_dependency 'hiredis'
   s.add_dependency 'redis'
 

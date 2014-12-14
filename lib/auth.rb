@@ -1,44 +1,48 @@
 
 require 'pry'
 require 'linkeddata'
+require "addressable/uri"
 require_relative 'boot'
 
 class Auth
 
+
   attr_accessor :iri
 
   def initialize(iri=nil)
-    if iri.instance_of? NilClass
-      @iri = nil
-    elsif iri.instance_of? String
-      if iri == ''
-        @iri = nil
-      else
-        @iri = URI.parse(iri) rescue nil
-      end
-    elsif iri.instance_of? URI::Generic
-      # don't accept this input
-      @iri = nil
-    elsif iri.instance_of? URI::HTTP
-      @iri = iri
-    elsif iri.instance_of? RDF::URI
-      # coerce it to URI::HTTP
-      @iri = URI.parse(iri.to_s) rescue nil
+    if iri =~ /\A#{URI::regexp}\z/
+      @iri = Addressable::URI.parse(iri.to_s) rescue nil
     else
       @iri = nil
     end
+    # Strip off any trailing '/'
     if @iri.to_s.end_with? '/'
       iri = @iri.to_s.gsub(/\/$/,'')
-      @iri = URI.parse(iri) rescue nil
+      @iri = Addressable::URI.parse(iri.to_s) rescue nil
     end
   end
 
-  def rdf_valid?
-    # TODO: convert this to an RDF.rb graph query
+  def id
     return nil if @iri.nil?
-    return @rdf_valid unless @rdf_valid.nil?
-    iris = rdf.subjects.select {|s| s if s == @iri.to_s }
-    @rdf_valid = iris.to_set.length == 1
+    @id ||= @iri.basename
+  end
+
+  def rdf
+    return nil if @iri.nil?
+    @rdf ||= RDF::Graph.load(@iri)
+  end
+
+  def rdf_valid?
+    return nil if @iri.nil?
+    @rdf_valid ||= iri_types.length > 0
+  end
+
+  def iri_types
+    @iri_types ||= rdf.query(SPARQL.parse("SELECT * WHERE { <#{@iri}> a ?o }"))
+  end
+
+  def iri_authority?
+    iri_types.filter {|s| s[:o] == "http://www.loc.gov/mads/rdf/v1#Authority" }.length > 0
   end
 
   def rdf_find_object(id)
@@ -76,6 +80,12 @@ class Auth
           url = res['location']
           puts "SUCCESS: #{@iri}\t-> #{url}"
           return url
+        when '302','303'
+          #302 Moved Temporarily
+          #303 See Other
+          # Use the current URL, most get requests will follow a 302 or 303
+          puts "SUCCESS: #{@iri}\t-> #{url}"
+          return url
         when '404'
           puts "FAILURE: #{@iri}\t// #{url}"
           return nil
@@ -89,6 +99,19 @@ class Auth
     end
   end
 
-end
+  def same_as
+    same_as_q = 'http://sameas.org/rdf?uri=' + URI.encode(@iri.to_s)
+    @same_as ||= RDF::Graph.load(same_as_q)
+  end
 
+  def same_as_array
+    @same_as_solutions ||= same_as.query(same_as_query)
+    @same_as_solutions.collect {|s| s[:o] }
+  end
+
+  def same_as_query
+    @same_as_query ||= SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://www.w3.org/2002/07/owl#sameAs> ?o }")
+  end
+
+end
 

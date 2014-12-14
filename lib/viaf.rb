@@ -38,8 +38,9 @@ if __FILE__ == $0
     viaf =  Viaf.new iri
     raise "Invalid ID" unless viaf.id == '7466303'
     raise "Failed to get RDF" if viaf.rdf.nil?
-    raise "Invalid RDF" unless viaf.rdf_valid?
+    raise "Invalid RDF" unless viaf.rdf_valid?  rescue binding.pry
     raise "Failed to get ISNI" if viaf.get_isni != isni_iri
+    raise "Failed to get sameAs" if viaf.same_as_array.empty?
   end
   # invalid data
   viaf =  Viaf.new 'This is not a VIAF IRI'

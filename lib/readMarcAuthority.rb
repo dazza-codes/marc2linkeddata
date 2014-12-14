@@ -4,6 +4,24 @@
 # http://www.loc.gov/marc/authority/ecadlist.html
 # http://www.loc.gov/marc/authority/ecadhome.html
 
+# Ruby and RDF
+# http://www.jenitennison.com/blog/node/152
+# 4s-backend-setup ld4l
+# 4s-backend ld4l
+# 4s-httpd -p 9000 ld4l  # sparql server
+
+# add to /etc/4store.conf
+#[ld4l]
+#    port = 9000             # HTTP port number (default is 8080)
+#    default-graph = true    # default graph = union of named graphs (default)
+#    soft-limit = -1         # disable soft limit
+#    opt-level = 3           # enable all optimisations (default)
+#    discovery = sole
+# start 4s-boss
+#4s-boss
+#4s-admin list-stores
+
+
 require 'json'
 require 'linkeddata'
 require 'marc'
