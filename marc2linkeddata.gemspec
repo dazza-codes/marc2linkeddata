@@ -5,12 +5,14 @@ $:.unshift lib unless $:.include?(lib)
 Gem::Specification.new do |s|
   s.name        = 'marc2linkeddata'
   s.version     = '0.0.1'
+  s.licenses    = ['Apache-2.0']
 
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Darren Weber',]
   s.email       = ['dlweber@stanford.edu']
   s.summary     = 'Convert Marc21 records to linked data, for use in SUL/DLSS projects'
-  s.description = 'A SUL script to facilitate translation of Marc21 records to linked open data'
+  s.description = 'Utilities for translation of Marc21 records to linked open data.'
+  s.homepage    = 'https://github.com/darrenleeweber/marc2linkeddata'
 
   s.required_rubygems_version = '>= 1.3.6'
   s.required_ruby_version = '>= 2.1.0'
