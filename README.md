@@ -7,14 +7,23 @@ Utilities for translating MARC21 into linked data.
 Install
 
     gem install marc2linkeddata
+    # when a gem is published
 
 Require
 
     require 'marc2linkeddata'
+    # details to be determined
 
 Clone
 
     git clone git@github.com:darrenleeweber/marc2linkeddata.git
+
+Script
+
+    cd marc2linkeddata
+    ./bin/setup.sh # bundle
+    bundle exec ruby ./lib/readMarcAuthority.rb
+    # ./lib/readMarcAuthority.rb authfile1.mrc [ authfile2.mrc .. authfileN.mrc ]
 
 
 # 4store
