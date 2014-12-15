@@ -32,12 +32,13 @@ require_relative 'boot'
 require_relative 'parseMarcAuthority'
 
 # TODO: enable the redis cache for PROD
-USE_CACHE = false # use redis in prod, not in dev
-if USE_CACHE
+USE_REDIS = false # use redis in prod, not in dev
+if USE_REDIS
   # https://github.com/redis/redis-rb
   require 'hiredis'
   require 'redis'
   @redis = Redis.new # default host config
+  @redis.ping
   #redis = Redis.new(:host => "10.0.1.1", :port => 6380, :db => 15)
   # storing objects in redis:
   #redis.set "foo", [1, 2, 3].to_json
@@ -59,10 +60,10 @@ def marc2ld4l(marc_auth_filepath)
         auth = ParseMarcAuthority.new(record)
         auth_id = "sul_auth:#{auth.get_id}"
         triples = nil
-        triples = @redis.get(auth_id) if USE_CACHE
+        triples = @redis.get(auth_id) if USE_REDIS
         triples = auth.to_ttl if triples.nil?
         ld4l_file.write(triples)
-        @redis.set(auth_id, triples) if USE_CACHE
+        @redis.set(auth_id, triples) if USE_REDIS
       end
     rescue => e
       puts
