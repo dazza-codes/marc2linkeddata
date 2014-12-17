@@ -61,8 +61,8 @@ class ParseMarcAuthority
     end
   end
 
-  def get_iri4sul
-    "#{PREFIX_SUL_AUTH}#{get_id}"
+  def get_iri4lib
+    "#{PREFIX_LIB_AUTH}#{get_id}"
   end
 
   def get_iri4viaf
@@ -189,7 +189,7 @@ class ParseMarcAuthority
   def to_ttl
     # http://www.loc.gov/marc/authority/adintro.html
     triples = []
-    sul = get_iri4sul.gsub(PREFIX_SUL_AUTH, 'sul_auth:')
+    lib = get_iri4lib.gsub(PREFIX_LIB_AUTH, 'lib_auth:')
     # Try to find LOC, VIAF, and ISNI IRIs in the MARC record
     loc = Loc.new get_iri4loc
     isni_iri = get_iri4isni
@@ -250,14 +250,14 @@ class ParseMarcAuthority
       name = ''
       if loc.person?
         name = parse_100
-        triples << "#{sul} a foaf:Person"
+        triples << "#{lib} a foaf:Person"
       end
       if loc.corporation?
         name = parse_110
-        triples << "#{sul} a foaf:Organization"
+        triples << "#{lib} a foaf:Organization"
       end
       if name == ''
-        triples << "#{sul} a foaf:Agent"  # Fallback
+        triples << "#{lib} a foaf:Agent"  # Fallback
         # TODO: find out what type this is.
         #binding.pry
       else
@@ -288,7 +288,7 @@ class ParseMarcAuthority
       # X82 - chronological subdivision terms
       # X85 - form subdivision terms
       #
-      #triples << "#{sul} a foaf:Person" # TODO: what type is this?
+      #triples << "#{lib} a foaf:Person" # TODO: what type is this?
       #triples << "; owl:sameAs #{loc_iri.gsub(PREFIX_LOC_SUBJECTS, 'loc_subjects:')}"
     else
       binding.pry if ENV['MARC_DEBUG']
