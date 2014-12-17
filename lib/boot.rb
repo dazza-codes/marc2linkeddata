@@ -1,16 +1,13 @@
 require 'pry'
 require 'pry-doc'
 
+require 'json'
+require 'linkeddata'
+require 'marc'
 
 # TODO: enable ENV config
 # ENV['USE_CACHE']  # use redis, mongo, or triple store
 # ENV['USE_HTTP']   # resolve VIAF or ISNI
-
-
-def http_head_request(url)
-  uri = URI.parse(url)
-  Net::HTTP.start(uri.host, uri.port) {|http| req = Net::HTTP::Head.new(uri); http.request req }
-end
 
 # RDF prefixes
 PREFIX_BF = 'http://bibframe.org/vocab/'
@@ -32,5 +29,10 @@ def write_prefixes(file)
   file.write("@prefix sul_auth: <#{PREFIX_SUL_AUTH}> .\n")
   file.write("@prefix viaf: <#{PREFIX_VIAF}> .\n")
   file.write("\n\n")
+end
+
+def http_head_request(url)
+  uri = URI.parse(url)
+  Net::HTTP.start(uri.host, uri.port) {|http| req = Net::HTTP::Head.new(uri); http.request req }
 end
 

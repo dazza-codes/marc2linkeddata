@@ -199,7 +199,7 @@ class ParseMarcAuthority
     # http://lccn.loc.gov/n79046291
 
     if loc.iri.nil?
-      # Try to determine the LOC IRI
+      # Always try to determine the LOC IRI
       url = nil
       if loc.id =~ /^n/i
         url = "#{PREFIX_LOC_NAMES}#{loc.id.downcase}"
@@ -213,23 +213,29 @@ class ParseMarcAuthority
         case res.code
           when '200'
             loc = Loc.new url
-            puts "DISCOVERED: #{loc.iri}"
           when '301'
             loc = Loc.new res['location']
-            puts "DISCOVERED: #{loc.iri}"
+          when '302','303'
+            #302 Moved Temporarily
+            #303 See Other
+            # Use the current URL, most get requests will follow a 302 or 303
+            loc = Loc.new url
         end
+        puts "DISCOVERED: #{loc.iri}" unless loc.iri.nil?
       end
     end
+
     unless loc.iri.nil?
-      if viaf.iri.nil?
+      if viaf.iri.nil? #&& ENV['MARC_GET_VIAF']
         # Try to get VIAF via LOC.
         viaf = Viaf.new loc.get_viaf
       end
-      if isni_iri.nil?
+      if isni_iri.nil? #&& ENV['MARC_GET_ISNI']
         # Try to get ISNI via VIAF.
         isni_iri = viaf.get_isni
       end
     end
+
 
     if loc.iri.to_s =~ /name/
       # The MARC data differentiates them according to the tag number.
@@ -284,11 +290,10 @@ class ParseMarcAuthority
       #
       #triples << "#{sul} a foaf:Person" # TODO: what type is this?
       #triples << "; owl:sameAs #{loc_iri.gsub(PREFIX_LOC_SUBJECTS, 'loc_subjects:')}"
-    elsif loc.iri.nil?
-      binding.pry # wtf
     else
-      binding.pry # wtf
+      binding.pry if ENV['MARC_DEBUG']
     end
+    puts "Extracted #{loc.id}" if ENV['MARC_DEBUG']
     # Interesting case: a person was an Organisation - President of Chile.
     #binding.pry if viaf_iri =~ /80486556/
     triples.join

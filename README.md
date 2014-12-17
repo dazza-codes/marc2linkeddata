@@ -4,6 +4,11 @@ marc2linkeddata
 
 Utilities for translating MARC21 into linked data.
 
+Optional Dependencies
+
+  - http://redis.io/
+  - http://4store.org/
+
 Install
 
     gem install marc2linkeddata
@@ -22,16 +27,36 @@ Script
 
     cd marc2linkeddata
     ./bin/setup.sh # bundle
-    bundle exec ruby ./lib/readMarcAuthority.rb
-    # ./lib/readMarcAuthority.rb authfile1.mrc [ authfile2.mrc .. authfileN.mrc ]
+    ./bin/test.sh
 
+    # Translate a MARC21 authority file to a turtle file.
+    # readMarcAuthority.rb authfile1.mrc [ authfile2.mrc .. authfileN.mrc ]
+    bundle exec ./bin/readMarcAuthority.rb data/auth.01.mrc
+
+    # Check the syntax of the resulting turtle file;
+    # see rapper installation notes in 4store section below.
+    rapper -c -i turtle data/auth.01.ttl
+
+# Redis
+
+On Ubuntu, check the system redis is installed and running:
+
+    sudo apt-get install redis-server redis-tools redis-desktop-manager
+    service redis-server status
+    # If necessary:
+    #sudo service redis-server start
+    #sudo service redis-server restart
+
+Useful during development (use at your own risk):
+
+    redis-cli 'FLUSHALL'
 
 # 4store
 
  - http://4store.org/
  - http://4store.org/trac/wiki/Documentation
 
-On Ubuntu, check the system-4store is installed and running:
+On Ubuntu, check the system 4store is installed and running:
 
     # installation
     sudo apt-get install 4store lib4store-dev lib4store0
@@ -40,7 +65,9 @@ On Ubuntu, check the system-4store is installed and running:
     sudo apt-get install librasqal3 librasqal3-dev rasqal-utils
     # service admin
     sudo service 4store status
-    sudo service 4store start # or restart
+    # If necessary:
+    #sudo service 4store start
+    #sudo service 4store restart
 
 /etc/4store.conf should contain:
 
