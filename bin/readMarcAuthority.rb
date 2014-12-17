@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/boot'
-require_relative '../lib/parseMarcAuthority'
+require_relative '../lib/marc2linkeddata'
 
 REDIS4MARC = ENV['REDIS4MARC']
 REDIS_RO = ENV['REDIS_RO'] || REDIS4MARC
