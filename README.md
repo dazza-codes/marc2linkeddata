@@ -14,27 +14,38 @@ Install
     gem install marc2linkeddata
     # when a gem is published
 
-Require
+Use
 
-    require 'marc2linkeddata'
-    # details to be determined
+- authority files
+
+      require 'marc2linkeddata'
+      marc_filename = 'stf_auth.01.mrc'
+      marc_file = File.open(marc_filename,'r')
+      until marc_file.eof?
+        leader = ParseMarcAuthority::parse_leader(marc_file)
+        if leader[:type] == 'z'
+          raw = marc_file.read(leader[:length])
+          record = MARC::Reader.decode(raw)
+          auth = ParseMarcAuthority.new(record)
+          auth_id = "auth:#{auth.get_id}"
+          triples = auth.to_ttl
+        end
+      end
 
 Clone
 
     git clone git@github.com:darrenleeweber/marc2linkeddata.git
+    cd marc2linkeddata
+    ./bin/setup.sh
+    ./bin/test.sh
 
 Script
 
-    cd marc2linkeddata
-    ./bin/setup.sh # bundle
-    ./bin/test.sh
-
     # Translate a MARC21 authority file to a turtle file.
-    # readMarcAuthority.rb authfile1.mrc [ authfile2.mrc .. authfileN.mrc ]
+    # readMarcAuthority.rb [ authfile1.mrc .. authfileN.mrc ]
     bundle exec ./bin/readMarcAuthority.rb data/auth.01.mrc
 
-    # Check the syntax of the resulting turtle file;
-    # see rapper installation notes in 4store section below.
+    # Check the syntax of the resulting turtle file.
     rapper -c -i turtle data/auth.01.ttl
 
 # Redis
