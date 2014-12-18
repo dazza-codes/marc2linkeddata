@@ -16,21 +16,20 @@ Install
 
 Use
 
-- authority files
-
-      require 'marc2linkeddata'
-      marc_filename = 'stf_auth.01.mrc'
-      marc_file = File.open(marc_filename,'r')
-      until marc_file.eof?
-        leader = ParseMarcAuthority::parse_leader(marc_file)
-        if leader[:type] == 'z'
-          raw = marc_file.read(leader[:length])
-          record = MARC::Reader.decode(raw)
-          auth = ParseMarcAuthority.new(record)
-          auth_id = "auth:#{auth.get_id}"
-          triples = auth.to_ttl
+  - authority files
+        require 'marc2linkeddata'
+        marc_filename = 'stf_auth.01.mrc'
+        marc_file = File.open(marc_filename,'r')
+        until marc_file.eof?
+          leader = ParseMarcAuthority::parse_leader(marc_file)
+          if leader[:type] == 'z'
+            raw = marc_file.read(leader[:length])
+            record = MARC::Reader.decode(raw)
+            auth = ParseMarcAuthority.new(record)
+            auth_id = "auth:#{auth.get_id}"
+            triples = auth.to_ttl
+          end
         end
-      end
 
 Clone
 
@@ -47,6 +46,23 @@ Script
 
     # Check the syntax of the resulting turtle file.
     rapper -c -i turtle data/auth.01.ttl
+
+# License
+
+Copyright 2014 The Board of Trustees of the Leland Stanford Junior University.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
 
 # Redis
 
@@ -112,7 +128,7 @@ See 4store wiki for additional notes on creating databases at
  - http://4store.org/trac/wiki/Documentation
  - http://4store.org/trac/wiki/CreateDatabase
 
-## Useful development commands
+### Useful Development Commands
 
 Preliminaries:
 
