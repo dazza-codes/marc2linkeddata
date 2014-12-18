@@ -154,45 +154,45 @@ Routine commands (use at your own risk):
 
 - Download the LOC data
 
-      cd $YOUR_DOWNLOAD_PATH
-      # when the marc2linkeddata gem is installed,
-      # this script should be available in the path.
-      # The download could take a long time.
-      loc_downloads.sh
+        cd $YOUR_DOWNLOAD_PATH
+        # when the marc2linkeddata gem is installed,
+        # this script should be available in the path.
+        # The download could take a long time.
+        loc_downloads.sh
 
 - Add to /etc/4store.conf:
 
-      [loc]
-            port = 9001
-            unsafe = true
+        [loc]
+              port = 9001
+              unsafe = true
 
 - Create a new KB for the LOC data
 
-      sudo service 4store stop
-      touch /var/log/4store/query-loc.log
-      4s-boss
-      4s-admin create-store loc
-      4s-admin start-stores loc
-      4s-admin list-stores
+        sudo service 4store stop
+        touch /var/log/4store/query-loc.log
+        4s-boss
+        4s-admin create-store loc
+        4s-admin start-stores loc
+        4s-admin list-stores
 
 - Import the LOC data into 4store
 
-      cd $YOUR_DOWNLOAD_PATH
-      # when the marc2linkeddata gem is installed,
-      # this script should be available in the path.
-      # The import could take a long time.
-      loc_4store_import.sh
+        cd $YOUR_DOWNLOAD_PATH
+        # when the marc2linkeddata gem is installed,
+        # this script should be available in the path.
+        # The import could take a long time.
+        loc_4store_import.sh
 
 - Run the 4s-httpd server for the LOC KB
 
-      4s-httpd -D -R -s-1 loc
-      # 4s-httpd locks out other processes, like 4s-size.
-      # 4s-httpd options are read from /etc/4store.conf, plus:
-      # -D = debug info
-      # -R = reasoning (query rewriting)
-      # -s -1 = no timeouts
+        4s-httpd -D -R -s-1 loc
+        # 4s-httpd locks out other processes, like 4s-size.
+        # 4s-httpd options are read from /etc/4store.conf, plus:
+        # -D = debug info
+        # -R = reasoning (query rewriting)
+        # -s -1 = no timeouts
 
 - Configure marc2linkeddata to use this KB
 
-      # TODO, but it should result in something like this:
-      # repo = RDF::FourStore::Repository.new('http://localhost:9001')
+        # TODO, but it should result in something like this:
+        # repo = RDF::FourStore::Repository.new('http://localhost:9001')
