@@ -1,43 +1,30 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/marc2linkeddata'
+require 'marc2linkeddata'
 
-REDIS4MARC = ENV['REDIS4MARC']
-REDIS_RO = ENV['REDIS_RO'] || REDIS4MARC
-REDIS_WO = ENV['REDIS_WO'] || REDIS4MARC
-
-if REDIS4MARC
-  # https://github.com/redis/redis-rb
-  require 'hiredis'
-  require 'redis'
-  @redis = Redis.new # default host config
-  @redis.ping
-  #redis = Redis.new(:host => "10.0.1.1", :port => 6380, :db => 15)
-  # storing objects in redis:
-  #redis.set "foo", [1, 2, 3].to_json
-  #JSON.parse(redis.get("foo"))
-end
+CONFIG = Marc2LinkedData.configuration
+CONFIG.debug = true
 
 def marc2ld(marc_filename)
   ld_filename = marc_filename.gsub('.mrc','.ttl')
   ld_file = File.open(ld_filename,'w')
-  write_prefixes(ld_file)
+  Marc2LinkedData.write_prefixes(ld_file)
   marc_file = File.open(marc_filename,'r')
   until marc_file.eof?
     begin
-      leader = ParseMarcAuthority::parse_leader(marc_file)
+      leader = Marc2LinkedData::ParseMarcAuthority::parse_leader(marc_file)
       if leader[:type] == 'z'
         raw = marc_file.read(leader[:length])
         record = MARC::Reader.decode(raw)
         # ParseMarcAuthority is a lazy parser, so
         # init only assigns record to an instance var.
-        auth = ParseMarcAuthority.new(record)
+        auth = Marc2LinkedData::ParseMarcAuthority.new(record)
         auth_id = "auth:#{auth.get_id}"
         triples = nil
-        triples = @redis.get(auth_id) if REDIS_RO
+        triples = @redis.get(auth_id) if CONFIG.redis_ro
         triples = auth.to_ttl if triples.nil?
         ld_file.write(triples)
-        @redis.set(auth_id, triples) if REDIS_WO
+        @redis.set(auth_id, triples) if  CONFIG.redis_wo
       end
     rescue => e
       puts
@@ -46,7 +33,7 @@ def marc2ld(marc_filename)
       puts e.backtrace
       puts record.to_s
       puts
-      binding.pry if ENV['MARC_DEBUG']
+      binding.pry if CONFIG.debug
     end
   end
   marc_file.close

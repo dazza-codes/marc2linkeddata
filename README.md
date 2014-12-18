@@ -42,8 +42,8 @@ Clone
 Script
 
     # Translate a MARC21 authority file to a turtle file.
-    # readMarcAuthority.rb [ authfile1.mrc .. authfileN.mrc ]
-    bundle exec ./bin/readMarcAuthority.rb data/auth.01.mrc
+    # readMarcAuthority [ authfile1.mrc .. authfileN.mrc ]
+    .binstubs/readMarcAuthority data/auth.01.mrc
 
     # Check the syntax of the resulting turtle file.
     rapper -c -i turtle data/auth.01.ttl

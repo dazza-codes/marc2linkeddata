@@ -2,6 +2,7 @@
 
 set -e
 
+rm -f .binstubs/*
 bundle install --binstubs .binstubs
 bundle package --all --quiet
 
