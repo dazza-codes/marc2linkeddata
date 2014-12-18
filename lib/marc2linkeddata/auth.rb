@@ -34,12 +34,7 @@ module Marc2LinkedData
     end
 
     def iri_types
-      begin
-        return @iri_types unless @iri_types.nil?
-        @iri_types = rdf.query(SPARQL.parse("SELECT * WHERE { <#{@iri}> a ?o }"))
-      rescue
-        []
-      end
+      rdf.query(SPARQL.parse("SELECT * WHERE { <#{@iri}> a ?o }"))
     end
 
     def rdf_find_object(id)
