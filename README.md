@@ -136,6 +136,8 @@ Preliminaries:
     # First shutdown the system 4store service
     sudo service 4store status
     sudo service 4store stop
+    # Optional - switch to manual control of 4store service
+    #sudo echo "manual" > /etc/init/4store.override
     # Start 4s-boss
     4s-boss
 
