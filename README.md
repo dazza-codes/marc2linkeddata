@@ -198,3 +198,8 @@ Routine commands (use at your own risk):
 
         # TODO, but it should result in something like this:
         # repo = RDF::FourStore::Repository.new('http://localhost:9001')
+
+
+
+
+

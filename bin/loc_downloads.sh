@@ -8,16 +8,16 @@ if [ ! -s authoritiesnames_madsrdf.nt ]; then
     mv authoritiesnames.nt.madsrdf authoritiesnames_madsrdf.nt
 fi
 
+wget -c http://id.loc.gov/static/data/authoritiessubjects.nt.madsrdf.zip
+unzip -o authoritiessubjects.nt.madsrdf.zip
+# created subjects-madsrdf-20140306.nt
+
 # Skipping skos because most of the data is in madsrdf.
 #if [ ! -s  authoritiesnames_skos.nt ]; then
 #    wget -c http://id.loc.gov/static/data/authoritiesnames.nt.skos.gz
 #    gunzip authoritiesnames.nt.skos.gz
 #    mv authoritiesnames.nt.skos authoritiesnames_skos.nt
 #fi
-
-wget -c http://id.loc.gov/static/data/authoritiessubjects.nt.madsrdf.zip
-unzip -o authoritiessubjects.nt.madsrdf.zip
-# created subjects-madsrdf-20140306.nt
 
 # Skipping skos because most of the data is in madsrdf.
 #wget -c http://id.loc.gov/static/data/authoritiessubjects.nt.skos.zip

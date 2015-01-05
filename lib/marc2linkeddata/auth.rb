@@ -26,6 +26,9 @@ module Marc2LinkedData
 
     def rdf
       return @rdf unless @rdf.nil?
+      # TODO: try to retrieve the rdf from a local triple store
+      # TODO: if local triple store fails, try remote source(s)
+      # TODO: if retrieved from a remote source, save the rdf to a local triple store
       @rdf = RDF::Graph.load(@iri)
     end
 

@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'addressable'
   s.add_dependency 'linkeddata'
   s.add_dependency 'marc'
+  s.add_dependency 'rdf-4store'
 
   s.add_dependency 'hiredis'
   s.add_dependency 'redis'
