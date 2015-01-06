@@ -168,7 +168,7 @@ module Marc2LinkedData
         name = field.subfields.select {|f| f.code == 'a' }.first.value rescue ''
         name.force_encoding('UTF-8')
       rescue
-        'MISSING_PERSONAL_NAME'
+        'ERROR_PERSONAL_NAME'
       end
     end
 
@@ -183,10 +183,26 @@ module Marc2LinkedData
         name = [a,b,c].flatten.join(' : ')
         name.force_encoding('UTF-8')
       rescue
-        'MISSING_PERSONAL_NAME'
+        'ERROR_CORPORATE_NAME'
       end
     end
 
+    def parse_111
+      # http://www.loc.gov/marc/authority/concise/ad110.html
+      begin
+        # 111 is a meeting name
+        field = @record.fields.select {|f| f if f.tag == '111' }.first
+        a = field.subfields.collect {|f| f.value if f.code == 'a' }.compact rescue []
+        # TODO: incorporate additional subfields?
+        # b = field.subfields.collect {|f| f.value if f.code == 'b' }.compact rescue []
+        # c = field.subfields.collect {|f| f.value if f.code == 'c' }.compact rescue []
+        # name = [a,b,c].flatten.join(' : ')
+        # name.force_encoding('UTF-8')
+        a.force_encoding('UTF-8')
+      rescue
+        'ERROR_MEETING_NAME'
+      end
+    end
     def to_ttl
       # http://www.loc.gov/marc/authority/adintro.html
       triples = []
@@ -195,7 +211,7 @@ module Marc2LinkedData
       # Try to find LOC, VIAF, and ISNI IRIs in the MARC record
       loc = Loc.new get_iri4loc
       isni_iri = get_iri4isni
-      viaf = Viaf.new get_iri4viaf
+      viaf = Viaf.new get_iri4viaf rescue nil
 
       # Get LOC control number and add catalog permalink? e.g.
       # http://lccn.loc.gov/n79046291
@@ -228,13 +244,13 @@ module Marc2LinkedData
       end
 
       unless loc.iri.nil?
-        if viaf.iri.nil? #&& ENV['MARC_GET_VIAF']
+        if viaf.nil? #&& ENV['MARC_GET_VIAF']
           # Try to get VIAF via LOC.
-          viaf = Viaf.new loc.get_viaf
+          viaf = Viaf.new loc.get_viaf rescue nil
         end
         if isni_iri.nil? #&& ENV['MARC_GET_ISNI']
           # Try to get ISNI via VIAF.
-          isni_iri = viaf.get_isni
+          isni_iri = viaf.get_isni rescue nil
         end
       end
 
@@ -250,19 +266,33 @@ module Marc2LinkedData
         #
         puts "LOC URL: #{loc.iri} DEPRECATED" if loc.deprecated?
         name = ''
-        if loc.person?
-          name = parse_100
-          triples << "#{lib} a foaf:Person"
-        end
-        if loc.corporation?
+        if loc.conference?
+          # e.g. http://id.loc.gov/authorities/names/n79044866
+          name = parse_111
+          triples << "#{lib} a <http://schema.org/Event>"
+        elsif loc.corporation?
           name = parse_110
           triples << "#{lib} a foaf:Organization"
-        end
-        if name == ''
-          triples << "#{lib} a foaf:Agent"  # Fallback
-          # TODO: find out what type this is.
-          binding.pry if CONFIG.debug
+        elsif loc.name_title?
+          # TODO: determine what to do with these.
+          # e.g. http://id.loc.gov/authorities/names/n79044934
+        elsif loc.person?
+          name = parse_100
+          triples << "#{lib} a foaf:Person"
+        elsif loc.place?
+          # e.g. http://id.loc.gov/authorities/names/n79045127
+          # TODO: determine what to do with these.
+          binding.pry # create parse_151 ?
+          triples << "#{lib} a <http://schema.org/Place>"
         else
+          # TODO: find out what type this is.
+          if CONFIG.debug
+            binding.pry if CONFIG.debug
+          else
+            triples << "#{lib} a foaf:Agent"  # Fallback
+          end
+        end
+        if name != ''
           name_encoding = URI.encode(name)
           triples << "; foaf:name \"#{name_encoding}\""
         end

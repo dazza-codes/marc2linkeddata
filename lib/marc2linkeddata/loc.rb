@@ -24,26 +24,34 @@ module Marc2LinkedData
     end
 
     def authority?
-      iri_types.filter {|s| s[:o] == "http://www.loc.gov/mads/rdf/v1#Authority" }.length > 0
+      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#Authority' }.length > 0
     end
 
     def deprecated?
-      iri_types.filter {|s| s[:o] == "http://www.loc.gov/mads/rdf/v1#DeprecatedAuthority" }.length > 0
+      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#DeprecatedAuthority' }.length > 0
+    end
+
+    def conference?
+      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#ConferenceName' }.length > 0
     end
 
     def corporation?
-      iri_types.filter {|s| s[:o] == "http://www.loc.gov/mads/rdf/v1#CorporateName" }.length > 0
-      # iri_types.filter {|s| s[:o] =~ /CorporateName/ }.length > 0
-      # obj = rdf_find_object 'CorporateName'
-      # obj.nil? ? false : true
+      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#CorporateName' }.length > 0
+    end
+
+    def name_title?
+      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#NameTitle' }.length > 0
     end
 
     def person?
-      iri_types.filter {|s| s[:o] == "http://www.loc.gov/mads/rdf/v1#PersonalName" }.length > 0
-      # <http://www.loc.gov/mads/rdf/v1#PersonalName>
+      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#PersonalName' }.length > 0
       # iri_types.filter {|s| s[:o] =~ /PersonalName/ }.length > 0
       # obj = rdf_find_object 'PersonalName'
       # obj.nil? ? false : true
+    end
+
+    def place?
+      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#Geographic' }.length > 0
     end
 
     def get_viaf
