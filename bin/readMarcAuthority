@@ -60,9 +60,9 @@ Redis Persistence - based on https://github.com/redis/redis-rb
   Set the REDIS_URL for a custom redis configuration.
   export REDIS_URL="redis://{user}:{password}@{host}:{port}/{db}"
   export REDIS_RO=true   # enable redis read-only  (default = REDIS4MARC || false)
+                         # faster reading of triples from pre-populated redis data
   export REDIS_WO=true   # enable redis write-only (default = REDIS4MARC || false)
-  REDIS_RO enables faster reading of triples from pre-populated redis data.
-  REDIS_WO ensures current data is parsed and populated in redis.
+                         # ensures current data is updated in redis
 
 HELP
 else
