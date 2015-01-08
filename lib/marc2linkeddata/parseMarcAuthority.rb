@@ -6,6 +6,7 @@
 require_relative 'boot'
 require_relative 'loc'
 require_relative 'viaf'
+require_relative 'oclc_identity'
 
 module Marc2LinkedData
 
@@ -52,6 +53,10 @@ module Marc2LinkedData
       end
     end
 
+    def get_iri4lib
+      "#{@config.prefixes['lib']}authority/#{get_id}"
+    end
+
     def get_iri4loc
       begin
         # 920 is the loc IRI,  e.g. http://id.loc.gov/authorities/names/n42000906
@@ -62,8 +67,16 @@ module Marc2LinkedData
       end
     end
 
-    def get_iri4lib
-      "#{@config.prefixes['lib']}authority/#{get_id}"
+    def get_iri4oclc
+      begin
+        # 035 is the OCLC control number
+        field = @record.fields.select {|f| f if f.tag == '035' }.first
+        oclc_cn = field.subfields.collect {|f| f.value if f.code == 'a'}.first
+        oclc_id = /\d+$/.match(oclc_cn).to_s
+        oclc_id.empty? ? nil : "http://worldcat.org/oclc/#{oclc_id}"
+      rescue
+        nil
+      end
     end
 
     def get_iri4viaf
@@ -188,7 +201,7 @@ module Marc2LinkedData
     end
 
     def parse_111
-      # http://www.loc.gov/marc/authority/concise/ad110.html
+      # http://www.loc.gov/marc/authority/concise/ad111.html
       begin
         # 111 is a meeting name
         field = @record.fields.select {|f| f if f.tag == '111' }.first
@@ -203,6 +216,19 @@ module Marc2LinkedData
         'ERROR_MEETING_NAME'
       end
     end
+
+    def parse_151
+      # http://www.loc.gov/marc/authority/concise/ad151.html
+      begin
+        # 151 is a geographic name
+        field = @record.fields.select {|f| f if f.tag == '151' }.first
+        name = field.subfields.collect {|f| f.value if f.code == 'a' }.first rescue ''
+        name.force_encoding('UTF-8')
+      rescue
+        'ERROR_PLACE_NAME'
+      end
+    end
+
     def to_ttl
       # http://www.loc.gov/marc/authority/adintro.html
       triples = []
@@ -210,7 +236,7 @@ module Marc2LinkedData
       lib = get_iri4lib.gsub(@config.prefixes[lib_auth_key], "#{lib_auth_key}:")
       # Try to find LOC, VIAF, and ISNI IRIs in the MARC record
       loc = Loc.new get_iri4loc
-      isni_iri = get_iri4isni
+      isni_iri = get_iri4isni  # TODO: create Isni class
       viaf = Viaf.new get_iri4viaf rescue nil
 
       # Get LOC control number and add catalog permalink? e.g.
@@ -248,12 +274,13 @@ module Marc2LinkedData
           # Try to get VIAF via LOC.
           viaf = Viaf.new loc.get_viaf rescue nil
         end
+      end
+      unless viaf.nil?
         if isni_iri.nil? #&& ENV['MARC_GET_ISNI']
           # Try to get ISNI via VIAF.
           isni_iri = viaf.get_isni rescue nil
         end
       end
-
 
       if loc.iri.to_s =~ /name/
         # The MARC data differentiates them according to the tag number.
@@ -268,36 +295,36 @@ module Marc2LinkedData
         name = ''
         if loc.conference?
           # e.g. http://id.loc.gov/authorities/names/n79044866
-          name = parse_111
+          name = loc.label || parse_111
           triples << "#{lib} a <http://schema.org/Event>"
         elsif loc.corporation?
-          name = parse_110
+          name = loc.label || parse_110
           triples << "#{lib} a foaf:Organization"
         elsif loc.name_title?
-          # TODO: determine what to do with these.
           # e.g. http://id.loc.gov/authorities/names/n79044934
+          # Skipping these, because the person entity should be in
+          # an additional record and we don't want the title content.
+          #binding.pry if CONFIG.debug
+          return ''
         elsif loc.person?
-          name = parse_100
+          name = loc.label || parse_100
           triples << "#{lib} a foaf:Person"
         elsif loc.place?
           # e.g. http://id.loc.gov/authorities/names/n79045127
-          # TODO: determine what to do with these.
-          binding.pry # create parse_151 ?
+          name = loc.label || parse_151
           triples << "#{lib} a <http://schema.org/Place>"
         else
           # TODO: find out what type this is.
-          if CONFIG.debug
-            binding.pry if CONFIG.debug
-          else
-            triples << "#{lib} a foaf:Agent"  # Fallback
-          end
+          binding.pry if CONFIG.debug
+          name = loc.label || ''
+          triples << "#{lib} a foaf:Agent"  # Fallback
         end
         if name != ''
           name_encoding = URI.encode(name)
           triples << "; foaf:name \"#{name_encoding}\""
         end
         triples << "; owl:sameAs loc_names:#{loc.id}"
-        unless viaf.iri.nil?
+        unless viaf.nil?
           triples << "; owl:sameAs viaf:#{viaf.id}"
         end
         unless isni_iri.nil?
@@ -325,6 +352,29 @@ module Marc2LinkedData
       else
         binding.pry if CONFIG.debug
       end
+
+
+      if CONFIG.debug
+
+        if oclc_iri.nil? #&& ENV['MARC_GET_OCLC']
+          # Try to get OCLC using LOC ID.
+          oclc_iri = loc.get_oclc_identity rescue nil
+        end
+        if oclc_iri.nil? #&& ENV['MARC_GET_OCLC']
+          # Try to get OCLC using 035a field data
+          oclc_iri = get_iri4oclc
+        end
+        unless oclc_iri.nil?
+          # Try to get additional data from OCLC
+          oclc = OclcIdentity.new oclc_iri
+          #xml = oclc.get_xml
+          #xml_doc = Nokogiri::XML(xml)
+          binding.pry
+          # TODO: get additional info, e.g. works?
+          #oclc.rdf
+        end
+      end
+
       puts "Extracted #{loc.id}" if CONFIG.debug
       # Interesting case: a person was an Organisation - President of Chile.
       #binding.pry if viaf_iri =~ /80486556/

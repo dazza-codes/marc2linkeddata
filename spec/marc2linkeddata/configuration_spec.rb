@@ -34,33 +34,33 @@ module Marc2LinkedData
       end
     end
 
-    describe "#redis_ro" do
+    describe "#redis_read" do
       it "default value is false" do
         config = Configuration.new
-        expect(config.redis_ro).to be_falsey
+        expect(config.redis_read).to be_falsey
       end
     end
 
-    describe "#redis_ro=" do
+    describe "#redis_read=" do
       it "can set value" do
         config = Configuration.new
-        config.redis_ro = true
-        expect(config.redis_ro).to be_truthy
+        config.redis_read = true
+        expect(config.redis_read).to be_truthy
       end
     end
 
-    describe "#redis_wo" do
+    describe "#redis_write" do
       it "default value is false" do
         config = Configuration.new
-        expect(config.redis_wo).to be_falsey
+        expect(config.redis_write).to be_falsey
       end
     end
 
-    describe "#redis_wo=" do
+    describe "#redis_write=" do
       it "can set value" do
         config = Configuration.new
-        config.redis_wo = true
-        expect(config.redis_wo).to be_truthy
+        config.redis_write = true
+        expect(config.redis_write).to be_truthy
       end
     end
 

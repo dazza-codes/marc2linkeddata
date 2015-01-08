@@ -26,6 +26,11 @@ module Marc2LinkedData
 #   raise "Failed to get VIAF" if loc.get_viaf != viaf_iri
 #   raise "Failed to get sameAs" if loc.same_as_array.empty?
 
+    # TODO: add tests for different types of records, e.g.
+    # authorities:
+    #   person, organisation, conference, etc.
+
+
     after :each do
     end
 

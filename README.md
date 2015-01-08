@@ -8,11 +8,17 @@ Optional Dependencies
 
   - http://redis.io/
   - http://4store.org/
+  - see notes below
 
 Install
 
     gem install marc2linkeddata
     # when a gem is published
+
+Configure
+
+- set env values and/or create or modify a .env file
+- see the .env_example file for details
 
 Use
 
@@ -38,8 +44,11 @@ Clone
     cd marc2linkeddata
     ./bin/setup.sh
     ./bin/test.sh
+    cp .env_example .env # then edit .env
 
 Script
+
+    # First configure (see above).
 
     # Translate a MARC21 authority file to a turtle file.
     # readMarcAuthority [ authfile1.mrc .. authfileN.mrc ]

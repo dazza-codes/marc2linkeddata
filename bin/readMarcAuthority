@@ -3,7 +3,6 @@
 require 'marc2linkeddata'
 
 CONFIG = Marc2LinkedData.configuration
-CONFIG.debug = true
 
 def marc2ld(marc_filename)
   ld_filename = marc_filename.gsub('.mrc','.ttl')
@@ -21,14 +20,19 @@ def marc2ld(marc_filename)
         auth = Marc2LinkedData::ParseMarcAuthority.new(record)
         auth_id = "auth:#{auth.get_id}"
         triples = nil
-        triples = @redis.get(auth_id) if CONFIG.redis_ro
-        triples = auth.to_ttl if triples.nil?
+        # TODO: enable additional persistence options
+        # Use data already in redis (if enabled)
+        triples = CONFIG.redis.get(auth_id) if CONFIG.redis_read
+        if triples.nil?
+          triples = auth.to_ttl  # generate new triples
+          # Update redis (if enabled) for triples not read from redis
+          CONFIG.redis.set(auth_id, triples) if CONFIG.redis_write
+        end
         ld_file.write(triples)
-        @redis.set(auth_id, triples) if  CONFIG.redis_wo
       end
     rescue => e
       puts
-      puts "ERROR"
+      puts 'ERROR'
       puts e.message
       puts e.backtrace
       puts record.to_s
@@ -59,10 +63,10 @@ Redis Persistence - based on https://github.com/redis/redis-rb
 - supplementary options:
   Set the REDIS_URL for a custom redis configuration.
   export REDIS_URL="redis://{user}:{password}@{host}:{port}/{db}"
-  export REDIS_RO=true   # enable redis read-only  (default = REDIS4MARC || false)
-                         # faster reading of triples from pre-populated redis data
-  export REDIS_WO=true   # enable redis write-only (default = REDIS4MARC || false)
-                         # ensures current data is updated in redis
+  export REDIS_READ=true   # enable redis reads (default = REDIS4MARC || false)
+                           # faster reading of triples from pre-populated redis data
+  export REDIS_WRITE=true  # enable redis writes (default = REDIS4MARC || false)
+                           # recent data is updated in redis
 
 HELP
 else

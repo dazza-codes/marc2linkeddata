@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require 'marc2linkeddata'
+
+CONFIG = Marc2LinkedData.configuration
+
+binding.pry
+

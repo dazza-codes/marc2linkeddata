@@ -1,3 +1,5 @@
+require 'dotenv'
+Dotenv.load
 
 require_relative 'marc2linkeddata/boot'
 require_relative 'marc2linkeddata/configuration'
