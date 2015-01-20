@@ -3,6 +3,8 @@
 # See loc_downloads.sh to get the data
 # This script assumes the data are ntriples in *.nt files.
 
+options="-host localhost -port 8049 -username $ML_USER -password $ML_PASS -mode local -input_file_type rdf "
+
 files=$(find ./ -name '*.nt')
 for f in ${files}; do
     filesize=$(du -h "$f" | cut -f1)
@@ -12,8 +14,6 @@ for f in ${files}; do
     else
         echo "Running import for $f ($filesize)"
     fi
-    # Usage: agload <kbname> <rdf files> ...
-    # TODO: add option for skipping errors?
-    agload -d delete-spo -i ntriples --port 8080 --bulk --rapper loc $f
+    /opt/MarkLogic/mlcp/bin/mlcp.sh import $options -input_file_path $f
 done
 

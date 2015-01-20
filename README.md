@@ -97,14 +97,34 @@ On Ubuntu, check the system 4store is installed and running:
 
     # installation
     sudo apt-get install 4store lib4store-dev lib4store0
-    sudo apt-get install libpcre3 libpcre3-dev
-    sudo apt-get install libraptor2-0 libraptor2-dev libraptor2-doc raptor2-utils
-    sudo apt-get install librasqal3 librasqal3-dev rasqal-utils
+    # that should install dependencies, such as:
+    #sudo apt-get install libpcre3-dev
+    #sudo apt-get install libraptor2-dev libraptor2-doc raptor2-utils
+    #sudo apt-get install librasqal3-dev rasqal-utils
     # service admin
     sudo service 4store status
     # If necessary:
     #sudo service 4store start
     #sudo service 4store restart
+
+Build from source
+
+    # assuming 64-bit linux OS (e.g. Ubuntu)
+    # install dependencies, e.g.
+    sudo apt-get install libavahi-common3 libavahi-client3
+    sudo apt-get install libraptor2-dev libraptor2-doc raptor2-utils
+    sudo apt-get install librasqal3-dev librasqal3-doc rasqal-utils
+    sudo apt-get install libpcre3-dev
+    git clone https://github.com/garlik/4store.git
+    cd 4store
+    more docs/INSTALL  # out-dated, but read it anyway
+    # also read http://4store.org/trac/wiki/Install
+    sh autogen.sh
+    ./configure
+    make
+    sudo make install  # installs binaries to /usr/local/bin/4s-*
+    # optional:
+    #make test
 
 /etc/4store.conf should contain:
 
