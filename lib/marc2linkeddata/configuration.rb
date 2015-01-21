@@ -16,7 +16,18 @@ module Marc2LinkedData
       @debug = ENV['DEBUG'].upcase == 'TRUE' rescue false
 
       log_file = ENV['LOG_FILE'] || 'marc2ld.log'
-      @logger = Logger.new File.new(log_file, 'w+')
+      log_file = File.absolute_path log_file
+      log_path = File.dirname log_file
+      unless File.directory? log_path
+        # try to create the log directory
+        Dir.mkdir log_path rescue nil
+      end
+      begin
+        log_file = File.new(log_file, 'w+')
+      rescue
+        log_file = $stderr
+      end
+      @logger = Logger.new(log_file, shift_age = 'monthly')
       @logger.level = @debug ? Logger::DEBUG : Logger::INFO
 
       # RDF prefixes

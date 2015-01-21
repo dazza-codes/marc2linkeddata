@@ -70,26 +70,26 @@ module Marc2LinkedData
         res = Marc2LinkedData.http_head_request(url)
         case res.code
           when '200'
-            @config.logger.debug "SUCCESS: #{@iri}\t-> #{url}"
+            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '301'
             #301 Moved Permanently
             url = res['location']
-            @config.logger.debug "SUCCESS: #{@iri}\t-> #{url}"
+            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '302','303'
             #302 Moved Temporarily
             #303 See Other
             # Use the current URL, most get requests will follow a 302 or 303
-            @config.logger.debug "SUCCESS: #{@iri}\t-> #{url}"
+            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '404'
-            @config.logger.warn "FAILURE: #{@iri}\t// #{url}"
+            @config.logger.warn "#{@iri}\t// #{url}"
             return nil
           else
             # WTF
             binding.pry if @config.debug
-            @config.logger.fail "FAILURE: unknown response code for #{@iri}"
+            @config.logger.error "unknown http response code (#{res.code}) for #{@iri}"
             return nil
         end
       rescue
