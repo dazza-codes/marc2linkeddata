@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 module Marc2LinkedData
 
@@ -15,18 +15,44 @@ module Marc2LinkedData
     before :each do
     end
 
-    describe "#id" do
-      it "should equal the viaf url basename" do
+    describe '#id' do
+      it 'should equal the viaf url basename' do
         expect(@viaf.id).to eq(@viaf_id)
       end
     end
 
-    #     viaf = Marc2LinkedData::Viaf.new iri
-    #     raise "Invalid ID" unless viaf.id == '7466303'
-    #     raise "Failed to get RDF" if viaf.rdf.nil?
-    #     raise "Invalid RDF" unless viaf.rdf_valid? rescue binding.pry
-    #     raise "Failed to get ISNI" if viaf.get_isni != isni_iri
-    #     raise "Failed to get sameAs" if viaf.same_as_array.empty?
+    describe '#iri' do
+      it 'should equal the viaf url' do
+        expect(@viaf.iri.to_s).to eq(@viaf_url)
+      end
+      it 'should be an instance of Addressable::URI' do
+        expect(@viaf.iri.instance_of? Addressable::URI).to be_truthy
+      end
+    end
+
+    describe '#rdf' do
+      it 'should be an instance of RDF::Graph' do
+        expect(@viaf.rdf.instance_of? RDF::Graph).to be_truthy
+      end
+    end
+
+    describe '#rdf_valid?' do
+      it 'should be true' do
+        expect(@viaf.rdf_valid?).to be_truthy
+      end
+    end
+
+    describe '#same_as_array' do
+      it 'should be populated' do
+        expect(@viaf.same_as_array.empty?).to be_falsey
+      end
+    end
+
+    describe '#get_isni' do
+      it 'should equal the isni url' do
+        expect(@viaf.get_isni).to eq(@isni_url)
+      end
+    end
 
     after :each do
     end
