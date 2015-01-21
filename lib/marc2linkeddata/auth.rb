@@ -6,8 +6,10 @@ module Marc2LinkedData
   class Auth
 
     attr_accessor :iri
+    attr_reader :config
 
     def initialize(uri=nil)
+      @config = Marc2LinkedData.configuration
       if uri =~ /\A#{URI::regexp}\z/
         uri = Addressable::URI.parse(uri.to_s) rescue nil
       end
@@ -24,6 +26,9 @@ module Marc2LinkedData
       @iri.basename
     end
 
+    # This method is often overloaded in subclasses because
+    # RDF services use variations in the URL 'extension' patterns; e.g.
+    # see Loc#rdf and Viaf#rdf
     def rdf
       return @rdf unless @rdf.nil?
       # TODO: try to retrieve the rdf from a local triple store
@@ -65,26 +70,26 @@ module Marc2LinkedData
         res = Marc2LinkedData.http_head_request(url)
         case res.code
           when '200'
-            # TODO: convert puts to logger?
-            puts "SUCCESS: #{@iri}\t-> #{url}"
+            @config.logger.debug "SUCCESS: #{@iri}\t-> #{url}"
             return url
           when '301'
             #301 Moved Permanently
             url = res['location']
-            puts "SUCCESS: #{@iri}\t-> #{url}"
+            @config.logger.debug "SUCCESS: #{@iri}\t-> #{url}"
             return url
           when '302','303'
             #302 Moved Temporarily
             #303 See Other
             # Use the current URL, most get requests will follow a 302 or 303
-            puts "SUCCESS: #{@iri}\t-> #{url}"
+            @config.logger.debug "SUCCESS: #{@iri}\t-> #{url}"
             return url
           when '404'
-            puts "FAILURE: #{@iri}\t// #{url}"
+            @config.logger.warn "FAILURE: #{@iri}\t// #{url}"
             return nil
           else
             # WTF
-            binding.pry
+            binding.pry if @config.debug
+            @config.logger.fail "FAILURE: unknown response code for #{@iri}"
             return nil
         end
       rescue

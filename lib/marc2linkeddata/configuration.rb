@@ -10,8 +10,14 @@ module Marc2LinkedData
     attr_accessor :redis_write
     attr_accessor :redis
 
+    attr_reader :logger
+
     def initialize
       @debug = ENV['DEBUG'].upcase == 'TRUE' rescue false
+
+      log_file = ENV['LOG_FILE'] || 'marc2ld.log'
+      @logger = Logger.new File.new(log_file, 'w+')
+      @logger.level = @debug ? Logger::DEBUG : Logger::INFO
 
       # RDF prefixes
       @prefixes = {}
