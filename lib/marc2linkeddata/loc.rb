@@ -1,8 +1,8 @@
-require_relative 'auth'
+require_relative 'resource'
 
 module Marc2LinkedData
 
-  class Loc < Auth
+  class Loc < Resource
 
     PREFIX = 'http://id.loc.gov/authorities/'
     PREFIX_NAMES = "#{PREFIX}names/"
@@ -25,7 +25,7 @@ module Marc2LinkedData
 
     def label
       label_predicate = '<http://www.loc.gov/mads/rdf/v1#authoritativeLabel>'
-      query = SPARQL.parse("SELECT * WHERE { <#{@iri}> #{label_predicate} ?o }")
+      query = SPARQL.parse("SELECT * WHERE { <#{iri}> #{label_predicate} ?o }")
       rdf.query(query).first[:o].to_s rescue nil
     end
 

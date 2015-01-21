@@ -3,11 +3,6 @@
 # http://www.loc.gov/marc/authority/ecadlist.html
 # http://www.loc.gov/marc/authority/ecadhome.html
 
-require_relative 'boot'
-require_relative 'loc'
-require_relative 'viaf'
-require_relative 'oclc_identity'
-
 module Marc2LinkedData
 
   class ParseMarcAuthority
@@ -304,7 +299,7 @@ module Marc2LinkedData
           # e.g. http://id.loc.gov/authorities/names/n79044934
           # Skipping these, because the person entity should be in
           # an additional record and we don't want the title content.
-          #binding.pry if CONFIG.debug
+          #binding.pry if @config.debug
           return ''
         elsif loc.person?
           name = loc.label || parse_100
@@ -315,7 +310,7 @@ module Marc2LinkedData
           triples << "#{lib} a <http://schema.org/Place>"
         else
           # TODO: find out what type this is.
-          binding.pry if CONFIG.debug
+          binding.pry if @config.debug
           name = loc.label || ''
           triples << "#{lib} a foaf:Agent"  # Fallback
         end
@@ -350,32 +345,48 @@ module Marc2LinkedData
         #triples << "#{lib} a foaf:Person" # TODO: what type is this?
         #triples << "; owl:sameAs #{loc_iri.gsub(PREFIX_LOC_SUBJECTS, 'loc_subjects:')}"
       else
-        binding.pry if CONFIG.debug
+        binding.pry if @config.debug
       end
 
 
-      if CONFIG.debug
+      if @config.debug
 
-        if oclc_iri.nil? #&& ENV['MARC_GET_OCLC']
-          # Try to get OCLC using LOC ID.
-          oclc_iri = loc.get_oclc_identity rescue nil
-        end
+        # Try to get OCLC using LOC ID.
+        oclc_iri = loc.get_oclc_identity rescue nil
         if oclc_iri.nil? #&& ENV['MARC_GET_OCLC']
           # Try to get OCLC using 035a field data
           oclc_iri = get_iri4oclc
         end
         unless oclc_iri.nil?
-          # Try to get additional data from OCLC
-          oclc = OclcIdentity.new oclc_iri
-          #xml = oclc.get_xml
-          #xml_doc = Nokogiri::XML(xml)
-          binding.pry
-          # TODO: get additional info, e.g. works?
-          #oclc.rdf
+          # Try to get additional data from OCLC, using the RDFa
+          # available in the OCLC identities pages.
+          oclc_auth = OclcIdentity.new oclc_iri
+          triples << " <#{loc.iri.to_s}> owl:sameAs <#{oclc_auth.iri.to_s}> . "
+          oclc_creative_works = oclc_auth.get_creative_works
+          oclc_creative_works.each do |creative_work|
+            # Notes on work-around for OCLC data inconsistency:
+            # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
+            # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
+            # However, the RDF for <http://worldcat.org/oclc/747413718> contains:
+            # <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://worldcat.org/entity/work/id/994448191> .
+            # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
+            #creative_work_uri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
+            #creative_work_uri = creative_work_uri.gsub('wwwwww','www') # in case it gets added already by OCLC
+            #creative_work = OclcCreativeWork.new creative_work_uri
+            creative_work = OclcCreativeWork.new creative_work
+            creative_work_uri = OclcCreativeWork::PREFIX + creative_work.id
+
+            oclc_work_uri = creative_work.get_work
+            oclc_work = OclcWork.new oclc_work_uri
+            triples << " <#{oclc_auth.iri.to_s}> rdfs:seeAlso <#{creative_work_uri}> ."
+            triples << " <#{creative_work_uri}> schema:exampleOfWork <#{oclc_work_uri}> ."
+
+            binding.pry
+          end
         end
       end
 
-      puts "Extracted #{loc.id}" if CONFIG.debug
+      puts "Extracted #{loc.id}" if @config.debug
       # Interesting case: a person was an Organisation - President of Chile.
       #binding.pry if viaf_iri =~ /80486556/
       triples.join

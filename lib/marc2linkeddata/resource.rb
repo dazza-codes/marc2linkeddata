@@ -1,9 +1,7 @@
 
-require_relative 'boot'
-
 module Marc2LinkedData
 
-  class Auth
+  class Resource
 
     attr_accessor :iri
     attr_reader :config

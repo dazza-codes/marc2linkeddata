@@ -1,8 +1,8 @@
-require_relative 'auth'
+require_relative 'resource'
 
 module Marc2LinkedData
 
-  class OclcIdentity < Auth
+  class OclcIdentity < Resource
 
     PREFIX = 'http://www.worldcat.org/identities/'
 
@@ -16,23 +16,31 @@ module Marc2LinkedData
       @rdf = RDF::Graph.load(uri4rdf)
     end
 
-    def get_xml
-      begin
-        return @xml unless @xml.nil?
-        http = Net::HTTP.new @iri.host
-        resp = http.get(@iri.path, {'Accept' => 'application/xml'})
-        case resp.code
-          when '301','302','303'
-            #301 Moved Permanently; 302 Moved Temporarily; 303 See Other
-            resp = http.get(resp['location'], {'Accept' => 'application/xml'})
-        end
-        if resp.code != '200'
-          raise
-        end
-        @xml = resp.body
-      rescue
-        puts 'ERROR: Failed to request OCLC identity xml.'
-      end
+    # def get_xml
+    #   begin
+    #     return @xml unless @xml.nil?
+    #     http = Net::HTTP.new @iri.host
+    #     resp = http.get(@iri.path, {'Accept' => 'application/xml'})
+    #     case resp.code
+    #       when '301','302','303'
+    #         #301 Moved Permanently; 302 Moved Temporarily; 303 See Other
+    #         resp = http.get(resp['location'], {'Accept' => 'application/xml'})
+    #     end
+    #     if resp.code != '200'
+    #       raise
+    #     end
+    #     @xml = resp.body
+    #   rescue
+    #     puts 'ERROR: Failed to request OCLC identity xml.'
+    #   end
+    # end
+
+    def get_creative_works
+      rdf.query(query_creative_works).collect {|s| s[:oclcWork] }
+    end
+
+    def query_creative_works
+      SPARQL.parse('SELECT * WHERE { ?oclcWork a <http://schema.org/CreativeWork> }')
     end
 
   end

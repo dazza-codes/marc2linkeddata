@@ -1,8 +1,8 @@
-require_relative 'auth'
+require_relative 'resource'
 
 module Marc2LinkedData
 
-  class Viaf < Auth
+  class Viaf < Resource
 
     PREFIX = 'http://viaf.org/viaf/'
 

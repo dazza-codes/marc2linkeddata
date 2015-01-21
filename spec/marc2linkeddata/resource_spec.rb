@@ -2,12 +2,12 @@ require "spec_helper"
 
 module Marc2LinkedData
 
-  describe Auth do
+  describe Resource do
 
     before :all do
       @auth_id = 'no99010609'
       @auth_url = 'http://id.loc.gov/authorities/names/no99010609'
-      @auth = Auth.new @auth_url
+      @auth = Resource.new @auth_url
     end
 
     before :each do
@@ -16,10 +16,10 @@ module Marc2LinkedData
     describe '#initialize' do
       it 'should not raise error for a valid iri' do
         # iri_valid = 'http://id.loc.gov/authorities/names/no99010609'
-        expect{Auth.new @auth_url}.not_to raise_error
+        expect{Resource.new @auth_url}.not_to raise_error
       end
       it 'should raise error for an invalid iri' do
-        expect{Auth.new 'This is not a URL'}.to raise_error(RuntimeError)
+        expect{Resource.new 'This is not a URL'}.to raise_error(RuntimeError)
       end
     end
 

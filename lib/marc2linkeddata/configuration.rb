@@ -42,6 +42,9 @@ module Marc2LinkedData
       @prefixes['isni'] = 'http://www.isni.org/isni/'
       @prefixes['loc_names'] = 'http://id.loc.gov/authorities/names/'
       @prefixes['loc_subjects'] = 'http://id.loc.gov/authorities/subjects/'
+      @prefixes['rdf'] = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+      @prefixes['rdfs'] = 'http://www.w3.org/2000/01/rdf-schema#'
+      @prefixes['schema'] = 'http://schema.org/'
       @prefixes['owl'] = 'http://www.w3.org/2002/07/owl#'
       @prefixes['viaf'] = 'http://viaf.org/viaf/'
 

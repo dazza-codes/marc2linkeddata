@@ -23,7 +23,7 @@ record = MARC::Reader.decode(raw)
 
 # From http://www.loc.gov/marc/authority/adleader.html
 # System-Generated Elements - The following Leader elements are usually system generated:
-# 
+#
 # 00-04 	Logical record length
 #
 #    05 - Record status:
@@ -33,16 +33,16 @@ record = MARC::Reader.decode(raw)
 #     n - New
 #     o - Obsolete
 #     s - Deleted; heading split into two or more headings
-#     x - Deleted; heading replaced by another heading 
-#   
+#     x - Deleted; heading replaced by another heading
+#
 #    06 - Type of record
-#     z - Authority data 
-#   
+#     z - Authority data
+#
 # 07-08 	Undefined character positions
 #
 #    09 - Character coding scheme
 #     # - MARC-8
-#     a - UCS/Unicode 
+#     a - UCS/Unicode
 #
 #    10 	Indicator count
 #     2 - Number of character positions used for indicators
@@ -51,27 +51,27 @@ record = MARC::Reader.decode(raw)
 #     2 - Number of character positions used for a subfield code
 #
 # 12-16 	Base address of data
-#     [number] - Length of Leader and Directory 
+#     [number] - Length of Leader and Directory
 #
 #    17 - Encoding level
 #     n - Complete authority record
-#     o - Incomplete authority record 
+#     o - Incomplete authority record
 #
 # 20-23 	Entry map
 #
 # 18-19 - Undefined character positions
-#     
+#
 #    20 - Length of the length-of-field portion
 #     4 - Number of characters in the length-of-field portion of a Directory entry
-#    
+#
 #    21 - Length of the starting-character-position portion
 #     5 - Number of characters in the starting-character-position portion of a Directory entry
-#    
+#
 #    22 - Length of the implementation-defined portion
 #     0 - Number of characters in the implementation-defined portion of a Directory entry
 #
 # It is common for default values in other Leader elements to be generated automatically as well.
-# Capitalization - Alphabetic codes are input as lower case letters. 
+# Capitalization - Alphabetic codes are input as lower case letters.
 #
 # example:
 #record.leader
@@ -79,8 +79,8 @@ record = MARC::Reader.decode(raw)
 # 00-04: '00774' - record length
 # 05:    'c' - corrected or revised
 # 06:    'z' - always 'z' for authority records
-# 09:    'a' - UCS/Unicode 
-# 12-16: '00253' - base address of data, Length of Leader and Directory 
+# 09:    'a' - UCS/Unicode
+# 12-16: '00253' - base address of data, Length of Leader and Directory
 # 17:    'n' - Complete authority record
 LEADER_STATUS_CODES = {
   'a' => 'Increase in encoding level',
@@ -103,18 +103,18 @@ def leader_parse(record)
 end
 
 
-# Stanford Auth keys and Ckeys can collide. They are only unique within their own set. 
-# 
+# Stanford Resource keys and Ckeys can collide. They are only unique within their own set.
+#
 # When I do a catalogdump for ckey 6809804 I see:
-# 
+#
 # .948.   |hNO HOLDINGS IN STF - 7 OTHER HOLDINGS
-# 
+#
 # When we do a catalogdump for searchworks we filter the results to only export
 # records with holdings, and not those things which are on order or "shadowed"
 # i.e. hidden from public view, although we still have the bibliographic data in
 # the database. When I extracted the records for conversion I selected all of
 # them.
-# 
+#
 # - Josh
 
 
@@ -154,7 +154,7 @@ exit!
 # the database. When I extracted the records for conversion I selected all of
 # them.
 field948 = record.fields.select {|f| f if f.tag == '948' }
-holdings = field948.first.value 
+holdings = field948.first.value
 
 
 # TODO: construct RDF model, see http://blog.datagraph.org/2010/03/rdf-for-ruby
