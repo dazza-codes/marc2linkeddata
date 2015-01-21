@@ -5,29 +5,14 @@ module Marc2LinkedData
   describe Loc do
 
     before :all do
-      # loc_iris = ['http://id.loc.gov/authorities/names/no99010609', 'http://id.loc.gov/authorities/names/no99010609/']
-      @viaf_url = 'http://viaf.org/viaf/85312226'
+      # loc_urls = ['http://id.loc.gov/authorities/names/no99010609', 'http://id.loc.gov/authorities/names/no99010609/']
       @loc_id = 'no99010609'
       @loc_url = 'http://id.loc.gov/authorities/names/no99010609'
       @loc = Loc.new @loc_url
+      @viaf_url = 'http://viaf.org/viaf/85312226'
     end
 
     before :each do
-    end
-
-    describe "#id" do
-      it "should equal the loc url basename" do
-        expect(@loc.id).to eq(@loc_id)
-      end
-    end
-
-    describe '#iri' do
-      it 'should equal the loc url' do
-        expect(@loc.iri.to_s).to eq(@loc_url)
-      end
-      it 'should be an instance of Addressable::URI' do
-        expect(@loc.iri.instance_of? Addressable::URI).to be_truthy
-      end
     end
 
     describe '#rdf' do
