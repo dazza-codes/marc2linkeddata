@@ -6,7 +6,7 @@ module Marc2LinkedData
 
     before :all do
       # loc_iris = ['http://id.loc.gov/authorities/names/no99010609', 'http://id.loc.gov/authorities/names/no99010609/']
-      # viaf_iri = 'http://viaf.org/viaf/85312226'
+      @viaf_url = 'http://viaf.org/viaf/85312226'
       @loc_id = 'no99010609'
       @loc_url = 'http://id.loc.gov/authorities/names/no99010609'
       @loc = Loc.new @loc_url
@@ -21,10 +21,38 @@ module Marc2LinkedData
       end
     end
 
-#   raise "Failed to get RDF" if loc.rdf.nil?
-#   raise "Invalid RDF" unless loc.rdf_valid?
-#   raise "Failed to get VIAF" if loc.get_viaf != viaf_iri
-#   raise "Failed to get sameAs" if loc.same_as_array.empty?
+    describe '#iri' do
+      it 'should equal the loc url' do
+        expect(@loc.iri.to_s).to eq(@loc_url)
+      end
+      it 'should be an instance of Addressable::URI' do
+        expect(@loc.iri.instance_of? Addressable::URI).to be_truthy
+      end
+    end
+
+    describe '#rdf' do
+      it 'should be an instance of RDF::Graph' do
+        expect(@loc.rdf.instance_of? RDF::Graph).to be_truthy
+      end
+    end
+
+    describe '#rdf_valid?' do
+      it 'should be true' do
+        expect(@loc.rdf_valid?).to be_truthy
+      end
+    end
+
+    describe '#same_as_array' do
+      it 'should be populated' do
+        expect(@loc.same_as_array.empty?).to be_falsey
+      end
+    end
+
+    describe '#get_viaf' do
+      it 'should equal the viaf url' do
+        expect(@loc.get_viaf).to eq(@viaf_url)
+      end
+    end
 
     # TODO: add tests for different types of records, e.g.
     # authorities:
