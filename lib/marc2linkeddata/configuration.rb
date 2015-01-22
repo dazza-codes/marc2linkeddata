@@ -10,6 +10,7 @@ module Marc2LinkedData
     attr_accessor :redis_write
     attr_accessor :redis
 
+    attr_accessor :log_file
     attr_reader :logger
 
     def initialize
@@ -17,15 +18,17 @@ module Marc2LinkedData
 
       log_file = ENV['LOG_FILE'] || 'marc2ld.log'
       log_file = File.absolute_path log_file
+      @log_file = log_file
       log_path = File.dirname log_file
       unless File.directory? log_path
         # try to create the log directory
         Dir.mkdir log_path rescue nil
       end
       begin
-        log_file = File.new(log_file, 'w+')
+        log_file = File.new(@log_file, 'w+')
       rescue
         log_file = $stderr
+        @log_file = 'STDERR'
       end
       @logger = Logger.new(log_file, shift_age = 'monthly')
       @logger.level = @debug ? Logger::DEBUG : Logger::INFO

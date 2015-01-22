@@ -348,47 +348,41 @@ module Marc2LinkedData
         binding.pry if @config.debug
       end
 
-
-      if @config.debug
-
-        # Try to get OCLC using LOC ID.
-        oclc_iri = loc.get_oclc_identity rescue nil
-        if oclc_iri.nil? #&& ENV['MARC_GET_OCLC']
-          # Try to get OCLC using 035a field data
-          oclc_iri = get_iri4oclc
-        end
-        unless oclc_iri.nil?
-          # Try to get additional data from OCLC, using the RDFa
-          # available in the OCLC identities pages.
-          oclc_auth = OclcIdentity.new oclc_iri
-          triples << " <#{loc.iri.to_s}> owl:sameAs <#{oclc_auth.iri.to_s}> . "
-          oclc_creative_works = oclc_auth.get_creative_works
-          oclc_creative_works.each do |creative_work|
-            # Notes on work-around for OCLC data inconsistency:
-            # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
-            # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
-            # However, the RDF for <http://worldcat.org/oclc/747413718> contains:
-            # <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://worldcat.org/entity/work/id/994448191> .
-            # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
-            #creative_work_uri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
-            #creative_work_uri = creative_work_uri.gsub('wwwwww','www') # in case it gets added already by OCLC
-            #creative_work = OclcCreativeWork.new creative_work_uri
-            creative_work = OclcCreativeWork.new creative_work
-            creative_work_uri = OclcCreativeWork::PREFIX + creative_work.id
-
-            oclc_work_uri = creative_work.get_work
-            oclc_work = OclcWork.new oclc_work_uri
-            triples << " <#{oclc_auth.iri.to_s}> rdfs:seeAlso <#{creative_work_uri}> ."
-            triples << " <#{creative_work_uri}> schema:exampleOfWork <#{oclc_work_uri}> ."
-
-            binding.pry
+      # Try to get OCLC using LOC ID.
+      oclc_iri = loc.get_oclc_identity rescue nil
+      if oclc_iri.nil? #&& ENV['MARC_GET_OCLC']
+        # Try to get OCLC using 035a field data
+        oclc_iri = get_iri4oclc
+      end
+      unless oclc_iri.nil?
+        # Try to get additional data from OCLC, using the RDFa
+        # available in the OCLC identities pages.
+        oclc_auth = OclcIdentity.new oclc_iri
+        triples << "  <#{loc.iri.to_s}> owl:sameAs <#{oclc_auth.iri.to_s}> .\n"
+        oclc_creative_works = oclc_auth.get_creative_works
+        oclc_creative_works.each do |creative_work|
+          # Notes on work-around for OCLC data inconsistency:
+          # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
+          # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
+          # However, the RDF for <http://worldcat.org/oclc/747413718> contains:
+          # <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://worldcat.org/entity/work/id/994448191> .
+          # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
+          #creative_work_iri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
+          #creative_work_iri = creative_work_iri.gsub('wwwwww','www') # in case it gets added already by OCLC
+          #creative_work = OclcCreativeWork.new creative_work_iri
+          creative_work = OclcCreativeWork.new creative_work
+          creative_work_iri = OclcCreativeWork::PREFIX + creative_work.id
+          triples << "  <#{oclc_auth.iri.to_s}> rdfs:seeAlso <#{creative_work_iri}> .\n"
+          # Try to find the generic work entity for this example
+          oclc_work_iri = creative_work.get_work
+          unless oclc_work_iri.empty?
+            #oclc_work = OclcWork.new oclc_work_iri
+            triples << "  <#{creative_work_iri}> schema:exampleOfWork <#{oclc_work_iri}> .\n"
           end
         end
       end
 
-      puts "Extracted #{loc.id}" if @config.debug
-      # Interesting case: a person was an Organisation - President of Chile.
-      #binding.pry if viaf_iri =~ /80486556/
+      @config.logger.info "Extracted #{loc.id}"
       triples.join
     end
   end

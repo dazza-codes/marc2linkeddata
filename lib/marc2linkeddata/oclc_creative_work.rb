@@ -16,12 +16,12 @@ module Marc2LinkedData
     end
 
     def get_work
-      works = rdf.query(query_work).collect {|s| s[:oclcWork] }
-      works.first.to_s
+      works = rdf.query(query_work).collect {|s| s[:o] }
+      works.first.to_s || nil
     end
 
     def query_work
-      SPARQL.parse("SELECT * WHERE { <#{query_uri}> <http://schema.org/exampleOfWork> ?oclcWork }")
+      SPARQL.parse("SELECT * WHERE { <#{query_uri}> <http://schema.org/exampleOfWork> ?o }")
     end
 
     def query_uri

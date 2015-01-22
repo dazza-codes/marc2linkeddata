@@ -72,8 +72,10 @@ HELP
 else
 end
 
+puts "Logging to: #{CONFIG.log_file}"
 marc_files.each do |path|
   puts "Processing: #{path}"
+  CONFIG.logger.info "Processing: #{path}"
   marc2ld(path.to_s)
 end
 
