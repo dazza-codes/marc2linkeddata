@@ -29,6 +29,7 @@ def marc2ld(marc_filename)
           CONFIG.redis.set(auth_id, triples) if CONFIG.redis_write
         end
         ld_file.write(triples)
+        ld_file.flush
       end
     rescue => e
       puts

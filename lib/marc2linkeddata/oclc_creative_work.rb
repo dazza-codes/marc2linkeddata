@@ -8,11 +8,11 @@ module Marc2LinkedData
 
     def rdf
       # e.g. 'http://worldcat.org/oclc/004957186'
-      return nil if @iri.nil?
+      return nil if iri.nil?
       return @rdf unless @rdf.nil?
       uri4rdf = @iri.to_s
       uri4rdf += '.rdf' unless uri4rdf.end_with? '.rdf'
-      @rdf = RDF::Graph.load(uri4rdf)
+      @rdf = get_rdf(uri4rdf)
     end
 
     def get_work
@@ -28,6 +28,9 @@ module Marc2LinkedData
       # Ensure we always use the full URI prefix in SPARQL
       PREFIX + id
     end
+
+    # TODO: get ISBN?
+
 
   end
 

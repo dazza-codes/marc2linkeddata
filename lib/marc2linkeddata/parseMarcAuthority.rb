@@ -234,9 +234,13 @@ module Marc2LinkedData
       isni_iri = get_iri4isni  # TODO: create Isni class
       viaf = Viaf.new get_iri4viaf rescue nil
 
+      # TODO: VIVO? VITRO? Stanford CAP?
+
       # Get LOC control number and add catalog permalink? e.g.
       # http://lccn.loc.gov/n79046291
 
+      # If the LOC is not in the marc record, try to resolve it online.
+      # TODO: use @config.get_loc so the web resolution is optional; but it's not optional yet.
       if loc.iri.nil?
         # Always try to determine the LOC IRI
         url = nil
@@ -247,7 +251,7 @@ module Marc2LinkedData
           url = "#{@config.prefixes['loc_subjects']}#{loc.id.downcase}"
         end
         unless url.nil?
-          # Verify the URL
+          # Verify the URL (used HEAD so it's as fast as possible)
           res = Marc2LinkedData.http_head_request(url + '.rdf')
           case res.code
             when '200'
@@ -259,24 +263,46 @@ module Marc2LinkedData
               #303 See Other
               # Use the current URL, most get requests will follow a 302 or 303
               loc = Loc.new url
+            else
+              # If it gets here, it's a problem (although not fatal?).
+              binding.pry if @config.debug
           end
-          puts "DISCOVERED: #{loc.iri}" unless loc.iri.nil?
         end
+        # Did this resolution succeed?
+        if loc.iri.nil?
+          # If it gets here, it's a problem (although not fatal?).
+          binding.pry if @config.debug
+          @config.logger.error 'FAILURE to resolve LOC URL'
+        else
+          @config.logger.debug "DISCOVERED: #{loc.iri}"
+        end
+      else
+        @config.logger.debug "MARC contains LOC: #{loc.iri}"
       end
 
-      unless loc.iri.nil?
-        if viaf.nil? #&& ENV['MARC_GET_VIAF']
+      if viaf.nil? && @config.get_viaf
+        # When VIAF is not already in the MARC record, try to get it.
+        unless loc.iri.nil?
           # Try to get VIAF via LOC.
           viaf = Viaf.new loc.get_viaf rescue nil
         end
+        @config.logger.debug 'Failed to resolve VIAF URI' if viaf.nil?
       end
-      unless viaf.nil?
-        if isni_iri.nil? #&& ENV['MARC_GET_ISNI']
+
+      if isni_iri.nil? && @config.get_isni
+        unless viaf.nil?
           # Try to get ISNI via VIAF.
           isni_iri = viaf.get_isni rescue nil
         end
+        @config.logger.debug 'Failed to resolve ISNI URI' if isni_iri.nil?
       end
 
+      #
+      # Create triples for various kinds of LOC authority.
+      # At present, this relies on LOC RDF to differentiate
+      # types of authorities.  It should be possible to do this
+      # from the MARC directly, if @config.get_loc is false.
+      #
       if loc.iri.to_s =~ /name/
         # The MARC data differentiates them according to the tag number.
         # The term 'name' refers to:
@@ -286,12 +312,12 @@ module Marc2LinkedData
         #  X30 - Uniform Title
         #  X51 - Jurisdiction / Geographic Name
         #
-        puts "LOC URL: #{loc.iri} DEPRECATED" if loc.deprecated?
+        @config.logger.warn "LOC URL: #{loc.iri} DEPRECATED" if loc.deprecated?
         name = ''
         if loc.conference?
           # e.g. http://id.loc.gov/authorities/names/n79044866
           name = loc.label || parse_111
-          triples << "#{lib} a <http://schema.org/Event>"
+          triples << "#{lib} a schema:Event"
         elsif loc.corporation?
           name = loc.label || parse_110
           triples << "#{lib} a foaf:Organization"
@@ -304,10 +330,19 @@ module Marc2LinkedData
         elsif loc.person?
           name = loc.label || parse_100
           triples << "#{lib} a foaf:Person"
+          # VIAF extracts first and last name, try to use them.
+          if @config.get_viaf && ! viaf.nil?
+            viaf.family_names.each do |n|
+              triples << "; foaf:familyName \"#{URI.encode(n)}\""
+            end
+            viaf.given_names.each do |n|
+              triples << "; foaf:firstName \"#{URI.encode(n)}\""
+            end
+          end
         elsif loc.place?
           # e.g. http://id.loc.gov/authorities/names/n79045127
           name = loc.label || parse_151
-          triples << "#{lib} a <http://schema.org/Place>"
+          triples << "#{lib} a schema:Place"
         else
           # TODO: find out what type this is.
           binding.pry if @config.debug
@@ -348,38 +383,45 @@ module Marc2LinkedData
         binding.pry if @config.debug
       end
 
-      # Try to get OCLC using LOC ID.
-      oclc_iri = loc.get_oclc_identity rescue nil
-      if oclc_iri.nil? #&& ENV['MARC_GET_OCLC']
-        # Try to get OCLC using 035a field data
-        oclc_iri = get_iri4oclc
-      end
-      unless oclc_iri.nil?
-        # Try to get additional data from OCLC, using the RDFa
-        # available in the OCLC identities pages.
-        oclc_auth = OclcIdentity.new oclc_iri
-        triples << "  <#{loc.iri.to_s}> owl:sameAs <#{oclc_auth.iri.to_s}> .\n"
-        oclc_creative_works = oclc_auth.get_creative_works
-        oclc_creative_works.each do |creative_work|
-          # Notes on work-around for OCLC data inconsistency:
-          # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
-          # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
-          # However, the RDF for <http://worldcat.org/oclc/747413718> contains:
-          # <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://worldcat.org/entity/work/id/994448191> .
-          # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
-          #creative_work_iri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
-          #creative_work_iri = creative_work_iri.gsub('wwwwww','www') # in case it gets added already by OCLC
-          #creative_work = OclcCreativeWork.new creative_work_iri
-          creative_work = OclcCreativeWork.new creative_work
-          creative_work_iri = OclcCreativeWork::PREFIX + creative_work.id
-          triples << "  <#{oclc_auth.iri.to_s}> rdfs:seeAlso <#{creative_work_iri}> .\n"
-          # Try to find the generic work entity for this example
-          oclc_work_iri = creative_work.get_work
-          unless oclc_work_iri.empty?
-            #oclc_work = OclcWork.new oclc_work_iri
-            triples << "  <#{creative_work_iri}> schema:exampleOfWork <#{oclc_work_iri}> .\n"
+      # Optional elaboration of authority data with OCLC identity and works.
+      if @config.get_oclc
+        oclc_iri = nil
+        begin
+          # Try to get OCLC using LOC ID.
+          oclc_iri = loc.get_oclc_identity
+        rescue
+          # Try to get OCLC using 035a field data, but
+          # this is not as reliable/accurate as LOC.
+          oclc_iri = get_iri4oclc
+        end
+        unless oclc_iri.nil?
+          # Try to get additional data from OCLC, using the RDFa
+          # available in the OCLC identities pages.
+          oclc_auth = OclcIdentity.new oclc_iri
+          triples << "  <#{loc.iri.to_s}> owl:sameAs <#{oclc_auth.iri.to_s}> .\n"
+          oclc_creative_works = oclc_auth.get_creative_works
+          oclc_creative_works.each do |creative_work|
+            # Notes on work-around for OCLC data inconsistency:
+            # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
+            # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
+            # However, the RDF for <http://worldcat.org/oclc/747413718> contains:
+            # <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://worldcat.org/entity/work/id/994448191> .
+            # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
+            #creative_work_iri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
+            #creative_work_iri = creative_work_iri.gsub('wwwwww','www') # in case it gets added already by OCLC
+            #creative_work = OclcCreativeWork.new creative_work_iri
+            creative_work = OclcCreativeWork.new creative_work
+            creative_work_iri = OclcCreativeWork::PREFIX + creative_work.id
+            triples << "  <#{oclc_auth.iri.to_s}> rdfs:seeAlso <#{creative_work_iri}> .\n"
+            # Try to find the generic work entity for this example work.
+            oclc_work_iri = creative_work.get_work
+            unless oclc_work_iri.empty?
+              #oclc_work = OclcWork.new oclc_work_iri
+              triples << "  <#{creative_work_iri}> schema:exampleOfWork <#{oclc_work_iri}> .\n"
+            end
           end
         end
+
       end
 
       @config.logger.info "Extracted #{loc.id}"

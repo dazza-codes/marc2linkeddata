@@ -18,9 +18,10 @@ module Marc2LinkedData
     # end
 
     def rdf
-      return nil if @iri.nil?
-      uri4rdf = @iri.to_s + '.rdf'
-      @rdf ||= RDF::Graph.load(uri4rdf)
+      return nil if iri.nil?
+      return @rdf unless @rdf.nil?
+      uri4rdf = iri.to_s + '.rdf'
+      @rdf = get_rdf(uri4rdf)
     end
 
     def label

@@ -13,7 +13,7 @@ module Marc2LinkedData
       return @rdf unless @rdf.nil?
       uri4rdf = @iri.to_s
       uri4rdf += '/' unless uri4rdf.end_with? '/'
-      @rdf = RDF::Graph.load(uri4rdf)
+      @rdf = get_rdf(uri4rdf)
     end
 
     # def get_xml
