@@ -4,6 +4,10 @@ module Marc2LinkedData
   class Configuration
 
     attr_accessor :debug
+    attr_accessor :get_isni
+    attr_accessor :get_loc
+    attr_accessor :get_oclc
+    attr_accessor :get_viaf
     attr_accessor :prefixes
     attr_accessor :redis4marc
     attr_accessor :redis_read
@@ -14,8 +18,9 @@ module Marc2LinkedData
     attr_reader :logger
 
     def initialize
-      @debug = ENV['DEBUG'].upcase == 'TRUE' rescue false
+      @debug = env_boolean('DEBUG')
 
+      # logging
       log_file = ENV['LOG_FILE'] || 'marc2ld.log'
       log_file = File.absolute_path log_file
       @log_file = log_file
@@ -51,13 +56,19 @@ module Marc2LinkedData
       @prefixes['owl'] = 'http://www.w3.org/2002/07/owl#'
       @prefixes['viaf'] = 'http://viaf.org/viaf/'
 
+      # LOD options
+      @get_isni = env_boolean('GET_ISNI')
+      @get_loc = env_boolean('GET_LOC')
+      @get_oclc = env_boolean('GET_OCLC')
+      @get_viaf = env_boolean('GET_VIAF')
+
       # Persistence options
       @redis = nil
-      @redis4marc = ENV['REDIS4MARC'].upcase == 'TRUE' rescue false
+      @redis4marc = env_boolean('REDIS4MARC')
       if @redis4marc
-        @redis_url = ENV['REDIS_URL']
-        @redis_read  = ENV['REDIS_READ'].upcase == 'TRUE' rescue true
-        @redis_write = ENV['REDIS_WRITE'].upcase == 'TRUE' rescue true
+        @redis_url = env_boolean('REDIS_URL')
+        @redis_read  = env_boolean('REDIS_READ')
+        @redis_write = env_boolean('REDIS_WRITE')
         redis_config
       else
         @redis_url = nil
@@ -65,6 +76,11 @@ module Marc2LinkedData
         @redis_write = false
       end
       # TODO: provide options for triple stores
+    end
+
+    def env_boolean(var)
+      # check if an ENV variable is true, use false as default
+      ENV[var].to_s.upcase == 'TRUE' rescue false
     end
 
     def redis_config
