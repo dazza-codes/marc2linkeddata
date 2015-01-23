@@ -6,6 +6,7 @@ require 'json'
 require 'linkeddata'
 require 'marc'
 require 'rdf/4store'
+require 'ruby-progressbar'
 
 require 'pry'
 require 'pry-doc'
