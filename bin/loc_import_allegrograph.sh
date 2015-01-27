@@ -3,6 +3,9 @@
 # See loc_downloads.sh to get the data
 # This script assumes the data are ntriples in *.nt files.
 
+# For reference, note that there is an allegrograph ruby gem, see
+# https://github.com/emk/rdf-agraph
+
 files=$(find ./ -name '*.nt')
 for f in ${files}; do
     filesize=$(du -h "$f" | cut -f1)
