@@ -46,7 +46,7 @@ module Marc2LinkedData
     end
 
     def about
-      q = SPARQL.parse('SELECT * WHERE { ?s http://schema.org/about ?o }')
+      q = SPARQL.parse('SELECT * WHERE { ?s <http://schema.org/about> ?o }')
       rdf.query(q)
     end
 
