@@ -8,14 +8,24 @@ module Marc2LinkedData
     attr_accessor :get_loc
     attr_accessor :get_oclc
     attr_accessor :get_viaf
+    attr_accessor :oclc_auth2works
+
+    attr_accessor :local_loc_user
+    attr_accessor :local_loc_pass
+    attr_accessor :local_loc_url
+
     attr_accessor :prefixes
+
+    attr_accessor :use_foaf
+    attr_accessor :use_schema
+
     attr_accessor :redis4marc
     attr_accessor :redis_read
     attr_accessor :redis_write
     attr_accessor :redis
 
     attr_accessor :log_file
-    attr_reader :logger
+    attr_accessor :logger
 
     def initialize
       @debug = env_boolean('DEBUG')
@@ -56,11 +66,28 @@ module Marc2LinkedData
       @prefixes['owl'] = 'http://www.w3.org/2002/07/owl#'
       @prefixes['viaf'] = 'http://viaf.org/viaf/'
 
-      # LOD options
+      # Authority parse options
       @get_isni = env_boolean('GET_ISNI')
       @get_loc = env_boolean('GET_LOC')
       @get_oclc = env_boolean('GET_OCLC')
       @get_viaf = env_boolean('GET_VIAF')
+
+      @oclc_auth2works = env_boolean('OCLC_AUTH2WORKS')
+
+      # Vocabulary options
+      # foaf:Person or schema:Person or both?
+      @use_foaf = env_boolean('USE_FOAF')
+      @use_schema = env_boolean('USE_SCHEMA') # schema.org
+
+      # Local triple store for LOC authority data,
+      # accessed via an HTTP API with basic authentication.
+      # See downloads at http://id.loc.gov/download/
+      @local_loc_user = ENV['LOCAL_LOC_USER']
+      @local_loc_pass = ENV['LOCAL_LOC_PASS']
+      loc_host = ENV['LOCAL_LOC_HOST']
+      loc_port = ENV['LOCAL_LOC_PORT']
+      loc_path = ENV['LOCAL_LOC_PATH']
+      @local_loc_url = "http://#{loc_host}:#{loc_port}#{loc_path}"
 
       # Persistence options
       @redis = nil
