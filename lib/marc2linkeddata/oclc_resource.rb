@@ -8,7 +8,7 @@ module Marc2LinkedData
 
     def initialize(uri=nil)
       # Ensure the OCLC IRI contains 'www' in the host name.
-      uri = uri.to_s.gsub('worldcat.org','www.worldcat.org').gsub('wwwwww','')
+      uri.to_s.gsub!('worldcat.org','www.worldcat.org') unless uri =~ /www\./
       super(uri)
     end
 
