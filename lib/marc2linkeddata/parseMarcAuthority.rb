@@ -224,6 +224,14 @@ module Marc2LinkedData
       end
     end
 
+
+    # TODO: use an 'affiliation' entry, maybe 373?  (optional field)
+
+    # TODO: construct an RDF::Graph so it can be serialized in different formats.
+
+    # TODO: try to find persons in Stanford CAP data.
+
+
     def to_ttl
       # http://www.loc.gov/marc/authority/adintro.html
       triples = []
@@ -231,7 +239,7 @@ module Marc2LinkedData
       lib = get_iri4lib.gsub(@config.prefixes[lib_auth_key], "#{lib_auth_key}:")
       # Try to find LOC, VIAF, and ISNI IRIs in the MARC record
       loc = Loc.new get_iri4loc
-      isni_iri = get_iri4isni  # TODO: create Isni class
+      isni = Isni.new get_iri4isni rescue nil
       viaf = Viaf.new get_iri4viaf rescue nil
 
       # TODO: VIVO? VITRO? Stanford CAP?
@@ -289,12 +297,14 @@ module Marc2LinkedData
         @config.logger.debug 'Failed to resolve VIAF URI' if viaf.nil?
       end
 
-      if isni_iri.nil? && @config.get_isni
+      if isni.nil? && @config.get_isni
         unless viaf.nil?
           # Try to get ISNI via VIAF.
-          isni_iri = viaf.get_isni rescue nil
+          isni = Isni.new viaf.get_isni rescue nil
         end
-        @config.logger.debug 'Failed to resolve ISNI URI' if isni_iri.nil?
+        @config.logger.debug "#{viaf.iri} failed to resolve ISNI URI" if isni.nil?
+
+        binding.pry if viaf.iri.to_s.include? '67737121' #@config.debug
       end
 
       #
@@ -320,7 +330,8 @@ module Marc2LinkedData
           triples << "#{lib} a schema:Event"
         elsif loc.corporation?
           name = loc.label || parse_110
-          triples << "#{lib} a foaf:Organization"
+          triples << "#{lib} a foaf:Organization" if @config.use_foaf
+          triples << "#{lib} a schema:Organization" if @config.use_schema
         elsif loc.name_title?
           # e.g. http://id.loc.gov/authorities/names/n79044934
           # Skipping these, because the person entity should be in
@@ -329,14 +340,18 @@ module Marc2LinkedData
           return ''
         elsif loc.person?
           name = loc.label || parse_100
-          triples << "#{lib} a foaf:Person"
-          # VIAF extracts first and last name, try to use them.
+          triples << "#{lib} a foaf:Person" if @config.use_foaf
+          triples << "#{lib} a schema:Person" if @config.use_schema
+          # VIAF extracts first and last name, try to use them. Note
+          # that VIAF uses schema:name, schema:givenName, and schema:familyName.
           if @config.get_viaf && ! viaf.nil?
             viaf.family_names.each do |n|
-              triples << "; foaf:familyName \"#{URI.encode(n)}\""
+              triples << "; foaf:familyName \"#{URI.encode(n)}\"" if @config.use_foaf
+              triples << "; schema:familyName \"#{URI.encode(n)}\"" if @config.use_schema
             end
             viaf.given_names.each do |n|
-              triples << "; foaf:firstName \"#{URI.encode(n)}\""
+              triples << "; foaf:firstName \"#{URI.encode(n)}\"" if @config.use_foaf
+              triples << "; schema:givenName \"#{URI.encode(n)}\"" if @config.use_schema
             end
           end
         elsif loc.place?
@@ -351,14 +366,15 @@ module Marc2LinkedData
         end
         if name != ''
           name_encoding = URI.encode(name)
-          triples << "; foaf:name \"#{name_encoding}\""
+          triples << "; foaf:name \"#{name_encoding}\"" if @config.use_foaf
+          triples << "; schema:name \"#{name_encoding}\"" if @config.use_schema
         end
         triples << "; owl:sameAs loc_names:#{loc.id}"
         unless viaf.nil?
           triples << "; owl:sameAs viaf:#{viaf.id}"
         end
-        unless isni_iri.nil?
-          isni_id = URI.parse(isni_iri).path.gsub('isni/','').gsub('/','')
+        unless isni.nil?
+          isni_id = URI.parse(isni.iri.to_s).path.gsub('isni/','').gsub('/','')
           triples << "; owl:sameAs isni:#{isni_id}"
         end
         triples << " .\n"
@@ -399,8 +415,7 @@ module Marc2LinkedData
           # available in the OCLC identities pages.
           oclc_auth = OclcIdentity.new oclc_iri
           triples << "  <#{loc.iri.to_s}> owl:sameAs <#{oclc_auth.iri.to_s}> .\n"
-          oclc_creative_works = oclc_auth.get_creative_works
-          oclc_creative_works.each do |creative_work|
+          oclc_auth.get_creative_works.each do |creative_work_uri|
             # Notes on work-around for OCLC data inconsistency:
             # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
             # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
@@ -409,16 +424,33 @@ module Marc2LinkedData
             # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
             #creative_work_iri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
             #creative_work_iri = creative_work_iri.gsub('wwwwww','www') # in case it gets added already by OCLC
-            #creative_work = OclcCreativeWork.new creative_work_iri
-            creative_work = OclcCreativeWork.new creative_work
-            creative_work_iri = OclcCreativeWork::PREFIX + creative_work.id
-            triples << "  <#{oclc_auth.iri.to_s}> rdfs:seeAlso <#{creative_work_iri}> .\n"
-            # Try to find the generic work entity for this example work.
-            oclc_work_iri = creative_work.get_work
-            unless oclc_work_iri.empty?
-              #oclc_work = OclcWork.new oclc_work_iri
-              triples << "  <#{creative_work_iri}> schema:exampleOfWork <#{oclc_work_iri}> .\n"
+            triples << "  <#{oclc_auth.iri}> rdfs:seeAlso <#{creative_work_uri}> .\n"
+            if @config.oclc_auth2works
+              # Try to use VIAF to relate auth to work as creator, contributor, editor, etc.
+              # Note that this requires additional RDF retrieval for each work (slower processing).
+              creative_work = OclcCreativeWork.new creative_work_uri
+              unless viaf.nil?
+                if creative_work.creator? viaf.iri
+                  triples << "  <#{creative_work.iri}> schema:creator <#{oclc_auth.iri}> .\n"
+                elsif creative_work.contributor? viaf.iri
+                  triples << "  <#{creative_work.iri}> schema:contributor <#{oclc_auth.iri}> .\n"
+                elsif creative_work.editor? viaf.iri
+                  triples << "  <#{creative_work.iri}> schema:editor <#{oclc_auth.iri}> .\n"
+                end
+              end
+
+              # TODO: Is auth the subject of the work (as in biography) or both (as in autobiography).
+              # binding.pry if @config.debug
+              # binding.pry if creative_work.iri.to_s == 'http://www.worldcat.org/oclc/006626542'
+
+              # Try to find the generic work entity for this example work.
+              creative_work.get_works.each do |oclc_work_uri|
+                triples << "  <#{creative_work.iri}> schema:exampleOfWork <#{oclc_work_uri}> .\n"
+                # Get additional properties for the work?
+                #oclc_work = OclcWork.new oclc_work_uri
+              end
             end
+
           end
         end
 

@@ -32,13 +32,13 @@ module Marc2LinkedData
 
     def given_names
       q = SPARQL.parse("SELECT * WHERE { <#{iri}> <http://schema.org/givenName> ?o }")
-      names = rdf.query(q).collect {|s| s[:o].to_s}.to_set.to_a
+      names = rdf.query(q).collect {|s| s[:o].to_s}
       names.to_set.to_a
     end
 
     def family_names
       q = SPARQL.parse("SELECT * WHERE { <#{iri}> <http://schema.org/familyName> ?o }")
-      names = rdf.query(q).collect {|s| s[:o].to_s}.to_set.to_a
+      names = rdf.query(q).collect {|s| s[:o].to_s}
       names.to_set.to_a
     end
 

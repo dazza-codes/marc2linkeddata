@@ -12,14 +12,20 @@ require 'pry'
 require 'pry-doc'
 
 require_relative 'marc2linkeddata/configuration'
+
 require_relative 'marc2linkeddata/resource'
+require_relative 'marc2linkeddata/isni'
 require_relative 'marc2linkeddata/loc'
 require_relative 'marc2linkeddata/viaf'
+
+require_relative 'marc2linkeddata/oclc_resource'
 require_relative 'marc2linkeddata/oclc_identity'
 require_relative 'marc2linkeddata/oclc_creative_work'
 require_relative 'marc2linkeddata/oclc_work'
+
 require_relative 'marc2linkeddata/parseMarcAuthority'
 #require_relative 'marc2linkeddata/parseMarcCatalog'
+require_relative 'marc2linkeddata/sparql'
 
 
 module Marc2LinkedData
