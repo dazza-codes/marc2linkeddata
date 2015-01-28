@@ -303,8 +303,7 @@ module Marc2LinkedData
           isni = Isni.new viaf.get_isni rescue nil
         end
         @config.logger.debug "#{viaf.iri} failed to resolve ISNI URI" if isni.nil?
-
-        binding.pry if viaf.iri.to_s.include? '67737121' #@config.debug
+        # binding.pry if viaf.iri.to_s.include? '67737121' #@config.debug
       end
 
       #
@@ -362,7 +361,9 @@ module Marc2LinkedData
           # TODO: find out what type this is.
           binding.pry if @config.debug
           name = loc.label || ''
-          triples << "#{lib} a foaf:Agent"  # Fallback
+          triples << "#{lib} a foaf:Agent" if @config.use_foaf # Fallback
+          # schema.org has no immediate parent for Person or Organization
+          triples << "#{lib} a schema:Thing" if @config.use_schema # Fallback
         end
         if name != ''
           name_encoding = URI.encode(name)
@@ -415,7 +416,7 @@ module Marc2LinkedData
           # available in the OCLC identities pages.
           oclc_auth = OclcIdentity.new oclc_iri
           triples << "  <#{loc.iri.to_s}> owl:sameAs <#{oclc_auth.iri.to_s}> .\n"
-          oclc_auth.get_creative_works.each do |creative_work_uri|
+          oclc_auth.creative_works.each do |creative_work_uri|
             # Notes on work-around for OCLC data inconsistency:
             # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
             # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .

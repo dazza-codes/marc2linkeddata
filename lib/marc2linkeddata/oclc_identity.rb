@@ -35,12 +35,9 @@ module Marc2LinkedData
     #   end
     # end
 
-    def get_creative_works
-      rdf.query(query_creative_works).collect {|s| s[:oclcWork] }
-    end
-
-    def query_creative_works
-      SPARQL.parse('SELECT * WHERE { ?oclcWork a <http://schema.org/CreativeWork> }')
+    def creative_works
+      q = SPARQL.parse('SELECT * WHERE { ?oclcWork a <http://schema.org/CreativeWork> }')
+      rdf.query(q).collect {|s| s[:oclcWork] }
     end
 
   end
