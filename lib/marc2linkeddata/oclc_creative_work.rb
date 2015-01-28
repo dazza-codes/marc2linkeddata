@@ -8,7 +8,7 @@ module Marc2LinkedData
 
     def get_works
       # assume an exampleOfWork can only ever link to one work?
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri.to_s}> <http://schema.org/exampleOfWork> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/exampleOfWork> ?o }")
       works = rdf.query(q).collect {|s| s[:o] }
       if works.empty?
         # OCLC data is inconsistent in use of 'www' in IRI, so try again?

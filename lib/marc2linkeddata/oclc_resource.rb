@@ -8,7 +8,9 @@ module Marc2LinkedData
 
     def initialize(uri=nil)
       # Ensure the OCLC IRI contains 'www' in the host name.
-      uri.to_s.gsub!('worldcat.org','www.worldcat.org') unless uri =~ /www\./
+      unless uri =~ /www\./
+        uri = uri.to_s.gsub('worldcat.org','www.worldcat.org')
+      end
       super(uri)
     end
 
@@ -51,27 +53,27 @@ module Marc2LinkedData
     end
 
     def creators
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri.to_s}> <http://schema.org/creator> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/creator> ?o }")
       rdf.query(q).collect {|s| s[:o] }
     end
 
     def contributors
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri.to_s}> <http://schema.org/contributor> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/contributor> ?o }")
       rdf.query(q).collect {|s| s[:o] }
     end
 
     def editors
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri.to_s}> <http://schema.org/editor> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/editor> ?o }")
       rdf.query(q).collect {|s| s[:o] }
     end
 
     def publishers
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri.to_s}> <http://schema.org/publishers> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/publishers> ?o }")
       rdf.query(q).collect {|s| s[:o] }
     end
 
     def isbns
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri.to_s}> <http://schema.org/isbn> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/isbn> ?o }")
       rdf.query(q).collect {|s| s[:o] }
     end
   end

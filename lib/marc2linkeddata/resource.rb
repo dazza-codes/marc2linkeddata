@@ -52,7 +52,8 @@ module Marc2LinkedData
     end
 
     def iri_types
-      rdf.query(SPARQL.parse("SELECT * WHERE { <#{@iri.to_s}> a ?o }"))
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> a ?o }")
+      rdf.query(q)
     end
 
     def rdf_find_object(id)
@@ -80,26 +81,26 @@ module Marc2LinkedData
         res = Marc2LinkedData.http_head_request(url)
         case res.code
           when '200'
-            @config.logger.debug "Mapped #{@iri.to_s}\t-> #{url}"
+            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '301'
             #301 Moved Permanently
             url = res['location']
-            @config.logger.debug "Mapped #{@iri.to_s}\t-> #{url}"
+            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '302','303'
             #302 Moved Temporarily
             #303 See Other
             # Use the current URL, most get requests will follow a 302 or 303
-            @config.logger.debug "Mapped #{@iri.to_s}\t-> #{url}"
+            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '404'
-            @config.logger.warn "#{@iri.to_s}\t// #{url}"
+            @config.logger.warn "#{@iri}\t// #{url}"
             return nil
           else
             # WTF
             binding.pry if @config.debug
-            @config.logger.error "unknown http response code (#{res.code}) for #{@iri.to_s}"
+            @config.logger.error "unknown http response code (#{res.code}) for #{@iri}"
             return nil
         end
       rescue
@@ -113,11 +114,8 @@ module Marc2LinkedData
     end
 
     def same_as_array
-      same_as.query(same_as_query).collect {|s| s[:o] }
-    end
-
-    def same_as_query
-      SPARQL.parse("SELECT * WHERE { <#{@iri.to_s}> <http://www.w3.org/2002/07/owl#sameAs> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://www.w3.org/2002/07/owl#sameAs> ?o }")
+      same_as.query(q).collect {|s| s[:o] }
     end
 
   end
