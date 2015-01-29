@@ -289,12 +289,150 @@ module Marc2LinkedData
       end
     end
 
+    def parse_loc_auth_name
+      #
+      # Create triples for various kinds of LOC authority.
+      # At present, this relies on LOC RDF to differentiate
+      # types of authorities.  It should be possible to do this
+      # from the MARC directly, if @@config.get_loc is false.
+      #
+      # The MARC data differentiates them according to the tag number.
+      # The term 'name' refers to:
+      #  X00 - Personal Name
+      #  X10 - Corporate Name
+      #  X11 - Meeting Name
+      #  X30 - Uniform Title
+      #  X51 - Jurisdiction / Geographic Name
+      #
+      @@config.logger.warn "LOC URL: #{@loc.iri} DEPRECATED" if @loc.deprecated?
+      name = ''
+      if @loc.conference?
+        # e.g. http://id.loc.gov/authorities/names/n79044866
+        name = @loc.label || parse_111
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.event)
+      elsif @loc.corporation?
+        name = @loc.label || parse_110
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Organization) if @@config.use_foaf
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Organization) if @@config.use_schema
+      elsif @loc.name_title?
+        # e.g. http://id.loc.gov/authorities/names/n79044934
+        # Skipping these, because the person entity should be in
+        # an additional record and we don't want the title content.
+        binding.pry if @@config.debug
+        return ''
+      elsif @loc.person?
+        name = @loc.label || parse_100
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Person) if @@config.use_foaf
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Person) if @@config.use_schema
+        # VIAF extracts first and last name, try to use them. Note
+        # that VIAF uses schema:name, schema:givenName, and schema:familyName.
+        if @@config.get_viaf && ! @viaf.nil?
+          @viaf.family_names.each do |n|
+            # ln = URI.encode(n)
+            # TODO: try to get a language type, if VIAF provide it.
+            # name = RDF::Literal.new(n, :language => :en)
+            ln = RDF::Literal.new(n)
+            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.familyName, ln) if @@config.use_foaf
+            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.familyName, ln) if @@config.use_schema
+          end
+          @viaf.given_names.each do |n|
+            # fn = URI.encode(n)
+            # TODO: try to get a language type, if VIAF provide it.
+            # name = RDF::Literal.new(n, :language => :en)
+            fn = RDF::Literal.new(n)
+            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.firstName, fn) if @@config.use_foaf
+            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.givenName, fn) if @@config.use_schema
+          end
+        end
+      elsif @loc.place?
+        # e.g. http://id.loc.gov/authorities/names/n79045127
+        name = @loc.label || parse_151
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Place)
+      else
+        # TODO: find out what type this is.
+        binding.pry if @@config.debug
+        name = @loc.label || ''
+        # Note: schema.org has no immediate parent for Person or Organization
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Agent) if @@config.use_foaf
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Thing) if @@config.use_schema
+      end
+      if name != ''
+        # name_encoding = URI.encode(name)
+        name = RDF::Literal.new(name)
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.name, name) if @@config.use_foaf
+        @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.name, name) if @@config.use_schema
+      end
+    end
+
+    def parse_loc_auth_subject
+      # TODO: what to do with subjects?
+      binding.pry if @@config.debug
+      # The term 'subject' refers to:
+      #  X30 - Uniform Titles
+      #  X48 - Chronological Terms
+      #  X50 - Topical Terms
+      #  X51 - Geographic Names
+      #  X55 - Genre/Form Terms
+      #
+      # The term 'subject subdivision' refers to:
+      # X80 - general subdivision terms
+      # X81 - geographic subdivision names
+      # X82 - chronological subdivision terms
+      # X85 - form subdivision terms
+    end
+
+    def get_oclc_links
+      oclc_iri = nil
+      begin
+        # Try to get OCLC using LOC ID.
+        oclc_iri = @loc.get_oclc_identity
+      rescue
+        # Try to get OCLC using 035a field data, but
+        # this is not as reliable/accurate as LOC.
+        oclc_iri = get_iri4oclc
+      end
+      unless oclc_iri.nil?
+        # Try to get additional data from OCLC, using the RDFa
+        # available in the OCLC identities pages.
+        oclc_auth = OclcIdentity.new oclc_iri
+        @graph.insert RDF::Statement(@loc.rdf_uri, RDF::OWL.sameAs, oclc_auth.rdf_uri)
+        oclc_auth.creative_works.each do |creative_work_uri|
+          # Notes on work-around for OCLC data inconsistency:
+          # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
+          # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
+          # However, the RDF for <http://worldcat.org/oclc/747413718> contains:
+          # <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://worldcat.org/entity/work/id/994448191> .
+          # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
+          #creative_work_iri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
+          #creative_work_iri = creative_work_iri.gsub('wwwwww','www') # in case it gets added already by OCLC
+          creative_work = OclcCreativeWork.new creative_work_uri
+          @graph.insert RDF::Statement(oclc_auth.rdf_uri, RDF::RDFS.seeAlso, creative_work.rdf_uri)
+          if @@config.oclc_auth2works
+            # Try to use VIAF to relate auth to work as creator, contributor, editor, etc.
+            # Note that this requires additional RDF retrieval for each work (slower processing).
+            unless @viaf.nil?
+              if creative_work.creator? @viaf.iri
+                @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.creator, oclc_auth.rdf_uri)
+              elsif creative_work.contributor? @viaf.iri
+                @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.contributor, oclc_auth.rdf_uri)
+              elsif creative_work.editor? @viaf.iri
+                @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.editor, oclc_auth.rdf_uri)
+              end
+            end
+            # TODO: Is auth the subject of the work (as in biography) or both (as in autobiography).
+            # binding.pry if @@config.debug
+            # binding.pry if creative_work.iri.to_s == 'http://www.worldcat.org/oclc/006626542'
+            # Try to find the generic work entity for this example work.
+            creative_work.get_works.each do |oclc_work_uri|
+              oclc_work = OclcWork.new oclc_work_uri
+              @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.exampleOfWork, oclc_work.rdf_uri)
+            end
+          end
+        end
+      end
+    end
 
     # TODO: use an 'affiliation' entry, maybe 373?  (optional field)
-
-    # TODO: construct an RDF::Graph so it can be serialized in different formats.
-
-    # TODO: try to find persons in Stanford CAP data.
 
     def to_ttl
       graph.to_ttl
@@ -326,156 +464,15 @@ module Marc2LinkedData
       # TODO: find codes in the marc record to differentiate the authority into
       # TODO: person, organization, event, etc. without getting LOC RDF.
 
-      #
-      # Create triples for various kinds of LOC authority.
-      # At present, this relies on LOC RDF to differentiate
-      # types of authorities.  It should be possible to do this
-      # from the MARC directly, if @@config.get_loc is false.
-      #
       if @loc.iri.to_s =~ /name/
-        # The MARC data differentiates them according to the tag number.
-        # The term 'name' refers to:
-        #  X00 - Personal Name
-        #  X10 - Corporate Name
-        #  X11 - Meeting Name
-        #  X30 - Uniform Title
-        #  X51 - Jurisdiction / Geographic Name
-        #
-        @@config.logger.warn "LOC URL: #{@loc.iri} DEPRECATED" if @loc.deprecated?
-        name = ''
-        if @loc.conference?
-          # e.g. http://id.loc.gov/authorities/names/n79044866
-          name = @loc.label || parse_111
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.event)
-        elsif @loc.corporation?
-          name = @loc.label || parse_110
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Organization) if @@config.use_foaf
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Organization) if @@config.use_schema
-        elsif @loc.name_title?
-          # e.g. http://id.loc.gov/authorities/names/n79044934
-          # Skipping these, because the person entity should be in
-          # an additional record and we don't want the title content.
-          binding.pry if @@config.debug
-          return ''
-        elsif @loc.person?
-          name = @loc.label || parse_100
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Person) if @@config.use_foaf
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Person) if @@config.use_schema
-          # VIAF extracts first and last name, try to use them. Note
-          # that VIAF uses schema:name, schema:givenName, and schema:familyName.
-          if @@config.get_viaf && ! @viaf.nil?
-            @viaf.family_names.each do |n|
-              # ln = URI.encode(n)
-              # TODO: try to get a language type, if VIAF provide it.
-              # name = RDF::Literal.new(n, :language => :en)
-              ln = RDF::Literal.new(n)
-              @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.familyName, ln) if @@config.use_foaf
-              @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.familyName, ln) if @@config.use_schema
-            end
-            @viaf.given_names.each do |n|
-              # fn = URI.encode(n)
-              # TODO: try to get a language type, if VIAF provide it.
-              # name = RDF::Literal.new(n, :language => :en)
-              fn = RDF::Literal.new(n)
-              @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.firstName, fn) if @@config.use_foaf
-              @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.givenName, fn) if @@config.use_schema
-            end
-          end
-        elsif @loc.place?
-          # e.g. http://id.loc.gov/authorities/names/n79045127
-          name = @loc.label || parse_151
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Place)
-        else
-          # TODO: find out what type this is.
-          binding.pry if @@config.debug
-          name = @loc.label || ''
-          # Note: schema.org has no immediate parent for Person or Organization
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Agent) if @@config.use_foaf
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Thing) if @@config.use_schema
-        end
-
-        if name != ''
-          # name_encoding = URI.encode(name)
-          name = RDF::Literal.new(name)
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.name, name) if @@config.use_foaf
-          @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.name, name) if @@config.use_schema
-        end
-
+        parse_loc_auth_name
       elsif @loc.iri.to_s =~ /subjects/
-        # TODO: what to do with subjects?
-        binding.pry if @@config.debug
-        # The term 'subject' refers to:
-        #  X30 - Uniform Titles
-        #  X48 - Chronological Terms
-        #  X50 - Topical Terms
-        #  X51 - Geographic Names
-        #  X55 - Genre/Form Terms
-        #
-        # The term 'subject subdivision' refers to:
-        # X80 - general subdivision terms
-        # X81 - geographic subdivision names
-        # X82 - chronological subdivision terms
-        # X85 - form subdivision terms
-        #
+        parse_loc_auth_subject
       else
         binding.pry if @@config.debug
       end
-
       # Optional elaboration of authority data with OCLC identity and works.
-      if @@config.get_oclc
-        oclc_iri = nil
-        begin
-          # Try to get OCLC using LOC ID.
-          oclc_iri = @loc.get_oclc_identity
-        rescue
-          # Try to get OCLC using 035a field data, but
-          # this is not as reliable/accurate as LOC.
-          oclc_iri = get_iri4oclc
-        end
-        unless oclc_iri.nil?
-          # Try to get additional data from OCLC, using the RDFa
-          # available in the OCLC identities pages.
-          oclc_auth = OclcIdentity.new oclc_iri
-          @graph.insert RDF::Statement(@loc.rdf_uri, RDF::OWL.sameAs, oclc_auth.rdf_uri)
-          oclc_auth.creative_works.each do |creative_work_uri|
-            # Notes on work-around for OCLC data inconsistency:
-            # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
-            # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
-            # However, the RDF for <http://worldcat.org/oclc/747413718> contains:
-            # <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://worldcat.org/entity/work/id/994448191> .
-            # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
-            #creative_work_iri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
-            #creative_work_iri = creative_work_iri.gsub('wwwwww','www') # in case it gets added already by OCLC
-            creative_work = OclcCreativeWork.new creative_work_uri
-            @graph.insert RDF::Statement(oclc_auth.rdf_uri, RDF::RDFS.seeAlso, creative_work.rdf_uri)
-            if @@config.oclc_auth2works
-              # Try to use VIAF to relate auth to work as creator, contributor, editor, etc.
-              # Note that this requires additional RDF retrieval for each work (slower processing).
-              unless @viaf.nil?
-                if creative_work.creator? @viaf.iri
-                  @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.creator, oclc_auth.rdf_uri)
-                elsif creative_work.contributor? @viaf.iri
-                  @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.contributor, oclc_auth.rdf_uri)
-                elsif creative_work.editor? @viaf.iri
-                  @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.editor, oclc_auth.rdf_uri)
-                end
-              end
-
-              # TODO: Is auth the subject of the work (as in biography) or both (as in autobiography).
-              # binding.pry if @@config.debug
-              # binding.pry if creative_work.iri.to_s == 'http://www.worldcat.org/oclc/006626542'
-
-              # Try to find the generic work entity for this example work.
-              creative_work.get_works.each do |oclc_work_uri|
-                oclc_work = OclcWork.new oclc_work_uri
-                @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.exampleOfWork, oclc_work.rdf_uri)
-              end
-            end
-
-          end
-        end
-
-      end
+      get_oclc_links if @@config.get_oclc
 
       @@config.logger.info "Extracted #{@loc.id}"
       @graph
