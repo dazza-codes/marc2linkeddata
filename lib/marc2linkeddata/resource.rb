@@ -1,13 +1,15 @@
 
-require_relative 'boot'
-
 module Marc2LinkedData
 
-  class Auth
+  class Resource
 
     attr_accessor :iri
+    # attr_reader :config
+
+    @@config = nil
 
     def initialize(uri=nil)
+      @@config ||= Marc2LinkedData.configuration
       if uri =~ /\A#{URI::regexp}\z/
         uri = Addressable::URI.parse(uri.to_s) rescue nil
       end
@@ -24,12 +26,31 @@ module Marc2LinkedData
       @iri.basename
     end
 
+    # This method is often overloaded in subclasses because
+    # RDF services use variations in the URL 'extension' patterns; e.g.
+    # see Loc#rdf and Viaf#rdf
     def rdf
       return @rdf unless @rdf.nil?
       # TODO: try to retrieve the rdf from a local triple store
       # TODO: if local triple store fails, try remote source(s)
       # TODO: if retrieved from a remote source, save the rdf to a local triple store
-      @rdf = RDF::Graph.load(@iri)
+      @rdf = get_rdf(@iri.to_s)
+    end
+
+    def get_rdf(uri4rdf)
+      tries = 0
+      begin
+        tries += 1
+        @rdf = RDF::Graph.load(uri4rdf)
+      rescue
+        retry if tries <= 2
+        binding.pry if @@config.debug
+        nil
+      end
+    end
+
+    def rdf_uri
+      RDF::URI.new(@iri)
     end
 
     def rdf_valid?
@@ -37,7 +58,8 @@ module Marc2LinkedData
     end
 
     def iri_types
-      rdf.query(SPARQL.parse("SELECT * WHERE { <#{@iri}> a ?o }"))
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> a ?o }")
+      rdf.query(q)
     end
 
     def rdf_find_object(id)
@@ -65,26 +87,26 @@ module Marc2LinkedData
         res = Marc2LinkedData.http_head_request(url)
         case res.code
           when '200'
-            # TODO: convert puts to logger?
-            puts "SUCCESS: #{@iri}\t-> #{url}"
+            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '301'
             #301 Moved Permanently
             url = res['location']
-            puts "SUCCESS: #{@iri}\t-> #{url}"
+            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '302','303'
             #302 Moved Temporarily
             #303 See Other
             # Use the current URL, most get requests will follow a 302 or 303
-            puts "SUCCESS: #{@iri}\t-> #{url}"
+            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '404'
-            puts "FAILURE: #{@iri}\t// #{url}"
+            @@config.logger.warn "#{@iri}\t// #{url}"
             return nil
           else
             # WTF
-            binding.pry
+            binding.pry if @@config.debug
+            @@config.logger.error "unknown http response code (#{res.code}) for #{@iri}"
             return nil
         end
       rescue
@@ -98,11 +120,8 @@ module Marc2LinkedData
     end
 
     def same_as_array
-      same_as.query(same_as_query).collect {|s| s[:o] }
-    end
-
-    def same_as_query
-      SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://www.w3.org/2002/07/owl#sameAs> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://www.w3.org/2002/07/owl#sameAs> ?o }")
+      same_as.query(q).collect {|s| s[:o] }
     end
 
   end

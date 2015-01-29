@@ -1,13 +1,33 @@
 require 'dotenv'
 Dotenv.load
 
-require_relative 'marc2linkeddata/boot'
+require 'addressable/uri'
+require 'json'
+require 'linkeddata'
+require 'marc'
+require 'rdf/4store'
+require 'ruby-progressbar'
+
+require 'pry'
+require 'pry-doc'
+
 require_relative 'marc2linkeddata/configuration'
-require_relative 'marc2linkeddata/auth'
+
+require_relative 'marc2linkeddata/resource'
+require_relative 'marc2linkeddata/isni'
+require_relative 'marc2linkeddata/lib_auth'
 require_relative 'marc2linkeddata/loc'
 require_relative 'marc2linkeddata/viaf'
+
+require_relative 'marc2linkeddata/oclc_resource'
+require_relative 'marc2linkeddata/oclc_identity'
+require_relative 'marc2linkeddata/oclc_creative_work'
+require_relative 'marc2linkeddata/oclc_work'
+
 require_relative 'marc2linkeddata/parseMarcAuthority'
 #require_relative 'marc2linkeddata/parseMarcCatalog'
+require_relative 'marc2linkeddata/sparql'
+
 
 module Marc2LinkedData
 
