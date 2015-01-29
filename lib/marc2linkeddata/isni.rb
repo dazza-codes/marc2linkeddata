@@ -10,11 +10,11 @@ module Marc2LinkedData
     PREFIX = 'http://www.isni.org/isni/'
 
     def rdf
+      # e.g. 'http://www.isni.org/isni/0000000109311081'
       return nil if @iri.nil?
       return @rdf unless @rdf.nil?
-      # TODO: determine how to get RDF
-      # TODO: not clear whether ISNI provides RDF (VIAF may be better)
-      @rdf = RDF::Graph.load(@iri.to_s)
+      uri4rdf = @iri.to_s + '.rdf'
+      @rdf = get_rdf(uri4rdf)
     end
 
   end

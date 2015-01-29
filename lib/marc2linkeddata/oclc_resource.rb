@@ -17,9 +17,9 @@ module Marc2LinkedData
     def rdf
       # e.g. 'http://worldcat.org/oclc/004957186'
       # also 'http://www.worldcat.org/oclc/004957186'
-      return nil if iri.nil?
+      return nil if @iri.nil?
       return @rdf unless @rdf.nil?
-      uri4rdf = iri.to_s
+      uri4rdf = @iri.to_s
       uri4rdf += '.rdf' unless uri4rdf.end_with? '.rdf'
       @rdf = get_rdf(uri4rdf)
     end
@@ -29,18 +29,15 @@ module Marc2LinkedData
     end
 
     def creator?(uri)
-      uri = RDF::URI.new uri
-      creators.include? uri
+      creators.include? RDF::URI.new(uri)
     end
 
     def contributor?(uri)
-      uri = RDF::URI.new uri
-      contributors.include? uri
+      contributors.include? RDF::URI.new(uri)
     end
 
     def editor?(uri)
-      uri = RDF::URI.new uri
-      editors.include? uri
+      editors.include? RDF::URI.new(uri)
     end
 
     def media_object?
@@ -68,7 +65,7 @@ module Marc2LinkedData
     end
 
     def publishers
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/publishers> ?o }")
+      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/publisher> ?o }")
       rdf.query(q).collect {|s| s[:o] }
     end
 

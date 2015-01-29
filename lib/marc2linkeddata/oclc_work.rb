@@ -8,7 +8,7 @@ module Marc2LinkedData
     #PREFIX = 'http://www.worldcat.org/entity/work/id/'
     PREFIX = 'http://worldcat.org/entity/work/id/'
 
-    def get_examples
+    def example_works
       q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/workExample> ?o }")
       rdf.query(q).collect {|s| s[:o] }
     end

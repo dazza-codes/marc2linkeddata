@@ -6,8 +6,10 @@ module Marc2LinkedData
     attr_accessor :iri
     # attr_reader :config
 
+    @@config = nil
+
     def initialize(uri=nil)
-      @config = Marc2LinkedData.configuration
+      @@config ||= Marc2LinkedData.configuration
       if uri =~ /\A#{URI::regexp}\z/
         uri = Addressable::URI.parse(uri.to_s) rescue nil
       end
@@ -42,9 +44,13 @@ module Marc2LinkedData
         @rdf = RDF::Graph.load(uri4rdf)
       rescue
         retry if tries <= 2
-        binding.pry if @config.debug
+        binding.pry if @@config.debug
         nil
       end
+    end
+
+    def rdf_uri
+      RDF::URI.new(@iri)
     end
 
     def rdf_valid?
@@ -81,26 +87,26 @@ module Marc2LinkedData
         res = Marc2LinkedData.http_head_request(url)
         case res.code
           when '200'
-            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
+            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '301'
             #301 Moved Permanently
             url = res['location']
-            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
+            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '302','303'
             #302 Moved Temporarily
             #303 See Other
             # Use the current URL, most get requests will follow a 302 or 303
-            @config.logger.debug "Mapped #{@iri}\t-> #{url}"
+            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
             return url
           when '404'
-            @config.logger.warn "#{@iri}\t// #{url}"
+            @@config.logger.warn "#{@iri}\t// #{url}"
             return nil
           else
             # WTF
-            binding.pry if @config.debug
-            @config.logger.error "unknown http response code (#{res.code}) for #{@iri}"
+            binding.pry if @@config.debug
+            @@config.logger.error "unknown http response code (#{res.code}) for #{@iri}"
             return nil
         end
       rescue

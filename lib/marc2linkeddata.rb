@@ -15,6 +15,7 @@ require_relative 'marc2linkeddata/configuration'
 
 require_relative 'marc2linkeddata/resource'
 require_relative 'marc2linkeddata/isni'
+require_relative 'marc2linkeddata/lib_auth'
 require_relative 'marc2linkeddata/loc'
 require_relative 'marc2linkeddata/viaf'
 

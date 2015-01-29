@@ -28,8 +28,9 @@ def marc2ld(marc_filename)
   ld_filename = marc_filename.gsub('.mrc','.ttl')
   puts "Translating: #{marc_filename} to #{ld_filename}"
   ld_file = File.open(ld_filename,'w')
-  Marc2LinkedData.write_prefixes(ld_file)
+  # Marc2LinkedData.write_prefixes(ld_file)
   marc_file = File.open(marc_filename,'r')
+  auth_count = 0
   auth_records = marc_auth_count(marc_file)
   progress = ProgressBar.create(:total => auth_records, :format => '%a %f |%b>>%i| %P%% %t')
   until marc_file.eof?
@@ -42,17 +43,23 @@ def marc2ld(marc_filename)
         # ParseMarcAuthority is a lazy parser, so
         # init only assigns record to an instance var.
         auth = Marc2LinkedData::ParseMarcAuthority.new(record)
-        auth_id = "auth:#{auth.get_id}"
-        triples = nil
-        # TODO: enable additional persistence options
-        # Use data already in redis (if enabled)
-        triples = CONFIG.redis.get(auth_id) if CONFIG.redis_read
-        if triples.nil?
-          triples = auth.to_ttl  # generate new triples
-          # Update redis (if enabled) for triples not read from redis
-          CONFIG.redis.set(auth_id, triples) if CONFIG.redis_write
-        end
-        ld_file.write(triples)
+        auth_count += 1
+        # auth_id = "auth:#{auth.get_id}"
+        # triples = nil
+        # # TODO: enable additional persistence options
+        # # Use data already in redis (if enabled)
+        # triples = CONFIG.redis.get(auth_id) if CONFIG.redis_read
+        # if triples.nil?
+        #   triples = auth.to_ttl  # generate new triples
+        #   # Update redis (if enabled) for triples not read from redis
+        #   CONFIG.redis.set(auth_id, triples) if CONFIG.redis_write
+        # end
+
+        triples = auth.to_ttl.lines
+        binding.pry if (CONFIG.debug && triples.empty?)
+        triples.delete_if {|l| l.chomp.empty? }
+        triples.delete_if {|l| l.start_with?('@prefix') } if auth_count > 1
+        ld_file.write(triples.join)
         ld_file.flush
       end
     rescue => e
