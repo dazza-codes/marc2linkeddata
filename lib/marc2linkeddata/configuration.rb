@@ -4,6 +4,12 @@ module Marc2LinkedData
   class Configuration
 
     attr_accessor :debug
+
+    attr_accessor :field_auth_loc
+    attr_accessor :field_auth_isni
+    attr_accessor :field_auth_oclc
+    attr_accessor :field_auth_viaf
+
     attr_accessor :get_isni
     attr_accessor :get_loc
     attr_accessor :get_oclc
@@ -67,11 +73,15 @@ module Marc2LinkedData
       @prefixes['viaf'] = 'http://viaf.org/viaf/'
 
       # Authority parse options
+      @field_auth_loc = ENV['FIELD_AUTH_LOC']
+      @field_auth_isni = ENV['FIELD_AUTH_ISNI']
+      @field_auth_oclc = ENV['FIELD_AUTH_OCLC']
+      @field_auth_viaf = ENV['FIELD_AUTH_VIAF']
+
       @get_isni = env_boolean('GET_ISNI')
       @get_loc = env_boolean('GET_LOC')
-      @get_oclc = env_boolean('GET_OCLC')
       @get_viaf = env_boolean('GET_VIAF')
-
+      @get_oclc = env_boolean('GET_OCLC')
       @oclc_auth2works = env_boolean('OCLC_AUTH2WORKS')
 
       # Vocabulary options

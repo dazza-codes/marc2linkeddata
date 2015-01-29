@@ -27,6 +27,12 @@ module Marc2LinkedData
       @viaf = nil
     end
 
+    def get_fields(field_num)
+      fields = @record.fields.select {|f| f if f.tag == field_num }
+      raise "Invalid data in field #{field_num}" if fields.length < 1
+      fields
+    end
+
     # Try to use the SUL catkey and/or the OCLC control numbers, maybe SUL
     # catkey in the record IRI
     def get_id
@@ -35,7 +41,7 @@ module Marc2LinkedData
       #field001 = record.fields.select {|f| f if f.tag == '001' }.first.value
       #field003 = record.fields.select {|f| f if f.tag == '003' }.first.value
       #"#{field003}-#{field001}"
-      @record.fields.select {|f| f if f.tag == '001' }.first.value
+      get_fields('001').first.value
     end
 
     def get_iri(field, iri_pattern)
@@ -50,9 +56,9 @@ module Marc2LinkedData
     def get_iri4isni
       isni_iri = nil
       begin
-        # 922 is the ISNI IRI, e.g. http://www.isni.org/0000000109311081
-        field922 = @record.fields.select {|f| f if f.tag == '922' }.first
-        isni_iri = get_iri(field922, 'isni.org')
+        # e.g. http://www.isni.org/0000000109311081
+        field = get_fields(@@config.field_auth_isni).first
+        isni_iri = get_iri(field, 'isni.org')
         # If ISNI is not already in the MARC record, try to get it from VIAF.
         if isni_iri.nil? && @@config.get_isni
           isni_iri = @viaf.get_isni rescue nil
@@ -76,9 +82,12 @@ module Marc2LinkedData
     def get_iri4loc
       loc_iri = nil
       begin
-        # 920 is the loc IRI,  e.g. http://id.loc.gov/authorities/names/n42000906
-        field920 = @record.fields.select {|f| f if f.tag == '920' }.first
-        loc_iri = get_iri(field920, 'id.loc.gov')
+        # e.g. http://id.loc.gov/authorities/names/n42000906
+        field = get_fields(@@config.field_auth_loc).first
+        loc_iri = get_iri(field, 'id.loc.gov')
+      rescue
+      end
+      begin
         if loc_iri.nil?
           # If the LOC is not in the marc record, try to determine the LOC IRI from the ID.
           loc_id = get_id
@@ -90,6 +99,7 @@ module Marc2LinkedData
           end
           unless loc_iri.nil?
             # Verify the URL (used HEAD so it's as fast as possible)
+            @@config.logger.debug "Trying to validate LOC IRI: #{loc_iri}"
             res = Marc2LinkedData.http_head_request(loc_iri + '.rdf')
             case res.code
               when '200'
@@ -108,12 +118,12 @@ module Marc2LinkedData
           if loc_iri.nil?
             # If it gets here, it's a problem.
             binding.pry if @@config.debug
-            @@config.logger.error 'FAILURE to resolve LOC URL'
+            @@config.logger.error 'FAILURE to resolve LOC IRI'
           else
-            @@config.logger.debug "DISCOVERED: #{loc_iri}"
+            @@config.logger.debug "DISCOVERED LOC IRI: #{loc_iri}"
           end
         else
-          @@config.logger.debug "MARC contains LOC: #{loc_iri}"
+          @@config.logger.debug "MARC contains LOC IRI: #{loc_iri}"
         end
         return loc_iri
       rescue
@@ -123,8 +133,7 @@ module Marc2LinkedData
 
     def get_iri4oclc
       begin
-        # 035 is the OCLC control number
-        field = @record.fields.select {|f| f if f.tag == '035' }.first
+        field = get_fields(@@config.field_auth_oclc).first
         oclc_cn = field.subfields.collect {|f| f.value if f.code == 'a'}.first
         oclc_id = /\d+$/.match(oclc_cn).to_s
         oclc_id.empty? ? nil : "http://www.worldcat.org/oclc/#{oclc_id}"
@@ -135,10 +144,10 @@ module Marc2LinkedData
 
     def get_iri4viaf
       begin
-        # 921 is the viaf IRI, e.g. http://viaf.org/viaf/181829329
-        # Note VIAF RSS feed for changes, e.g. http://viaf.org/viaf/181829329.rss
-        field921 = @record.fields.select {|f| f if f.tag == '921' }.first
-        viaf_iri = get_iri(field921, 'viaf.org')
+        # e.g. http://viaf.org/viaf/181829329
+        # VIAF RSS feed for changes, e.g. http://viaf.org/viaf/181829329.rss
+        field = get_fields(@@config.field_auth_viaf).first
+        viaf_iri = get_iri(field, 'viaf.org')
         # If VIAF is not already in the MARC record, try to get from LOC.
         if viaf_iri.nil? && @@config.get_viaf
           viaf_iri = @loc.get_viaf rescue nil
@@ -160,15 +169,15 @@ module Marc2LinkedData
       # 09:    'a' - UCS/Unicode
       # 12-16: '00253' - base address of data, Length of Leader and Directory
       # 17:    'n' - Complete authority record
-      leader_status_codes = {
-          'a' => 'Increase in encoding level',
-          'c' => 'Corrected or revised',
-          'd' => 'Deleted',
-          'n' => 'New',
-          'o' => 'Obsolete',
-          's' => 'Deleted; heading split into two or more headings',
-          'x' => 'Deleted; heading replaced by another heading'
-      }
+      # leader_status_codes = {
+      #     'a' => 'Increase in encoding level',
+      #     'c' => 'Corrected or revised',
+      #     'd' => 'Deleted',
+      #     'n' => 'New',
+      #     'o' => 'Obsolete',
+      #     's' => 'Deleted; heading split into two or more headings',
+      #     'x' => 'Deleted; heading replaced by another heading'
+      # }
       leader = file_handle.read(leader_bytes)
       file_handle.seek(-1 * leader_bytes, IO::SEEK_CUR)
       {
@@ -183,9 +192,8 @@ module Marc2LinkedData
 
     def parse_008
       # http://www.loc.gov/marc/authority/concise/ad008.html
-      field008 = @record.fields.select {|f| f if f.tag == '008' }
-      raise 'Invalid data in field008' if field008.length != 1
-      field008 = field008.first.value
+      field = get_fields('008').first
+      field008 = field.value
       languages = []
       languages.append('English') if ['b','e'].include? field008[8]
       languages.append('French') if ['b','f'].include? field008[8]
@@ -237,7 +245,8 @@ module Marc2LinkedData
       # http://www.loc.gov/marc/authority/concise/ad100.html
       begin
         # 100 is a personal name
-        field = @record.fields.select {|f| f if f.tag == '100' }.first
+        field = get_fields('100').first
+        # field = @record.fields.select {|f| f if f.tag == '100' }.first
         name = field.subfields.select {|f| f.code == 'a' }.first.value rescue ''
         name.force_encoding('UTF-8')
       rescue
