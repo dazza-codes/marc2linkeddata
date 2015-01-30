@@ -7,6 +7,9 @@ require 'pry'
 #EXAMPLE_RECORD_FILE='../marc/catalog/stf.00.mrc'
 EXAMPLE_RECORD_FILE='../marc/catalog/stf.51.mrc'
 
+
+## TODO: Try to find SUL PURL in the 856 field of a Symphony record
+
 ## reading records from a batch file
 #reader = MARC::Reader.new(EXAMPLE_RECORD_FILE, :external_encoding => "MARC-8")
 #reader = MARC::Reader.new(EXAMPLE_RECORD_FILE, :external_encoding => "UTF-8", :validate_encoding => true)

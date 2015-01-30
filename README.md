@@ -2,7 +2,8 @@
 marc2linkeddata
 ===============
 
-Utilities for translating MARC21 into linked data.
+Utilities for translating MARC21 into linked data.  The project has
+focused on authority records (as of Feb, 2015).
 
 Optional Dependencies
 
@@ -48,7 +49,9 @@ Clone
 
 Script
 
-    # First configure (see above).
+    # First configure (see .env_example).  Performance will
+    # slow with more retrieval of linked data resources, such
+    # as OCLC works for authorities.
 
     # Translate a MARC21 authority file to a turtle file.
     # readMarcAuthority [ authfile1.mrc .. authfileN.mrc ]
