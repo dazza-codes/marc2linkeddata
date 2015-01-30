@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = 'marc2linkeddata'
-  s.version     = '0.0.3'
+  s.version     = '0.0.4'
   s.licenses    = ['Apache-2.0']
 
   s.platform    = Gem::Platform::RUBY
@@ -31,10 +31,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'pry-doc'
   s.add_development_dependency 'rspec'
 
-  s.files         = `git ls-files`.split($/)
-  dev_files = ['.gitignore','bin/setup.sh','bin/test.sh']
+  s.files   = `git ls-files`.split($/)
+  dev_files = %w(.gitignore bin/setup.sh bin/test.sh)
   dev_files.each {|f| s.files.delete f }
 
-  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
+  s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files  = s.files.grep(%r{^(test|spec|features)/})
 end

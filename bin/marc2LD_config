@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+gem_path=$(dirname $0)
+env_example_file="$gem_path/.env_example"
+cp $env_example_file .env_example
+echo "Copy .env_example into .env and modify as required"
+
