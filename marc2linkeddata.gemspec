@@ -27,8 +27,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'hiredis'
   s.add_dependency 'redis'
 
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'pry-doc'
+  s.add_dependency 'pry'
+  s.add_dependency 'pry-doc'
   s.add_development_dependency 'rspec'
 
   s.files         = `git ls-files`.split($/)
