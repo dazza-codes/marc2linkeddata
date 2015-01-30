@@ -16,6 +16,20 @@ Install
     gem install marc2linkeddata
     # when a gem is published
 
+Install with rbenv (on linux)
+
+    cd
+    git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
+    echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+    source .bash_profile
+    git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+    rbenv install 2.1.5   # or the latest ruby available
+    rbenv global 2.1.5
+    rbenv rehash
+    gem install bundle
+    gem install marc2linkeddata
+
 Configure
 
 - set env values and/or create or modify a .env file
