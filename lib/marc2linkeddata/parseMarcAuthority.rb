@@ -7,11 +7,6 @@ module Marc2LinkedData
 
   class ParseMarcAuthority
 
-    # TODO: provide iterator pattern on an entire file of records.
-    # @leader = ParseMarcAuthority::parse_leader(marc_file)
-    # raw = marc_file.read(@leader[:length])
-    # @record = MARC::Reader.decode(raw)
-
     @@config = nil
 
     attr_reader :loc
@@ -258,7 +253,7 @@ module Marc2LinkedData
       # http://www.loc.gov/marc/authority/concise/ad110.html
       begin
         # 110 is a corporate name
-        field = @record.fields.select {|f| f if f.tag == '110' }.first
+        field = get_fields('110').first
         a = field.subfields.collect {|f| f.value if f.code == 'a' }.compact rescue []
         b = field.subfields.collect {|f| f.value if f.code == 'b' }.compact rescue []
         c = field.subfields.collect {|f| f.value if f.code == 'c' }.compact rescue []
@@ -273,6 +268,7 @@ module Marc2LinkedData
       # http://www.loc.gov/marc/authority/concise/ad111.html
       begin
         # 111 is a meeting name
+        field = get_fields('111').first
         field = @record.fields.select {|f| f if f.tag == '111' }.first
         a = field.subfields.collect {|f| f.value if f.code == 'a' }.compact rescue []
         # TODO: incorporate additional subfields?
@@ -290,7 +286,7 @@ module Marc2LinkedData
       # http://www.loc.gov/marc/authority/concise/ad151.html
       begin
         # 151 is a geographic name
-        field = @record.fields.select {|f| f if f.tag == '151' }.first
+        field = get_fields('151').first
         name = field.subfields.collect {|f| f.value if f.code == 'a' }.first rescue ''
         name.force_encoding('UTF-8')
       rescue
@@ -428,7 +424,7 @@ module Marc2LinkedData
                 @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.editor, oclc_auth.rdf_uri)
               end
             end
-            # TODO: Is auth the subject of the work (as in biography) or both (as in autobiography).
+            # TODO: Is auth the subject of the work (as in biography) or both (as in autobiography)?
             # binding.pry if @@config.debug
             # binding.pry if creative_work.iri.to_s == 'http://www.worldcat.org/oclc/006626542'
             # Try to find the generic work entity for this example work.
@@ -441,7 +437,7 @@ module Marc2LinkedData
       end
     end
 
-    # TODO: use an 'affiliation' entry, maybe 373?  (optional field)
+    # TODO: use an institutional 'affiliation' entry, maybe 373?  (optional field)
 
     def to_ttl
       graph.to_ttl
