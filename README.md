@@ -14,7 +14,6 @@ Optional Dependencies
 Install
 
     gem install marc2linkeddata
-    # when a gem is published
 
 Install with rbenv (on linux)
 
@@ -32,10 +31,24 @@ Install with rbenv (on linux)
 
 Configure
 
-- set env values and/or create or modify a .env file
-- see the .env_example file for details
+    # set env values and/or create or modify a .env file
+    # see the .env_example file for details
+    marc2LD_config
+    # Performance will slow with more retrieval of linked
+    # data resources, such as OCLC works for authorities.
 
-Use
+Scripting
+
+    # First configure (see details above).
+    # Translate a MARC21 authority file to a turtle file.
+    # readMarcAuthority [ authfile1.mrc .. authfileN.mrc ]
+    marcAuthority2LD auth.01.mrc
+
+    # Check the syntax of the resulting turtle file.
+    rapper -c -i turtle auth.01.ttl
+
+
+Ruby Library Use
 
 - authority files
 
@@ -53,26 +66,16 @@ Use
           end
         end
 
-Clone
+Development
 
-    git clone git@github.com:darrenleeweber/marc2linkeddata.git
+    git clone https://github.com/ld4l/marc2linkeddata.git
     cd marc2linkeddata
     ./bin/setup.sh
     ./bin/test.sh
-    cp .env_example .env # then edit .env
+    cp .env_example .env # and edit .env
+    # develop code and/or bin scripts; run bin scripts, e.g.
+    .binstubs/marcAuthority2LD auth.01.mrc
 
-Script
-
-    # First configure (see .env_example).  Performance will
-    # slow with more retrieval of linked data resources, such
-    # as OCLC works for authorities.
-
-    # Translate a MARC21 authority file to a turtle file.
-    # readMarcAuthority [ authfile1.mrc .. authfileN.mrc ]
-    .binstubs/readMarcAuthority data/auth.01.mrc
-
-    # Check the syntax of the resulting turtle file.
-    rapper -c -i turtle data/auth.01.ttl
 
 # License
 

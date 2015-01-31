@@ -1,7 +1,13 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 
-gem_path=$(dirname $0)
-env_example_file="$gem_path/.env_example"
-cp $env_example_file .env_example
-echo "Copy .env_example into .env and modify as required"
+require 'fileutils'
+# p FileUtils.options
+
+bin_path = File.dirname(__FILE__)
+env_example_file = File.join(bin_path, '..', '.env_example')
+
+puts "Copying config file:  #{env_example_file}  ->  #{FileUtils.pwd}"
+FileUtils.copy(env_example_file, FileUtils.pwd) rescue nil
+puts 'Copy .env_example into .env and modify as required'
+
 
