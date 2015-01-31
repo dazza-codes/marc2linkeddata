@@ -101,6 +101,7 @@ Redis Persistence - based on https://github.com/redis/redis-rb
                            # recent data is updated in redis
 
 HELP
+  exit!
 else
 end
 
