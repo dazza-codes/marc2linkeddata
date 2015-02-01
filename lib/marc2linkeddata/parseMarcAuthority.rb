@@ -450,7 +450,10 @@ module Marc2LinkedData
       # Try to find LOC, VIAF, and ISNI IRIs in the MARC record
       @loc = Loc.new get_iri4loc rescue nil
       # Try to identify problems in getting an LOC IRI.
-      binding.pry if (@@config.debug && @loc.nil?)
+      if @loc.nil?
+        binding.pry if @@config.debug
+        raise 'Failed to get authority at LOC'
+      end
       # might require LOC to get ISNI.
       @viaf = Viaf.new get_iri4viaf rescue nil
       # might require VIAF to get ISNI.
