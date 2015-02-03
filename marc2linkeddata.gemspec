@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   # ruby gem for RDF on allegrograph, see https://github.com/emk/rdf-agraph
   s.add_dependency 'rdf-agraph'
   # ruby gem for RDF on mongodb, see https://rubygems.org/gems/rdf-mongo
+  s.add_dependency 'bson_ext'
   s.add_dependency 'rdf-mongo'
   # cache simple RDF on redis
   s.add_dependency 'hiredis'
