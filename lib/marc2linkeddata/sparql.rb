@@ -37,12 +37,6 @@ module Marc2LinkedData
     # end
 
 
-    # For reference, note that there is an allegrograph ruby gem, see
-    # https://github.com/emk/rdf-agraph
-
-    # For reference, note that there is a ruby gem for RDF on mongodb, see
-    # https://rubygems.org/gems/rdf-mongo
-
 
 
 
