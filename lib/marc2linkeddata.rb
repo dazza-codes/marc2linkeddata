@@ -6,6 +6,7 @@ require 'json'
 require 'linkeddata'
 require 'marc'
 require 'rdf/4store'
+require 'rdf/mongo'
 require 'ruby-progressbar'
 
 require 'pry'
@@ -24,9 +25,13 @@ require_relative 'marc2linkeddata/oclc_identity'
 require_relative 'marc2linkeddata/oclc_creative_work'
 require_relative 'marc2linkeddata/oclc_work'
 
+require_relative 'marc2linkeddata/sparql'
+require_relative 'marc2linkeddata/sparql_dbpedia'
+require_relative 'marc2linkeddata/sparql_pubmed'
+
 require_relative 'marc2linkeddata/parseMarcAuthority'
 #require_relative 'marc2linkeddata/parseMarcCatalog'
-require_relative 'marc2linkeddata/sparql'
+
 
 
 module Marc2LinkedData

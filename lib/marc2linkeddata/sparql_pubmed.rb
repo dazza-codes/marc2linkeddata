@@ -2,13 +2,11 @@ require 'base64'
 
 module Marc2LinkedData
 
-  class SparqlPubmed
-
-    attr_reader :sparql
+  class SparqlPubmed < Sparql
 
     def initialize
       # config = Marc2LinkedData.configuration
-      @sparql = SPARQL::Client.new('http://pubmed.bio2rdf.org/sparql')
+      super('http://pubmed.bio2rdf.org/sparql')
     end
 
     # http://bio2rdf.org/pubmed_vocabulary:Author
