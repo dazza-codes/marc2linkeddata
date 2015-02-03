@@ -7,19 +7,19 @@ module Marc2LinkedData
     PREFIX = 'http://viaf.org/viaf/'
 
     # def id
-    #   return nil if iri.nil?
+    #   return nil if @iri.nil?
     #   iri.path.gsub('viaf/','').gsub('/','')
     # end
 
     def rdf
-      return nil if iri.nil?
+      return nil if @iri.nil?
       return @rdf unless @rdf.nil?
-      uri4rdf = iri.to_s + '/rdf.xml'
+      uri4rdf = @iri.to_s + '/rdf.xml'
       @rdf = get_rdf(uri4rdf)
     end
 
     def get_isni
-      return nil if iri.nil?
+      return nil if @iri.nil?
       return nil unless rdf_valid?
       return @isni_iri unless @isni_iri.nil?
       # Try to get ISNI source for VIAF
