@@ -83,8 +83,9 @@ ARGV.each do |filename|
   marc_files.push(path) if path.exist?
 end
 if marc_files.empty?
+  script_name = File.basename(__FILE__)
   puts <<HELP
-#{__FILE__} marc_authority_file1.mrc [ marc_authority_file2.mrc .. marc_authority_fileN.mrc ]
+#{script_name} marc_authority_file1.mrc [ marc_authority_file2.mrc .. marc_authority_fileN.mrc ]
 
 Output is RDF triples in a turtle file (.ttl) for every input .mrc file.
 Optional persistence services can be controlled by environment variables.
