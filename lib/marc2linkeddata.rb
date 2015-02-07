@@ -3,14 +3,18 @@ Dotenv.load
 
 require 'addressable/uri'
 require 'json'
-require 'linkeddata'
+require 'rest_client'
+RestClient.proxy = ENV['http_proxy'] unless ENV['http_proxy'].nil?
+
 require 'marc'
+
+require 'linkeddata'
 require 'rdf/4store'
 require 'rdf/mongo'
-require 'ruby-progressbar'
 
 require 'pry'
 require 'pry-doc'
+require 'ruby-progressbar'
 
 require_relative 'marc2linkeddata/configuration'
 
