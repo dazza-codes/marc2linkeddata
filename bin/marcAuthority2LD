@@ -40,6 +40,10 @@ def marc2ld(marc_filename)
       if leader[:type] == 'z'
         progress.increment
         record = MARC::Reader.decode(raw)
+
+        # TODO: thread the record parser and file output;
+        # TODO: use a new file for each record.
+
         # ParseMarcAuthority is a lazy parser, so
         # init only assigns record to an instance var.
         auth = Marc2LinkedData::ParseMarcAuthority.new(record)
