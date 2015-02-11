@@ -23,6 +23,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'restclient'
   s.add_dependency 'ruby-progressbar'
 
+  # DB clients
+  s.add_dependency 'mysql'
+  s.add_dependency 'sequel'
+
   # Use ENV for config
   s.add_dependency 'dotenv'
 
@@ -33,6 +37,7 @@ Gem::Specification.new do |s|
   # ruby gem for RDF on mongodb, see https://rubygems.org/gems/rdf-mongo
   s.add_dependency 'bson_ext'
   s.add_dependency 'rdf-mongo'
+
   # cache simple RDF on redis
   s.add_dependency 'hiredis'
   s.add_dependency 'redis'

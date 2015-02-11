@@ -24,6 +24,10 @@ require_relative 'marc2linkeddata/lib_auth'
 require_relative 'marc2linkeddata/loc'
 require_relative 'marc2linkeddata/viaf'
 
+if ENV['SUL_CAP_ENABLED'].to_s.upcase == 'TRUE'
+  require_relative 'marc2linkeddata/cap'
+end
+
 require_relative 'marc2linkeddata/oclc_resource'
 require_relative 'marc2linkeddata/oclc_identity'
 require_relative 'marc2linkeddata/oclc_creative_work'
