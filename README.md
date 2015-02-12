@@ -5,10 +5,34 @@ marc2linkeddata
 Utilities for translating MARC21 into linked data.  The project has
 focused on authority records (as of Feb, 2015).
 
+It has config options that can be enabled to increase the amount of data retrieved.
+Without any HTTP options enabled, using only data in the MARC record, it can
+translate 100,000 authority records in about 5-6 min on a current laptop system.
+File IO is the most expensive operation in this mode, so it helps to have a solid
+state drive or something with high IO performance.
+
+The current output is to the file system, but it should be easy to incorporate
+and configure alternatives by using the RDF.rb facilities for connecting to a
+repository.  A minor attempt was explored to use redis for caching, but that
+exploration hasn't matured much, mainly because there is no 'cache-expiry' data
+yet and because it would be better to use an RDF.rb extension of some
+kind (for redis, mongodb, etc) or to use a triple store/solr platform.
+
+With HTTP/RDF retrieval options enabled, it can take a lot longer (days) and the
+providers may not be very happy about a barrage of requests.
+
+TODO: A significant problem to solve is effective caching or mirrors for linked data.
+The retrieval should inspect any HTTP cache headers that might be available and
+adding PROVO to the linked-data graph generated for each record.
+
+TODO: Provide system platform options, to dockerize the application and make it easier
+for automatic horizontal scaling.  Consider https://www.packer.io/intro/index.html
+
 Optional Dependencies
 
-  - http://redis.io/
   - http://4store.org/
+  - http://www.mongodb.org/
+  - http://redis.io/
   - see notes below
 
 Install
