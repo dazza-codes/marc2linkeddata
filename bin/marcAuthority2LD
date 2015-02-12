@@ -138,6 +138,11 @@ def marc_file2ld(marc_filename)
   ld_file.close
 end
 
+def thread_wait(threads)
+  threads.each{|t| t.join}
+  threads.delete_if {|t| t.status == false}
+  threads.delete_if {|t| t.status.nil? }
+end
 
 
 # ---------------------------------------------------------------------
@@ -179,16 +184,16 @@ marc_files.each do |path|
   auth_records = marc_authority_records(path.to_s)
   progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
   if CONFIG.threads
-    thread_sleep = 0.0025 # 2.5 milliseconds
     thread_limit = 25
     threads = []
     auth_records.each do |r|
-      until threads.map { |t| t.status }.count('run') < thread_limit do
-        sleep thread_sleep
-      end
-      threads << Thread.new { marc_record2turtle(r, output_path) }
+      thread_wait(threads) while threads.length >= thread_limit
+      t = Thread.new { marc_record2turtle(r, output_path) }
+      t.abort_on_exception = true
+      threads << t
       progress.increment  # increment progress although thread is still running
     end
+    # Ensure any remaining threads complete
     threads.each{|t| t.join}
   else
     auth_records.each do |r|
