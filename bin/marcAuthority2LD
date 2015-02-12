@@ -184,10 +184,9 @@ marc_files.each do |path|
   auth_records = marc_authority_records(path.to_s)
   progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
   if CONFIG.threads
-    thread_limit = 25
     threads = []
     auth_records.each do |r|
-      thread_wait(threads) while threads.length >= thread_limit
+      thread_wait(threads) while threads.length >= CONFIG.thread_limit
       t = Thread.new { marc_record2turtle(r, output_path) }
       t.abort_on_exception = true
       threads << t

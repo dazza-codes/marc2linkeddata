@@ -4,7 +4,9 @@ module Marc2LinkedData
   class Configuration
 
     attr_accessor :debug
+
     attr_accessor :threads
+    attr_accessor :thread_limit
 
     attr_accessor :field_auth_loc
     attr_accessor :field_auth_isni
@@ -37,6 +39,7 @@ module Marc2LinkedData
     def initialize
       @debug = env_boolean('DEBUG')
       @threads = env_boolean('THREADS')
+      @thread_limit = ENV['THREAD_LIMIT'] || 25
 
       # logging
       log_file = ENV['LOG_FILE'] || 'marc2ld.log'
