@@ -143,7 +143,7 @@ module Marc2LinkedData
         # VIAF RSS feed for changes, e.g. http://viaf.org/viaf/181829329.rss
         field = get_fields(@@config.field_auth_viaf).first
         viaf_iri = get_iri(field, 'viaf.org')
-        # If VIAF is not already in the MARC record, try to get from LOC.
+        # If VIAF is not already in the MARC record, try to get it from LOC.
         if viaf_iri.nil? && @@config.get_viaf
           viaf_iri = @loc.get_viaf rescue nil
           @@config.logger.debug 'Failed to resolve VIAF URI' if viaf_iri.nil?
@@ -184,6 +184,10 @@ module Marc2LinkedData
           :complete => leader[17].include?('n')
       }
     end
+
+
+    # BLOCK ----------------------------------------------------
+    # Parse field numbers
 
     def parse_008
       # http://www.loc.gov/marc/authority/concise/ad008.html
@@ -293,6 +297,45 @@ module Marc2LinkedData
         'ERROR_PLACE_NAME'
       end
     end
+
+
+    # BLOCK ----------------------------------------------------
+    # Authority record types
+
+    def conference?
+      # e.g. http://id.loc.gov/authorities/names/n79044866
+      type = parse_111
+      (type.empty? || type.include?('ERROR')) ? false : true
+    end
+
+    def corporation?
+      type = parse_110
+      (type.empty? || type.include?('ERROR')) ? false : true
+    end
+
+    def name_title?
+      # e.g. http://id.loc.gov/authorities/names/n79044934
+      binding.pry if @@config.debug
+      return ''
+    end
+
+    def person?
+      type = parse_100
+      (type.empty? || type.include?('ERROR')) ? false : true
+    end
+
+    def place?
+      # e.g. http://id.loc.gov/authorities/names/n79045127
+      type = parse_151
+      (type.empty? || type.include?('ERROR')) ? false : true
+    end
+
+    # TODO: other authority types?
+
+
+
+    # BLOCK ----------------------------------------------------
+    # Parse authority records using RDF
 
     def parse_loc_auth_name
       #
@@ -467,6 +510,7 @@ module Marc2LinkedData
       @graph.insert RDF::Statement(@lib.rdf_uri, RDF::OWL.sameAs, @loc.rdf_uri)
       @graph.insert RDF::Statement(@lib.rdf_uri, RDF::OWL.sameAs, @viaf.rdf_uri) unless @viaf.nil?
       @graph.insert RDF::Statement(@lib.rdf_uri, RDF::OWL.sameAs, @isni.rdf_uri) unless @isni.nil?
+
       return @graph unless @@config.get_loc
 
       # TODO: find codes in the marc record to differentiate the authority into
@@ -477,6 +521,7 @@ module Marc2LinkedData
       elsif @loc.iri.to_s =~ /subjects/
         parse_loc_auth_subject
       else
+        # What is this?
         binding.pry if @@config.debug
       end
       # Optional elaboration of authority data with OCLC identity and works.
