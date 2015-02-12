@@ -34,6 +34,9 @@ Optional Dependencies
   - http://www.mongodb.org/
   - http://redis.io/
   - see notes below
+  - see also:
+    - http://marmotta.apache.org
+    - http://stardog.com
 
 Install
 
