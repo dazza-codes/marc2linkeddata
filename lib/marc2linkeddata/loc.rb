@@ -61,6 +61,10 @@ module Marc2LinkedData
       iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#Geographic' }.length > 0
     end
 
+    def uniform_title?
+      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#Title' }.length > 0
+    end
+
     def get_oclc_identity
       # Try to get OCLC URI from LOC ID
       # http://oclc.org/developer/develop/web-services/worldcat-identities.en.html
