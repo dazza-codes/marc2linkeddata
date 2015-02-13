@@ -22,7 +22,8 @@ With HTTP/RDF retrieval options enabled, it can take a lot longer (days) and the
 providers may not be very happy about a barrage of requests.
 
 Note that it runs a lot slower on jruby-9.0.0.0-pre1 than MRI 2.2.0, whether threads
-are enabled or not.
+are enabled or not.  It raises exceptions on jruby-1.7.9, related to ruby
+language support (such as Array#delete_if).
 
 TODO: A significant problem to solve is effective caching or mirrors for linked data.
 The retrieval should inspect any HTTP cache headers that might be available and
