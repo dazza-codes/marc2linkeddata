@@ -4,11 +4,11 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = 'marc2linkeddata'
-  s.version     = '0.0.7'
+  s.version     = '0.1.0'
   s.licenses    = ['Apache-2.0']
 
   # mysql and bson_ext only install on MRI (c-ruby)
-  s.platform    = Gem::Platform::CURRENT
+  s.platform    = Gem::Platform::RUBY
 
   s.authors     = ['Darren Weber',]
   s.email       = ['dlweber@stanford.edu']
