@@ -57,7 +57,7 @@ module Marc2LinkedData
       # obj.nil? ? false : true
     end
 
-    def place?
+    def geographic?
       iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#Geographic' }.length > 0
     end
 
