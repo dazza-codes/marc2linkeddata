@@ -3,7 +3,7 @@ marc2linkeddata
 ===============
 
 Utilities for translating MARC21 into linked data.  The project has
-focused on authority records (as of Feb, 2015).
+focused on authority records (as of 2015).
 
 It has config options that can be enabled to increase the amount of data retrieved.
 Without any HTTP options enabled, using only data in the MARC record, it can
@@ -20,6 +20,9 @@ kind (for redis, mongodb, etc) or to use a triple store/solr platform.
 
 With HTTP/RDF retrieval options enabled, it can take a lot longer (days) and the
 providers may not be very happy about a barrage of requests.
+
+Note that it runs a lot slower on jruby-9.0.0.0-pre1 than MRI 2.2.0, whether threads
+are enabled or not.
 
 TODO: A significant problem to solve is effective caching or mirrors for linked data.
 The retrieval should inspect any HTTP cache headers that might be available and
