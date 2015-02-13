@@ -7,14 +7,16 @@ Gem::Specification.new do |s|
   s.version     = '0.0.7'
   s.licenses    = ['Apache-2.0']
 
-  s.platform    = Gem::Platform::RUBY
+  # mysql and bson_ext only install on MRI (c-ruby)
+  s.platform    = Gem::Platform::CURRENT
+
   s.authors     = ['Darren Weber',]
   s.email       = ['dlweber@stanford.edu']
   s.summary     = 'Convert Marc21 records to linked data, for use in SUL/DLSS projects'
   s.description = 'Utilities for translation of Marc21 records to linked open data.'
   s.homepage    = 'https://github.com/darrenleeweber/marc2linkeddata'
 
-  s.required_rubygems_version = '>= 1.3.6'
+  #s.required_rubygems_version = '>= 1.3.6'
   # s.required_ruby_version = '>= 2.1.0'
 
   s.add_dependency 'addressable'
@@ -24,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'ruby-progressbar'
 
   # DB clients
-  s.add_dependency 'mysql'
+  s.add_dependency 'mysql'  # not for jruby
   s.add_dependency 'sequel'
 
   # Use ENV for config
@@ -35,7 +37,7 @@ Gem::Specification.new do |s|
   # ruby gem for RDF on allegrograph, see https://github.com/emk/rdf-agraph
   s.add_dependency 'rdf-agraph'
   # ruby gem for RDF on mongodb, see https://rubygems.org/gems/rdf-mongo
-  s.add_dependency 'bson_ext'
+  s.add_dependency 'bson_ext'  # not for jruby
   s.add_dependency 'rdf-mongo'
 
   # cache simple RDF on redis
