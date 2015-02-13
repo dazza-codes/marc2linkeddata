@@ -1,5 +1,22 @@
 #!/bin/bash
 
+export DEBUG=false
+
+# Runs a lot slower on jruby, even with threading enabled.
+export JRUBY_OPTS=-J-Xmx2g
+
+export THREAD=false
+export GET_LOC=false  # if this is true, be prepared to wait a very long time!
+
+export LOG_FILE='./log/marc2ld.log'
+export LIB_PREFIX='http://www.linked-data.org/library/'
+
+# Additional config options should be in .env;
+# the .env values will not replace those above.
+if [ ! -s .env ]; then
+    cp -u .env_example .env
+fi
+
 SCRIPT_FILE='.binstubs/marcAuthority2LD'
 if [ ! -s ${SCRIPT_FILE} ]; then
     echo "Cannot locate script: $SCRIPT_FILE"
@@ -12,10 +29,6 @@ if [ ! -s ${AUTH_FILE} ]; then
     echo "Place a MARC21 authority file into: $AUTH_FILE"
     exit 1
 fi
-
-export DEBUG=false
-export LOG_FILE='./log/marc2ld.log'
-export LIB_PREFIX='http://www.linked-data.org/library/'
 
 ${SCRIPT_FILE} ${AUTH_FILE}
 
@@ -44,11 +57,11 @@ find ${AUTH_PATH} -type f | xargs grep 'linked-data' | grep -c -F 'v1#NameTitle'
 echo -e "Count for 'v1#Title' authority records:" >> ${DATA_LOG_FILE}
 find ${AUTH_PATH} -type f | xargs grep 'linked-data' | grep -c -F 'v1#Title' >> ${DATA_LOG_FILE}
 
-# check the syntax of the output files
-echo -e "\n\n\n" >> ${DATA_LOG_FILE}
-for f in $(find ${AUTH_PATH} -type f); do
-     rapper -c -i turtle $f >> ${DATA_LOG_FILE} 2>&1
-done
+# # check the syntax of the output files
+# echo -e "\n\n\n" >> ${DATA_LOG_FILE}
+# for f in $(find ${AUTH_PATH} -type f); do
+#      rapper -c -i turtle $f >> ${DATA_LOG_FILE} 2>&1
+# done
 
 # cleanup
 rm -rf ${AUTH_PATH}
