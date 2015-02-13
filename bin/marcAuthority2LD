@@ -4,6 +4,17 @@ require 'marc2linkeddata'
 
 CONFIG = Marc2LinkedData.configuration
 
+def stack_trace(e, record)
+  $stderr.write "\n"
+  $stderr.write "ERROR\n"
+  $stderr.write e.message
+  $stderr.write e.backtrace
+  $stderr.write "\n"
+  $stderr.write record.to_s
+  $stderr.write "\n"
+end
+
+# Count all the records in the MARC file.
 def marc_auth_count(marc_file)
   auth_records = 0
   until marc_file.eof?
@@ -12,11 +23,7 @@ def marc_auth_count(marc_file)
       marc_file.seek(leader[:length], IO::SEEK_CUR)
       auth_records += 1 if leader[:type] == 'z'
     rescue => e
-      puts
-      puts 'ERROR'
-      puts e.message
-      puts e.backtrace
-      puts
+      stack_trace(e, record)
       binding.pry if CONFIG.debug
     end
   end
@@ -24,7 +31,76 @@ def marc_auth_count(marc_file)
   auth_records
 end
 
-def marc2ld(marc_filename)
+# Memory intensive loading of all authority records in the MARC file.
+def marc_authority_records(marc_filename)
+  puts "Reading records from: #{marc_filename}"
+  marc_file = File.open(marc_filename,'r')
+  auth_count = 0
+  auth_records = []
+  until marc_file.eof?
+    begin
+      leader = Marc2LinkedData::ParseMarcAuthority::parse_leader(marc_file)
+      raw = marc_file.read(leader[:length])
+      if leader[:type] == 'z'
+        record = MARC::Reader.decode(raw)
+        auth_records << record
+        auth_count += 1
+        $stdout.printf "\b\b\b\b\b\b" if auth_count > 1
+        $stdout.printf '%06d', auth_count
+      end
+    rescue => e
+      stack_trace(e, record)
+      binding.pry if CONFIG.debug
+    end
+  end
+  marc_file.close
+  $stdout.write "\n"
+  auth_records
+end
+
+
+def auth_record_cache(auth)
+
+  # auth_id = "auth:#{auth.get_id}"
+  # triples = nil
+  # # TODO: enable additional persistence options
+  # # Use data already in redis (if enabled)
+  # triples = CONFIG.redis.get(auth_id) if CONFIG.redis_read
+  # if triples.nil?
+  #   triples = auth.to_ttl  # generate new triples
+  #   # Update redis (if enabled) for triples not read from redis
+  #   CONFIG.redis.set(auth_id, triples) if CONFIG.redis_write
+  # end
+
+end
+
+
+
+def marc_record2turtle(record, output_path=nil)
+  begin
+    # ParseMarcAuthority is a lazy parser, so
+    # init only assigns record to an instance var.
+    auth = Marc2LinkedData::ParseMarcAuthority.new(record)
+    auth_record_cache(auth)
+    triples = auth.to_ttl.lines
+    binding.pry if (CONFIG.debug && triples.empty?)
+    triples.delete_if {|l| l.chomp.empty? }
+    # Output the triples to a turtle file.
+    ld_filename = File.join(output_path, "auth_#{auth.get_id}.ttl")
+    CONFIG.logger.info "Writing triples in turtle to #{ld_filename}"
+    ld_file = File.open(ld_filename,'w')
+    ld_file.write(triples.join)
+    ld_file.flush
+    ld_file.close
+  rescue => e
+    stack_trace(e, record)
+    binding.pry if CONFIG.debug
+  end
+end
+
+
+
+def marc_file2ld(marc_filename)
   ld_filename = marc_filename.gsub('.mrc','.ttl')
   puts "Translating: #{marc_filename} to #{ld_filename}"
   ld_file = File.open(ld_filename,'w')
@@ -44,17 +120,7 @@ def marc2ld(marc_filename)
         # init only assigns record to an instance var.
         auth = Marc2LinkedData::ParseMarcAuthority.new(record)
         auth_count += 1
-        # auth_id = "auth:#{auth.get_id}"
-        # triples = nil
-        # # TODO: enable additional persistence options
-        # # Use data already in redis (if enabled)
-        # triples = CONFIG.redis.get(auth_id) if CONFIG.redis_read
-        # if triples.nil?
-        #   triples = auth.to_ttl  # generate new triples
-        #   # Update redis (if enabled) for triples not read from redis
-        #   CONFIG.redis.set(auth_id, triples) if CONFIG.redis_write
-        # end
-
+        auth_record_cache(auth)
         triples = auth.to_ttl.lines
         binding.pry if (CONFIG.debug && triples.empty?)
         triples.delete_if {|l| l.chomp.empty? }
@@ -63,12 +129,7 @@ def marc2ld(marc_filename)
         ld_file.flush
       end
     rescue => e
-      puts
-      puts 'ERROR'
-      puts e.message
-      puts e.backtrace
-      puts record.to_s
-      puts
+      stack_trace(e, record)
       binding.pry if CONFIG.debug
     end
   end
@@ -77,38 +138,68 @@ def marc2ld(marc_filename)
   ld_file.close
 end
 
+def thread_wait(threads)
+  threads.each{|t| t.join}
+  threads.delete_if {|t| t.status == false}
+  threads.delete_if {|t| t.status.nil? }
+end
+
+
+# ---------------------------------------------------------------------
+# MAIN
+
+
 marc_files = []
 ARGV.each do |filename|
   path = Pathname(filename)
   marc_files.push(path) if path.exist?
 end
 if marc_files.empty?
+  script_name = File.basename(__FILE__)
+  script_path = File.dirname(__FILE__)
+  example_env_file = File.absolute_path(File.join(script_path,'..','.env_example'))
   puts <<HELP
-#{__FILE__} marc_authority_file1.mrc [ marc_authority_file2.mrc .. marc_authority_fileN.mrc ]
+#{script_name} marc_authority_file1.mrc [ marc_authority_file2.mrc .. marc_authority_fileN.mrc ]
 
-Output is RDF triples in a turtle file (.ttl) for every input .mrc file.
-Optional persistence services can be controlled by environment variables.
+Output is RDF triples in turtle files (.ttl). The files are output into a
+directory created in the same path as the .mrc file,
+with one .ttl file for each record.
 
-Redis Persistence - based on https://github.com/redis/redis-rb
-- essential options:
-  export REDIS4MARC=true # enable redis persistence (default = false)
-- supplementary options:
-  Set the REDIS_URL for a custom redis configuration.
-  export REDIS_URL="redis://{user}:{password}@{host}:{port}/{db}"
-  export REDIS_READ=true   # enable redis reads (default = REDIS4MARC || false)
-                           # faster reading of triples from pre-populated redis data
-  export REDIS_WRITE=true  # enable redis writes (default = REDIS4MARC || false)
-                           # recent data is updated in redis
+Optional configuration can be set in environment variables. A '.env' file can be
+created in the path where this utility is run and this utility will use it. See
+comments and settings in the example file at:
+#{example_env_file}
 
 HELP
   exit!
-else
 end
 
 puts "Logging to: #{CONFIG.log_file}"
 marc_files.each do |path|
   CONFIG.logger.info "Processing: #{path}"
-  marc2ld(path.to_s)
+  # marc_file2ld(path.to_s)
+  output_dir = path.basename.to_s.gsub('.mrc','').gsub('.','_') + '_turtle'
+  output_path = File.join(path.dirname.to_s, output_dir)
+  Dir.mkdir(output_path, 0775) unless File.directory? output_path
+  auth_records = marc_authority_records(path.to_s)
+  progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
+  if CONFIG.threads
+    threads = []
+    auth_records.each do |r|
+      thread_wait(threads) while threads.length >= CONFIG.thread_limit
+      t = Thread.new { marc_record2turtle(r, output_path) }
+      t.abort_on_exception = true
+      threads << t
+      progress.increment  # increment progress although thread is still running
+    end
+    # Ensure any remaining threads complete
+    threads.each{|t| t.join}
+  else
+    auth_records.each do |r|
+      marc_record2turtle(r, output_path)
+      progress.increment
+    end
+  end
 end
 
 
