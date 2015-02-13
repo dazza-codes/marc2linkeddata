@@ -187,7 +187,7 @@ module Marc2LinkedData
 
 
     # BLOCK ----------------------------------------------------
-    # Parse field numbers
+    # Parse fields
 
     def parse_008
       # http://www.loc.gov/marc/authority/concise/ad008.html
@@ -240,61 +240,139 @@ module Marc2LinkedData
       }
     end
 
-    def parse_100
+    def field100
       # http://www.loc.gov/marc/authority/concise/ad100.html
+      # [#<MARC::Subfield:0x007f009d6a74e0 @code="a", @value="Abe, Eiichi,">,
+      #     #<MARC::Subfield:0x007f009d6a7440 @code="d", @value="1927-">,
+      #     #<MARC::Subfield:0x007f009d6a73a0 @code="t", @value="Hoppu dais\xC5\xAB.">,
+      #     #<MARC::Subfield:0x007f009d6a7300 @code="l", @value="English">],
+      #     @tag="100">
       begin
-        # 100 is a personal name
+        # 100 is a personal name or name-title
+        return @field100 unless @field100.nil?
         field = get_fields('100').first
         # field = @record.fields.select {|f| f if f.tag == '100' }.first
         name = field.subfields.select {|f| f.code == 'a' }.first.value rescue ''
-        name.force_encoding('UTF-8')
-      rescue
-        'ERROR_PERSONAL_NAME'
+        date = field.subfields.select {|f| f.code == 'd' }.first.value rescue ''
+        title = field.subfields.select {|f| f.code == 't' }.first.value rescue ''
+        lang = field.subfields.select {|f| f.code == 'l' }.first.value rescue ''
+        @field100 = {
+            :name => name.force_encoding('UTF-8'),
+            :date => date,
+            :title => title.force_encoding('UTF-8'),
+            :lang => lang,
+            :error => nil
+        }
+      rescue => e
+        @@config.logger.debug "Failed to parse field 100 for #{get_id}: #{e.message}"
+        @field100 = {
+            :name => nil,
+            :date => nil,
+            :title => nil,
+            :lang => nil,
+            :error => 'ERROR_PERSON_NAME' #e.message
+        }
       end
     end
 
-    def parse_110
+    def field110
       # http://www.loc.gov/marc/authority/concise/ad110.html
       begin
         # 110 is a corporate name
+        return @field110 unless @field110.nil?
         field = get_fields('110').first
         a = field.subfields.collect {|f| f.value if f.code == 'a' }.compact rescue []
         b = field.subfields.collect {|f| f.value if f.code == 'b' }.compact rescue []
         c = field.subfields.collect {|f| f.value if f.code == 'c' }.compact rescue []
         name = [a,b,c].flatten.join(' : ')
-        name.force_encoding('UTF-8')
-      rescue
-        'ERROR_CORPORATE_NAME'
+        @field110 = {
+            :name => name.force_encoding('UTF-8'),
+            :error => nil
+        }
+      rescue => e
+        @@config.logger.debug "Failed to parse field 110 for #{get_id}: #{e.message}"
+        @field110 = {
+            :name => nil,
+            :error => 'ERROR_CORPORATE_NAME' #e.message
+        }
       end
     end
 
-    def parse_111
+    def field111
       # http://www.loc.gov/marc/authority/concise/ad111.html
+      # #<MARC::Subfield:0x007f43a50fd1e8 @code="a", @value="Joseph Priestley Symposium">,
+      # #<MARC::Subfield:0x007f43a50fd148 @code="d", @value="(1974 :">,
+      # #<MARC::Subfield:0x007f43a50fd0a8 @code="c", @value="Wilkes-Barre, Pa.)">],
+      # @tag="111">,
       begin
         # 111 is a meeting name
+        return @field111 unless @field111.nil?
         field = get_fields('111').first
-        field = @record.fields.select {|f| f if f.tag == '111' }.first
-        a = field.subfields.collect {|f| f.value if f.code == 'a' }.compact rescue []
-        # TODO: incorporate additional subfields?
-        # b = field.subfields.collect {|f| f.value if f.code == 'b' }.compact rescue []
-        # c = field.subfields.collect {|f| f.value if f.code == 'c' }.compact rescue []
-        # name = [a,b,c].flatten.join(' : ')
-        # name.force_encoding('UTF-8')
-        a.force_encoding('UTF-8')
-      rescue
-        'ERROR_MEETING_NAME'
+        name = field.subfields.select {|f| f.code == 'a' }.first.value rescue ''
+        date = field.subfields.select {|f| f.code == 'd' }.first.value rescue ''
+        city = field.subfields.select {|f| f.code == 'c' }.first.value rescue ''
+        @field111 = {
+            :name => name.force_encoding('UTF-8'),
+            :date => date,
+            :city => city.force_encoding('UTF-8'),
+            :error => nil
+        }
+      rescue => e
+        @@config.logger.debug "Failed to parse field 111 for #{get_id}: #{e.message}"
+        @field111 = {
+            :name => nil,
+            :date => nil,
+            :city => nil,
+            :error => 'ERROR_MEETING_NAME'
+        }
       end
     end
 
-    def parse_151
+    def field130
       # http://www.loc.gov/marc/authority/concise/ad151.html
+      # e.g. http://id.loc.gov/authorities/names/n79119331
+      # #<MARC::DataField:0x007f7f6bffe708
+      # @indicator1=" ",
+      # @indicator2="0",
+      # @subfields=[#<MARC::Subfield:0x007f7f6bffe208 @code="a", @value="Fair maid of the Exchange">],
+      # @tag="130">,
+      # plus a lot of 400 fields
+      begin
+        # 130 is a uniform title
+        return @field130 unless @field130.nil?
+        field = get_fields('130').first
+        title = field.subfields.collect {|f| f.value if f.code == 'a'}.first rescue ''
+        @field130 = {
+            :title => title.force_encoding('UTF-8'),
+            :error => nil
+        }
+      rescue => e
+        @@config.logger.debug "Failed to parse field 130 for #{get_id}: #{e.message}"
+        @field130 = {
+            :title => nil,
+            :error => 'ERROR_UNIFORM_TITLE'
+        }
+      end
+    end
+
+    def field151
+      # http://www.loc.gov/marc/authority/concise/ad151.html
+      # e.g. http://id.loc.gov/authorities/names/n79045127
       begin
         # 151 is a geographic name
+        return @field151 unless @field151.nil?
         field = get_fields('151').first
         name = field.subfields.collect {|f| f.value if f.code == 'a' }.first rescue ''
-        name.force_encoding('UTF-8')
-      rescue
-        'ERROR_PLACE_NAME'
+        @field151 = {
+            :name => name.force_encoding('UTF-8'),
+            :error => nil
+        }
+      rescue => e
+        @@config.logger.debug "Failed to parse field 151 for #{get_id}: #{e.message}"
+        @field151 = {
+            :name => nil,
+            :error => 'ERROR_PLACE_NAME'
+        }
       end
     end
 
@@ -302,76 +380,148 @@ module Marc2LinkedData
     # BLOCK ----------------------------------------------------
     # Authority record types
 
-    def conference?
-      # e.g. http://id.loc.gov/authorities/names/n79044866
-      type = parse_111
-      (type.empty? || type.include?('ERROR')) ? false : true
+    # TODO: other authority types?
+    # The MARC data differentiates them according to the tag number.
+    # Methods below ordered by field number.
+
+    #  X00 - Personal Name
+    def person?
+      field = field100
+      field[:error].nil? && (! field[:name].empty?) && field[:title].empty?
     end
 
-    def corporation?
-      type = parse_110
-      (type.empty? || type.include?('ERROR')) ? false : true
-    end
-
+    #  X00 - Name-Title
     def name_title?
       # e.g. http://id.loc.gov/authorities/names/n79044934
-      binding.pry if @@config.debug
-      return ''
+      # if get_id == 'n79044934'.upcase
+      #   binding.pry if @@config.debug
+      # end
+      field = field100
+      field[:error].nil? && (! field[:name].empty?) && (! field[:title].empty?)
     end
 
-    def person?
-      type = parse_100
-      (type.empty? || type.include?('ERROR')) ? false : true
+    #  X10 - Corporate Name
+    def corporation?
+      field110[:error].nil?
     end
 
-    def place?
-      # e.g. http://id.loc.gov/authorities/names/n79045127
-      type = parse_151
-      (type.empty? || type.include?('ERROR')) ? false : true
+    #  X11 - Meeting Name
+    def conference?
+      # e.g. http://id.loc.gov/authorities/names/n79044866
+      field111[:error].nil?
     end
 
-    # TODO: other authority types?
+    #  X30 - Uniform Title
+    def uniform_title?
+      field130[:error].nil?
+    end
 
+    #  X51 - Jurisdiction / Geographic Name
+    #      - http://www.loc.gov/mads/rdf/v1#Geographic
+    def geographic?
+      # e.g. http://id.loc.gov/authorities/names/n79046135.html
+      field151[:error].nil?
+    end
+
+    # BLOCK ----------------------------------------------------
+    # Parse authority record
+
+    def parse_auth_details
+      if @loc.iri.to_s =~ /name/
+        if @@config.get_loc
+          # Retrieve and use LOC RDF
+          parse_auth_name_rdf
+        else
+          # Use only the MARC record, without RDF retrieval
+          parse_auth_name
+        end
+      elsif @loc.iri.to_s =~ /subjects/
+        # TODO: what to do with subjects?
+        binding.pry if @@config.debug
+        # parse_auth_subject_rdf
+      else
+        # What is this?
+        binding.pry if @@config.debug
+      end
+    end
 
 
     # BLOCK ----------------------------------------------------
-    # Parse authority records using RDF
+    # Parse authority record without RDF
 
-    def parse_loc_auth_name
+    def parse_auth_name
       #
       # Create triples for various kinds of LOC authority.
-      # At present, this relies on LOC RDF to differentiate
-      # types of authorities.  It should be possible to do this
-      # from the MARC directly, if @@config.get_loc is false.
       #
-      # The MARC data differentiates them according to the tag number.
-      # The term 'name' refers to:
-      #  X00 - Personal Name
-      #  X10 - Corporate Name
-      #  X11 - Meeting Name
-      #  X30 - Uniform Title
-      #  X51 - Jurisdiction / Geographic Name
-      #
-      @@config.logger.warn "LOC URL: #{@loc.iri} DEPRECATED" if @loc.deprecated?
       name = ''
-      if @loc.conference?
-        # e.g. http://id.loc.gov/authorities/names/n79044866
-        name = @loc.label || parse_111
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.event)
-      elsif @loc.corporation?
-        name = @loc.label || parse_110
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Organization) if @@config.use_foaf
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Organization) if @@config.use_schema
-      elsif @loc.name_title?
+      if person?
+        name = field100[:name]
+        graph_type_person(@lib.rdf_uri)
+
+        # TODO: find another way to get first and last names without VIAF
+        # # VIAF extracts first and last name, try to use them. Note
+        # # that VIAF uses schema:name, schema:givenName, and schema:familyName.
+        # if @@config.get_viaf && ! @viaf.nil?
+        #   @viaf.family_names.each do |n|
+        #     # ln = URI.encode(n)
+        #     # TODO: try to get a language type, if VIAF provide it.
+        #     # name = RDF::Literal.new(n, :language => :en)
+        #     ln = RDF::Literal.new(n)
+        #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.familyName, ln) if @@config.use_foaf
+        #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.familyName, ln) if @@config.use_schema
+        #   end
+        #   @viaf.given_names.each do |n|
+        #     # fn = URI.encode(n)
+        #     # TODO: try to get a language type, if VIAF provide it.
+        #     # name = RDF::Literal.new(n, :language => :en)
+        #     fn = RDF::Literal.new(n)
+        #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.firstName, fn) if @@config.use_foaf
+        #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.givenName, fn) if @@config.use_schema
+        #   end
+        # end
+      elsif name_title?
         # e.g. http://id.loc.gov/authorities/names/n79044934
-        # Skipping these, because the person entity should be in
-        # an additional record and we don't want the title content.
+        # http://viaf.org/viaf/182251325/rdf.xml
+        name = field100[:name]
+        graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle'))
+      elsif corporation?
+        name = field110[:name]
+        graph_type_organization(@lib.rdf_uri)
+      elsif conference?
+        # e.g. http://id.loc.gov/authorities/names/n79044866
+        name = [field111[:name],field111[:date],field111[:city]].join('')
+        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.event)
+      elsif uniform_title?
+        name = field130[:title]  # use 'name' for code below, although it's a title
+        graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
+        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.title)
+      elsif geographic?
+        name = field151[:name]  # use 'name' for code below, although it's a place
+        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.Place)
+      else
+        # TODO: find out what type this is.
         binding.pry if @@config.debug
-        return ''
-      elsif @loc.person?
-        name = @loc.label || parse_100
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Person) if @@config.use_foaf
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Person) if @@config.use_schema
+        name = ''
+        graph_type_agent(@lib.rdf_uri)
+      end
+      if name != ''
+        name = RDF::Literal.new(name)
+        graph_insert_name(@lib.rdf_uri, name)
+      end
+    end
+
+
+    # BLOCK ----------------------------------------------------
+    # Parse authority record using RDF
+
+    # Create triples for various kinds of LOC authority.
+    # This method relies on RDF data retrieval.
+    def parse_auth_name_rdf
+      @@config.logger.warn "#{@loc.iri} DEPRECATED" if @loc.deprecated?
+      name = ''
+      if @loc.person?
+        name = @loc.label || field100[:name]
+        graph_type_person(@lib.rdf_uri)
         # VIAF extracts first and last name, try to use them. Note
         # that VIAF uses schema:name, schema:givenName, and schema:familyName.
         if @@config.get_viaf && ! @viaf.nil?
@@ -392,29 +542,41 @@ module Marc2LinkedData
             @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.givenName, fn) if @@config.use_schema
           end
         end
-      elsif @loc.place?
+      elsif @loc.name_title?
+        # e.g. http://id.loc.gov/authorities/names/n79044934
+        # http://viaf.org/viaf/182251325/rdf.xml
+        name = @loc.label || field100[:name]
+        graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle'))
+      elsif @loc.corporation?
+        name = @loc.label || field110[:name]
+        graph_type_organization(@lib.rdf_uri)
+      elsif @loc.conference?
+        # e.g. http://id.loc.gov/authorities/names/n79044866
+        name = @loc.label || [field111[:name],field111[:date],field111[:city]].join('')
+        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.event)
+      elsif @loc.geographic?
         # e.g. http://id.loc.gov/authorities/names/n79045127
-        name = @loc.label || parse_151
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Place)
+        name = @loc.label || field151[:name]
+        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.Place)
+      elsif @loc.uniform_title?
+        name = field130[:title]  # use 'name' for code below, although it's a title
+        graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
+        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.title)
       else
         # TODO: find out what type this is.
         binding.pry if @@config.debug
         name = @loc.label || ''
-        # Note: schema.org has no immediate parent for Person or Organization
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::FOAF.Agent) if @@config.use_foaf
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF.type, RDF::SCHEMA.Thing) if @@config.use_schema
+        graph_type_agent(@lib.rdf_uri)
       end
       if name != ''
-        # name_encoding = URI.encode(name)
         name = RDF::Literal.new(name)
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.name, name) if @@config.use_foaf
-        @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.name, name) if @@config.use_schema
+        graph_insert_name(@lib.rdf_uri, name)
       end
     end
 
-    def parse_loc_auth_subject
-      # TODO: what to do with subjects?
-      binding.pry if @@config.debug
+
+
+    def parse_auth_subject_rdf
       # The term 'subject' refers to:
       #  X30 - Uniform Titles
       #  X48 - Chronological Terms
@@ -443,7 +605,7 @@ module Marc2LinkedData
         # Try to get additional data from OCLC, using the RDFa
         # available in the OCLC identities pages.
         oclc_auth = OclcIdentity.new oclc_iri
-        @graph.insert RDF::Statement(@loc.rdf_uri, RDF::OWL.sameAs, oclc_auth.rdf_uri)
+        graph_insert_sameAs(@loc.rdf_uri, oclc_auth.rdf_uri)
         oclc_auth.creative_works.each do |creative_work_uri|
           # Notes on work-around for OCLC data inconsistency:
           # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
@@ -454,17 +616,17 @@ module Marc2LinkedData
           #creative_work_iri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
           #creative_work_iri = creative_work_iri.gsub('wwwwww','www') # in case it gets added already by OCLC
           creative_work = OclcCreativeWork.new creative_work_uri
-          @graph.insert RDF::Statement(oclc_auth.rdf_uri, RDF::RDFS.seeAlso, creative_work.rdf_uri)
+          graph_insert_seeAlso(oclc_auth.rdf_uri, creative_work.rdf_uri)
           if @@config.oclc_auth2works
             # Try to use VIAF to relate auth to work as creator, contributor, editor, etc.
             # Note that this requires additional RDF retrieval for each work (slower processing).
             unless @viaf.nil?
               if creative_work.creator? @viaf.iri
-                @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.creator, oclc_auth.rdf_uri)
+                graph_insert_creator(creative_work.rdf_uri, oclc_auth.rdf_uri)
               elsif creative_work.contributor? @viaf.iri
-                @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.contributor, oclc_auth.rdf_uri)
+                graph_insert_contributor(creative_work.rdf_uri, oclc_auth.rdf_uri)
               elsif creative_work.editor? @viaf.iri
-                @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.editor, oclc_auth.rdf_uri)
+                graph_insert_editor(creative_work.rdf_uri, oclc_auth.rdf_uri)
               end
             end
             # TODO: Is auth the subject of the work (as in biography) or both (as in autobiography)?
@@ -473,7 +635,7 @@ module Marc2LinkedData
             # Try to find the generic work entity for this example work.
             creative_work.get_works.each do |oclc_work_uri|
               oclc_work = OclcWork.new oclc_work_uri
-              @graph.insert RDF::Statement(creative_work.rdf_uri, RDF::SCHEMA.exampleOfWork, oclc_work.rdf_uri)
+              graph_insert_exampleOfWork(creative_work.rdf_uri, oclc_work.rdf_uri)
             end
           end
         end
@@ -481,6 +643,9 @@ module Marc2LinkedData
     end
 
     # TODO: use an institutional 'affiliation' entry, maybe 373?  (optional field)
+
+    # BLOCK ----------------------------------------------------
+    # Graph methods
 
     def to_ttl
       graph.to_ttl
@@ -506,29 +671,63 @@ module Marc2LinkedData
 
       # Get LOC control number and add catalog permalink? e.g.
       # http://lccn.loc.gov/n79046291
-
-      @graph.insert RDF::Statement(@lib.rdf_uri, RDF::OWL.sameAs, @loc.rdf_uri)
-      @graph.insert RDF::Statement(@lib.rdf_uri, RDF::OWL.sameAs, @viaf.rdf_uri) unless @viaf.nil?
-      @graph.insert RDF::Statement(@lib.rdf_uri, RDF::OWL.sameAs, @isni.rdf_uri) unless @isni.nil?
-
-      return @graph unless @@config.get_loc
-
-      # TODO: find codes in the marc record to differentiate the authority into
-      # TODO: person, organization, event, etc. without getting LOC RDF.
-
-      if @loc.iri.to_s =~ /name/
-        parse_loc_auth_name
-      elsif @loc.iri.to_s =~ /subjects/
-        parse_loc_auth_subject
-      else
-        # What is this?
-        binding.pry if @@config.debug
-      end
+      graph_insert_sameAs(@lib.rdf_uri, @loc.rdf_uri)
+      graph_insert_sameAs(@lib.rdf_uri, @viaf.rdf_uri) unless @viaf.nil?
+      graph_insert_sameAs(@lib.rdf_uri, @isni.rdf_uri) unless @isni.nil?
+      parse_auth_details
       # Optional elaboration of authority data with OCLC identity and works.
       get_oclc_links if @@config.get_oclc
-
-      @@config.logger.info "Extracted #{@loc.id}"
+      # @@config.logger.info "Extracted #{@loc.id}"
       @graph
+    end
+
+    def graph_insert(uriS, uriP, uriO)
+      @graph.insert RDF::Statement(uriS, uriP, uriO)
+    end
+    def graph_insert_sameAs(uriS, uriO)
+      graph_insert(uriS, RDF::OWL.sameAs, uriO)
+    end
+    def graph_insert_seeAlso(uriS, uriO)
+      graph_insert(uriS, RDF::RDFS.seeAlso, uriO)
+    end
+    def graph_insert_exampleOfWork(uriS, uriO)
+      graph_insert(uriS, RDF::SCHEMA.exampleOfWork, uriO)
+    end
+    def graph_insert_creator(uriS, uriO)
+      graph_insert(uriS, RDF::SCHEMA.creator, uriO)
+    end
+    def graph_insert_contributor(uriS, uriO)
+      graph_insert(uriS, RDF::SCHEMA.contributor, uriO)
+    end
+    def graph_insert_editor(uriS, uriO)
+      graph_insert(uriS, RDF::SCHEMA.editor, uriO)
+    end
+    def graph_insert_type(uriS, uriO)
+      graph_insert(uriS, RDF.type, uriO)
+    end
+
+    # ----
+    # Methods that can use FOAF or SCHEMA or both (or neither?)
+
+    def graph_type_agent(uriS)
+      # Note: schema.org has no immediate parent for Person or Organization
+      graph_insert_type(uriS, RDF::FOAF.Agent) if @@config.use_foaf
+      graph_insert_type(uriS, RDF::SCHEMA.Thing) if @@config.use_schema
+    end
+
+    def graph_insert_name(uriS, name)
+      graph_insert(uriS, RDF::FOAF.name, name) if @@config.use_foaf
+      graph_insert(uriS, RDF::SCHEMA.name, name) if @@config.use_schema
+    end
+
+    def graph_type_organization(uriS)
+      graph_insert_type(uriS, RDF::FOAF.Organization) if @@config.use_foaf
+      graph_insert_type(uriS, RDF::SCHEMA.Organization) if @@config.use_schema
+    end
+
+    def graph_type_person(uriS)
+      graph_insert_type(uriS, RDF::FOAF.Person) if @@config.use_foaf
+      graph_insert_type(uriS, RDF::SCHEMA.Person) if @@config.use_schema
     end
   end
 
