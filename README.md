@@ -73,34 +73,49 @@ Configure
 
     # set env values and/or create or modify a .env file
     # see the .env_example file for details.
-    marc2LD_config
     # Performance will slow with more retrieval of linked
     # data resources, such as OCLC works for authorities.
+    marc2LD_config
 
 Scripting
 
     # First configure (see details above).
     # Translate a MARC21 authority file to a turtle file.
-    # readMarcAuthority [ authfile1.mrc .. authfileN.mrc ]
+    # It's assumed that '*.mrc' files contain multiple MARC21
+    # records and the record identifier is in field 001.
+    # marcAuthority2LD [ authfile1.mrc .. authfileN.mrc ]
     marcAuthority2LD auth.mrc
 
-    # It's assumed that auth.mrc contains multiple MARC21
-    # records and the record identifier is in field 001.
-
-    # Check the syntax of the resulting turtle files.
+    # Check the syntax of the output turtle files.
     touch turtle_syntax_checks.log
     for f in $(find ./auth_turtle/ -type f -name '.ttl'); do
       rapper -c -i turtle $f >>  turtle_syntax_checks.log 2>&1
     done
 
-Example Output File
+Example Output Files
 
-- In this example, the RDF-HTTP retrieval is enabled for authority resources.  Also, the
-  OCLC works for this authority are retrieved.  The result is an 'authority index' into LOD,
-  including works.  Although some of the RDF is retrieved in the process (and could be cached in
-  a local triple store), the output record is designed to be an LOD index only.  The index
-  can be stored in a local triple store, to be leveraged by local clients that may retrieve
-  and use additional data from the RDF links.
+- In this example, only data in the MARC record was used, without any RDF link
+  resolution or retrieval.  The example MARC record already contained links to
+  VIAF and ISNI IRIs (these 9xx MARC fields are identified in the configuration).
+
+        @prefix owl: <http://www.w3.org/2002/07/owl#> .
+        @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+        @prefix schema: <http://schema.org/> .
+        @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+        <http://linked-data.stanford.edu/library/authority/N79044798> a schema:Person;
+           schema:name "Byrnes, Christopher I.,";
+           owl:sameAs <http://id.loc.gov/authorities/names/n79044798>,
+             <http://viaf.org/viaf/108317368>,
+             <http://www.isni.org/0000000109311081> .
+
+- In this example, all the RDF link resolution and retrieval was enabled.  Also, the
+  OCLC works for this authority were resolved.  The result is an 'authority index' into LOD,
+  including associated works.  Although some of the RDF was retrieved in the process (and
+  could be cached in a local triple store), the output record is designed to be an LOD index
+  only.  The index could be stored in a local triple store, to be leveraged by local clients
+  that may retrieve and use additional data from the RDF links.  Sharing such an 'LOD index'
+  in a distributed network database could be very useful and open opportunities for institutions
+  to collaborate on scaling the link resolution and maintenance issues.
 
         @prefix owl: <http://www.w3.org/2002/07/owl#> .
         @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
