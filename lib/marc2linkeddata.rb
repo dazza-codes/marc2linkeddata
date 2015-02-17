@@ -23,18 +23,20 @@ module Marc2LinkedData
   end
 
   def self.http_head_request(url)
-    response = nil
+    uri = nil
     begin
       response = RestClient.head(url)
+      uri = response.args[:url]
     rescue
       @configuration.logger.error "RestClient.head failed for #{url}"
       begin
         response = RestClient.get(url)
+        uri = response.args[:url]
       rescue
         @configuration.logger.error "RestClient.get failed for #{url}"
       end
     end
-    response
+    uri
   end
 
   def self.write_prefixes(file)

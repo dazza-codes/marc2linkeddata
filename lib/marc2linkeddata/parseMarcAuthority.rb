@@ -95,20 +95,7 @@ module Marc2LinkedData
           unless loc_iri.nil?
             # Verify the URL (used HEAD so it's as fast as possible)
             @@config.logger.debug "Trying to validate LOC IRI: #{loc_iri}"
-            res = Marc2LinkedData.http_head_request(loc_iri + '.rdf')
-            case res.code
-              when 200
-                # it's good to go
-              when 301
-                # use the redirection
-                loc_iri = res['location']
-              when 302,303
-                #302 Moved Temporarily
-                #303 See Other
-                # Use the current URL, most get requests will follow a 302 or 303
-              else
-                loc_iri = nil
-            end
+            loc_iri = Marc2LinkedData.http_head_request(loc_iri + '.rdf')
           end
           if loc_iri.nil?
             # If it gets here, it's a problem.

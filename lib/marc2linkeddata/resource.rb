@@ -84,34 +84,19 @@ module Marc2LinkedData
 
     def resolve_external_auth(url)
       begin
-        res = Marc2LinkedData.http_head_request(url)
-        case res.code
-          when 200
-            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
-            return url
-          when 301
-            #301 Moved Permanently
-            url = res['location']
-            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
-            return url
-          when 302,303
-            #302 Moved Temporarily
-            #303 See Other
-            # Use the current URL, most get requests will follow a 302 or 303
-            @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
-            return url
-          when 404
-            @@config.logger.warn "#{@iri}\t// #{url}"
-            return nil
-          else
-            # WTF
-            binding.pry if @@config.debug
-            @@config.logger.error "unknown http response code (#{res.code}) for #{@iri}"
-            return nil
+        # RestClient does all the response code handling and redirection.
+        url = Marc2LinkedData.http_head_request(url)
+        if url.nil?
+          @@config.logger.warn "#{@iri}\t// #{url}"
+        else
+          @@config.logger.debug "Mapped #{@iri}\t-> #{url}"
         end
       rescue
-        nil
+        binding.pry if @@config.debug
+        @@config.logger.error "unknown http error for #{@iri}"
+        url = nil
       end
+      url
     end
 
     def same_as
