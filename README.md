@@ -6,10 +6,23 @@ Utilities for translating MARC21 into linked data.  The project has
 focused on authority records (as of 2015).
 
 It has config options that can be enabled to increase the amount of data retrieved.
-Without any HTTP options enabled, using only data in the MARC record, it can
-translate 100,000 authority records in about 5-6 min on a current laptop system.
-File IO is the most expensive operation in this mode, so it helps to have a solid
-state drive or something with high IO performance.
+All config options are set by environment variables.  The .env_example file documents
+the options available and how to use a .env file; the `marc2LD_config` utility will
+copy the .env_example file provided into the current path.
+
+Without any HTTP retrieval of RDF metadata, using only data in a MARC record, it can
+translate 100,000 authority records in about 5-6 min on a current laptop system.  The
+config options allow specification of MARC fields that may already contain resource links.
+With HTTP/RDF retrieval options enabled, it can take a lot longer (days) and the
+RDF providers may not be happy about a barrage of requests.
+
+File IO is the most expensive operation in the MARC-only mode (it helps to have a solid
+state drive with high IO performance).  In the RDF-HTTP retrieval mode, it may help
+to enable threading for concurrent retrieval of RDF resources.  However, it's still
+relatively slow (exploring options for caching and local downloads of RDF data).
+Note that it runs a lot slower on jruby-9.0.0.0-pre1 than MRI 2.2.0, whether threads
+are enabled or not.  It raises exceptions on jruby-1.7.9, related to ruby
+language support (such as Array#delete_if).
 
 The current output is to the file system, but it should be easy to incorporate
 and configure alternatives by using the RDF.rb facilities for connecting to a
@@ -18,12 +31,8 @@ exploration hasn't matured much, mainly because there is no 'cache-expiry' data
 yet and because it would be better to use an RDF.rb extension of some
 kind (for redis, mongodb, etc) or to use a triple store/solr platform.
 
-With HTTP/RDF retrieval options enabled, it can take a lot longer (days) and the
-providers may not be very happy about a barrage of requests.
-
-Note that it runs a lot slower on jruby-9.0.0.0-pre1 than MRI 2.2.0, whether threads
-are enabled or not.  It raises exceptions on jruby-1.7.9, related to ruby
-language support (such as Array#delete_if).
+TODO: Develop on additional example datasets, to evaluate the generality and robustness
+of the utilities.
 
 TODO: A significant problem to solve is effective caching or mirrors for linked data.
 The retrieval should inspect any HTTP cache headers that might be available and
@@ -54,8 +63,8 @@ Install with rbenv (on linux)
     echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
     source .bash_profile
     git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-    rbenv install 2.1.5   # or the latest ruby available
-    rbenv global 2.1.5
+    rbenv install 2.2.0   # or the latest ruby available
+    rbenv global 2.2.0
     rbenv rehash
     gem install bundle
     gem install marc2linkeddata
@@ -63,7 +72,7 @@ Install with rbenv (on linux)
 Configure
 
     # set env values and/or create or modify a .env file
-    # see the .env_example file for details
+    # see the .env_example file for details.
     marc2LD_config
     # Performance will slow with more retrieval of linked
     # data resources, such as OCLC works for authorities.
