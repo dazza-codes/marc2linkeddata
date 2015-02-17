@@ -23,23 +23,18 @@ module Marc2LinkedData
   end
 
   def self.http_head_request(url)
-    uri = URI.parse(url)
+    response = nil
     begin
-      if RUBY_VERSION =~ /^1\.9/
-        req = Net::HTTP::Head.new(uri.path)
-      else
-        req = Net::HTTP::Head.new(uri)
-      end
-      Net::HTTP.start(uri.host, uri.port) {|http| http.request req }
+      response = RestClient.head(url)
     rescue
-      @configuration.logger.error "Net::HTTP::Head failed for #{uri}"
+      @configuration.logger.error "RestClient.head failed for #{url}"
       begin
-        Net::HTTP.get_response(uri)
+        response = RestClient.get(url)
       rescue
-        @configuration.logger.error "Net::HTTP.get_response failed for #{uri}"
-        nil
+        @configuration.logger.error "RestClient.get failed for #{url}"
       end
     end
+    response
   end
 
   def self.write_prefixes(file)
