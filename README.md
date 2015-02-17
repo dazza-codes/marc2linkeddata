@@ -82,10 +82,62 @@ Scripting
     # First configure (see details above).
     # Translate a MARC21 authority file to a turtle file.
     # readMarcAuthority [ authfile1.mrc .. authfileN.mrc ]
-    marcAuthority2LD auth.01.mrc
+    marcAuthority2LD auth.mrc
 
-    # Check the syntax of the resulting turtle file.
-    rapper -c -i turtle auth.01.ttl
+    # It's assumed that auth.mrc contains multiple MARC21
+    # records and the record identifier is in field 001.
+
+    # Check the syntax of the resulting turtle files.
+    touch turtle_syntax_checks.log
+    for f in $(find ./auth_turtle/ -type f -name '.ttl'); do
+      rapper -c -i turtle $f >>  turtle_syntax_checks.log 2>&1
+    done
+
+Example Output File
+
+- In this example, the RDF-HTTP retrieval is enabled for authority resources.  Also, the
+  OCLC works for this authority are retrieved.  The result is an 'authority index' into LOD,
+  including works.  Although some of the RDF is retrieved in the process (and could be cached in
+  a local triple store), the output record is designed to be an LOD index only.  The index
+  can be stored in a local triple store, to be leveraged by local clients that may retrieve
+  and use additional data from the RDF links.
+
+        @prefix owl: <http://www.w3.org/2002/07/owl#> .
+        @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+        @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+        @prefix schema: <http://schema.org/> .
+        @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+        <http://linked-data.example.org/library/authority/N79044798> a schema:Person;
+           schema:familyName "Byrnes";
+           schema:givenName "Christopher Ian",
+             "Christopher I";
+           schema:name "Byrnes, Christopher I., 1949-";
+           owl:sameAs <http://id.loc.gov/authorities/names/n79044798>,
+             <http://viaf.org/viaf/108317368>,
+             <http://www.isni.org/0000000109311081> .
+        <http://id.loc.gov/authorities/names/n79044798> owl:sameAs <http://www.worldcat.org/identities/lccn-n79044798> .
+        <http://www.worldcat.org/identities/lccn-n79044798> rdfs:seeAlso <http://www.worldcat.org/oclc/747413718>,
+             <http://www.worldcat.org/oclc/017649403>,
+             <http://www.worldcat.org/oclc/004933024>,
+             <http://www.worldcat.org/oclc/007170722>,
+             <http://www.worldcat.org/oclc/006626542>,
+             <http://www.worldcat.org/oclc/050868185>,
+             <http://www.worldcat.org/oclc/013525712>,
+             <http://www.worldcat.org/oclc/013700764>,
+             <http://www.worldcat.org/oclc/036387153>,
+             <http://www.worldcat.org/oclc/013525674>,
+             <http://www.worldcat.org/oclc/013700768>,
+             <http://www.worldcat.org/oclc/018380395>,
+             <http://www.worldcat.org/oclc/018292079>,
+             <http://www.worldcat.org/oclc/023969230>,
+             <http://www.worldcat.org/oclc/035911289>,
+             <http://www.worldcat.org/oclc/495781917>,
+             <http://www.worldcat.org/oclc/727657045>,
+             <http://www.worldcat.org/oclc/782013318>,
+             <http://www.worldcat.org/oclc/037671494>,
+             <http://www.worldcat.org/oclc/751661734>,
+             <http://www.worldcat.org/oclc/800600611> .
+
 
 
 Ruby Library Use
@@ -102,7 +154,8 @@ Ruby Library Use
             record = MARC::Reader.decode(raw)
             auth = ParseMarcAuthority.new(record)
             auth_id = "auth:#{auth.get_id}"
-            triples = auth.to_ttl
+            graph = auth.graph
+            puts graph.to_ttl
           end
         end
 
@@ -114,7 +167,12 @@ Development
     ./bin/test.sh
     cp .env_example .env # and edit .env
     # develop code and/or bin scripts; run bin scripts, e.g.
-    .binstubs/marcAuthority2LD auth.01.mrc
+    .binstubs/marcAuthority2LD auth.mrc
+    # Look for results in auth_turtle/*.ttl files.
+    # see also full example script in
+    #.binstubs/run_test_data.sh
+    # which includes shell script for basic stats and
+    # using rapper to check the file output syntax.
 
 
 # License
