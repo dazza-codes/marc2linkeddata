@@ -9,7 +9,7 @@ module Marc2LinkedData
       @loc_id = 'no99010609'
       @loc_url = 'http://id.loc.gov/authorities/names/no99010609'
       @loc = Loc.new @loc_url
-      @viaf_url = 'http://viaf.org/viaf/85312226'
+      @viaf_url = 'http://viaf.org/viaf/85312226/'
     end
 
     before :each do
