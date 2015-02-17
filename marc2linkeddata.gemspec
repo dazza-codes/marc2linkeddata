@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = 'marc2linkeddata'
-  s.version     = '0.1.0'
+  s.version     = '0.1.1'
   s.licenses    = ['Apache-2.0']
 
   # mysql and bson_ext only install on MRI (c-ruby)
@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'addressable'
   s.add_dependency 'linkeddata'
   s.add_dependency 'marc'
-  s.add_dependency 'restclient'
+  s.add_dependency 'rest-client'
   s.add_dependency 'ruby-progressbar'
 
   # DB clients
