@@ -47,7 +47,7 @@ def marc_authority_records(marc_filename)
         auth_count += 1
         $stdout.printf "\b\b\b\b\b\b" if auth_count > 1
         $stdout.printf '%06d', auth_count
-        break if CONFIG.test_record
+        break if auth_count >= CONFIG.test_records
       end
     rescue => e
       stack_trace(e, record)

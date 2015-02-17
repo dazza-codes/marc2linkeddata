@@ -4,7 +4,7 @@ module Marc2LinkedData
   class Configuration
 
     attr_accessor :debug
-    attr_accessor :test_record
+    attr_accessor :test_records
 
     attr_accessor :threads
     attr_accessor :thread_limit
@@ -39,7 +39,7 @@ module Marc2LinkedData
 
     def initialize
       @debug = env_boolean('DEBUG')
-      @test_record = env_boolean('TEST_RECORD')
+      @test_records = ENV['TEST_RECORDS'].to_i
 
       @threads = env_boolean('THREADS')
       @thread_limit = ENV['THREAD_LIMIT'].to_i || 25
