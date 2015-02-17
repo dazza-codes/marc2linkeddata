@@ -153,6 +153,34 @@ Example Output Files
              <http://www.worldcat.org/oclc/751661734>,
              <http://www.worldcat.org/oclc/800600611> .
 
+- In addition, when the option to resolve OCLC works is enabled (OCLC_AUTH2WORKS option), the
+  following triples were added to those above.
+
+          <http://www.worldcat.org/oclc/004933024> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/796991413> .
+          <http://www.worldcat.org/oclc/006626542> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/111527266> .
+          <http://www.worldcat.org/oclc/007170722> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/144285064> .
+          <http://www.worldcat.org/oclc/013525674> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/7358848> .
+          <http://www.worldcat.org/oclc/013525712> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/7360091> .
+          <http://www.worldcat.org/oclc/013700764> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/366036025> .
+          <http://www.worldcat.org/oclc/013700768> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/366036042> .
+          <http://www.worldcat.org/oclc/017649403> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/866252320> .
+          <http://www.worldcat.org/oclc/018292079> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/836712068> .
+          <http://www.worldcat.org/oclc/018380395> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/365996343> .
+          <http://www.worldcat.org/oclc/023969230> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/890420837> .
+          <http://www.worldcat.org/oclc/035911289> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/355875201> .
+          <http://www.worldcat.org/oclc/036387153> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/622568> .
+          <http://www.worldcat.org/oclc/037671494> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/9216290> .
+          <http://www.worldcat.org/oclc/050868185> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/366714531> .
+          <http://www.worldcat.org/oclc/495781917> schema:contributor <http://www.worldcat.org/identities/lccn-n79044798>;
+             schema:exampleOfWork <http://www.worldcat.org/entity/work/id/994448191> .
+          <http://www.worldcat.org/oclc/727657045> schema:contributor <http://www.worldcat.org/identities/lccn-n79044798>;
+             schema:exampleOfWork <http://www.worldcat.org/entity/work/id/1811109792> .
+          <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/994448191> .
+          <http://www.worldcat.org/oclc/751661734> schema:contributor <http://www.worldcat.org/identities/lccn-n79044798>;
+             schema:exampleOfWork <http://www.worldcat.org/entity/work/id/1816359357> .
+          <http://www.worldcat.org/oclc/782013318> schema:contributor <http://www.worldcat.org/identities/lccn-n79044798>;
+             schema:exampleOfWork <http://www.worldcat.org/entity/work/id/146829946> .
+          <http://www.worldcat.org/oclc/889440750> schema:exampleOfWork <http://www.worldcat.org/entity/work/id/2061462527> .
 
 
 Ruby Library Use
