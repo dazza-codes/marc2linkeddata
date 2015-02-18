@@ -81,6 +81,54 @@ Configure
     # data resources, such as OCLC works for authorities.
     marc2LD_config
 
+Console Exploration
+
+    # First set configuration parameters (see details above).
+    # Then enter the pry REPL console, which requires the
+    # gem and loads the configuration.
+    marc2LD_console
+    > loc = Marc2LinkedData::Loc.new 'http://id.loc.gov/authorities/names/n79044798'
+    > loc.id
+    => "n79044798"
+    > #
+    > # retrieve RDF from LOC
+    > loc.rdf
+    => #<RDF::Graph:0x3fe88de67494(default)>
+    > # the RDF is an in-memory graph
+    > loc.rdf.to_ttl
+    => snipped for brevity
+    > #
+    > # Various attributes derived from the RDF
+    > loc.label
+    => "Byrnes, Christopher I., 1949-"
+    > loc.deprecated?
+    => false
+    > loc.person?
+    => true
+    > loc.corporation?
+    => false
+    > loc.conference?
+    => false
+    > loc.geographic?
+    => false
+    > loc.name_title?
+    => false
+    > loc.uniform_title?
+    => false
+    > #
+    > # Try to retrieve additional linked data resources:
+    > loc.get_viaf
+    => "http://viaf.org/viaf/108317368/"
+    > loc.get_oclc_identity
+    => "http://www.worldcat.org/identities/lccn-n79044798/"
+    > #
+    > # Don't just read this, do the homework:
+    > # There are similar classes for VIAF, ISNI and OCLC entities,
+    > # explore the code base for more details and figure out how
+    > # to use that VIAF IRI to construct a Viaf object, and
+    > # then use it to get more ISNI linked data 8-)
+
+
 Scripting
 
     # First configure (see details above).
@@ -196,10 +244,10 @@ Example Output Files
 
 Ruby Library Use
 
-- authority files
+- iterating records in an authority file
 
         require 'marc2linkeddata'
-        marc_filename = 'stf_auth.01.mrc'
+        marc_filename = 'auth.mrc'
         marc_file = File.open(marc_filename,'r')
         until marc_file.eof?
           leader = ParseMarcAuthority::parse_leader(marc_file)
