@@ -139,12 +139,6 @@ def marc_file2ld(marc_filename)
   ld_file.close
 end
 
-def thread_wait(threads)
-  threads.each{|t| t.join}
-  threads.delete_if {|t| t.status == false}
-  threads.delete_if {|t| t.status.nil? }
-end
-
 
 # ---------------------------------------------------------------------
 # MAIN
@@ -183,19 +177,16 @@ marc_files.each do |path|
   output_path = File.join(path.dirname.to_s, output_dir)
   Dir.mkdir(output_path, 0775) unless File.directory? output_path
   auth_records = marc_authority_records(path.to_s)
-  progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
   if CONFIG.threads
-    threads = []
-    auth_records.each do |r|
-      thread_wait(threads) while threads.length >= CONFIG.thread_limit
-      t = Thread.new { marc_record2turtle(r, output_path) }
-      t.abort_on_exception = true
-      threads << t
-      progress.increment  # increment progress although thread is still running
+    # Allow Parallel to automatically determine the optimal concurrency model.
+    # Note that :in_threads crashed and :in_processes worked.
+    # Parallel.each(auth_records, :progress => 'Records: ', :in_threads=>CONFIG.thread_limit) do |r|
+    # Parallel.each(auth_records, :progress => 'Records: ', :in_processes=>CONFIG.thread_limit) do |r|
+    Parallel.each(auth_records, :progress => 'Records: ') do |r|
+      marc_record2turtle(r, output_path)
     end
-    # Ensure any remaining threads complete
-    threads.each{|t| t.join}
   else
+    progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
     auth_records.each do |r|
       marc_record2turtle(r, output_path)
       progress.increment
