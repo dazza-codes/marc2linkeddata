@@ -86,7 +86,8 @@ Scripting
     # First configure (see details above).
     # Translate a MARC21 authority file to a turtle file.
     # It's assumed that '*.mrc' files contain multiple MARC21
-    # records and the record identifier is in field 001.
+    # records and the record identifier is configured in the
+    # ENV['FIELD_AUTH_ID'] value, it defaults to MARC field 001.
     # marcAuthority2LD [ authfile1.mrc .. authfileN.mrc ]
     marcAuthority2LD auth.mrc
 
