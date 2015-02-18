@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = 'marc2linkeddata'
-  s.version     = '0.1.2'
+  s.version     = '0.1.3'
   s.licenses    = ['Apache-2.0']
 
   # mysql and bson_ext only install on MRI (c-ruby)
@@ -19,36 +19,36 @@ Gem::Specification.new do |s|
   #s.required_rubygems_version = '>= 1.3.6'
   # s.required_ruby_version = '>= 2.1.0'
 
-  s.add_dependency 'addressable'
-  s.add_dependency 'linkeddata'
-  s.add_dependency 'marc'
-  s.add_dependency 'parallel'
-  s.add_dependency 'rest-client'
-  s.add_dependency 'ruby-progressbar'
+  s.add_dependency 'addressable', '~> 2.3'
+  s.add_dependency 'linkeddata', '~> 1.0'
+  s.add_dependency 'marc', '~> 1.0'
+  s.add_dependency 'parallel', '~> 1.0'
+  s.add_dependency 'rest-client', '~> 1.0'
+  s.add_dependency 'ruby-progressbar', '~> 1.0'
 
   # DB clients
-  s.add_dependency 'mysql'  # not for jruby
-  s.add_dependency 'sequel'
+  s.add_dependency 'mysql', '~> 2.0'  # not for jruby
+  s.add_dependency 'sequel', '~> 4.0'
 
   # Use ENV for config
-  s.add_dependency 'dotenv'
+  s.add_dependency 'dotenv', '~> 1.0'
 
   # ruby gem for RDF on 4store, see https://github.com/emk/rdf-4store
   s.add_dependency 'rdf-4store'
   # ruby gem for RDF on allegrograph, see https://github.com/emk/rdf-agraph
   s.add_dependency 'rdf-agraph'
   # ruby gem for RDF on mongodb, see https://rubygems.org/gems/rdf-mongo
-  s.add_dependency 'bson_ext'  # not for jruby
-  s.add_dependency 'rdf-mongo'
+  s.add_dependency 'bson_ext', '~> 1.0'  # not for jruby
+  s.add_dependency 'rdf-mongo', '~> 1.0'
 
   # cache simple RDF on redis
   s.add_dependency 'hiredis'
-  s.add_dependency 'redis'
+  s.add_dependency 'redis', '~> 3.0'
 
   # Use pry for console and debug config
   s.add_dependency 'pry'
   s.add_dependency 'pry-doc'
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rspec', '~> 3.0'
 
   s.files   = `git ls-files`.split($/)
   dev_files = %w(.gitignore bin/setup.sh bin/test.sh)
