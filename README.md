@@ -13,16 +13,20 @@ copy the .env_example file provided into the current path.
 Without any HTTP retrieval of RDF metadata, using only data in a MARC record, it can
 translate 100,000 authority records in about 5-6 min on a current laptop system.  The
 config options allow specification of MARC fields that may already contain resource links.
-With HTTP/RDF retrieval options enabled, it can take a lot longer (days) and the
-RDF providers may not be happy about a barrage of requests.
+With RDF retrieval options enabled, it can take a lot longer (days; and the
+RDF providers may not be happy about a barrage of requests).
 
-File IO is the most expensive operation in the MARC-only mode (it helps to have a solid
-state drive with high IO performance).  In the RDF-HTTP retrieval mode, it may help
-to enable threading for concurrent retrieval of RDF resources.  However, it's still
+It may help to enable threading for concurrent processing.  The concurrency is provided
+by the ruby parallel gem, which can automatically optimise concurrent threads or processes.
+It can process 100,000 authority records in under 2 min (without any RDF retrieval).
+
+The processing involves substantial file IO and, when enabled, network IO also.  With
+about 100,000 records in a .mrc file, all records can be loaded into memory and processed
+in a serial list or concurrently.  With regard to file IO, it is the most expensive
+operation in the MARC-only mode (it may help to use a drive with high IO performance).
+In the RDF retrieval mode, where network IO becomes more important, it may help
+to enable threads for concurrent retrieval of RDF resources.  However, it's still
 relatively slow (exploring options for caching and local downloads of RDF data).
-Note that it runs a lot slower on jruby-9.0.0.0-pre1 than MRI 2.2.0, whether threads
-are enabled or not.  It raises exceptions on jruby-1.7.9, related to ruby
-language support (such as Array#delete_if).
 
 The current output is to the file system, but it should be easy to incorporate
 and configure alternatives by using the RDF.rb facilities for connecting to a
@@ -38,8 +42,8 @@ TODO: A significant problem to solve is effective caching or mirrors for linked 
 The retrieval should inspect any HTTP cache headers that might be available and
 adding PROVO to the linked-data graph generated for each record.
 
-TODO: Provide system platform options, to dockerize the application and make it easier
-for automatic horizontal scaling.  Consider https://www.packer.io/intro/index.html
+TODO: Provide system platform options, like docker, to package the application and
+make it easier to scale out the processing.  Consider https://www.packer.io/intro/index.html
 
 Optional Dependencies
 
@@ -85,6 +89,12 @@ Scripting
     # records and the record identifier is in field 001.
     # marcAuthority2LD [ authfile1.mrc .. authfileN.mrc ]
     marcAuthority2LD auth.mrc
+
+    # To provide one-off config values on the command line, set
+    # the environment variable first; e.g. the following turns of
+    # debug mode, processes 20 records from auth.mrc, using
+    # concurrent processing.
+    DEBUG=false TEST_RECORDS=20 THREADS=true marcAuthority2LD auth.mrc
 
     # Check the syntax of the output turtle files.
     touch turtle_syntax_checks.log
