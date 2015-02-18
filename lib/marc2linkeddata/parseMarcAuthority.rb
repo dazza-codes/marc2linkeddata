@@ -36,7 +36,6 @@ module Marc2LinkedData
       #field001 = record.fields.select {|f| f if f.tag == '001' }.first.value
       #field003 = record.fields.select {|f| f if f.tag == '003' }.first.value
       #"#{field003}-#{field001}"
-      # get_fields('001').first.value
       get_fields(@@config.field_auth_id).first.value
     end
 
