@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'marc2linkeddata'
+CONFIG = Marc2LinkedData.configuration
+
+marc_files = []
+ARGV.each do |filename|
+  path = Pathname(filename)
+  marc_files.push(path) if path.exist?
+end
+if marc_files.empty?
+  script_name = File.basename(__FILE__)
+  # script_path = File.dirname(__FILE__)
+  # example_env_file = File.absolute_path(File.join(script_path,'..','.env_example'))
+  puts <<HELP
+#{script_name} marc_authority_file1.mrc [ marc_authority_file2.mrc .. marc_authority_fileN.mrc ]
+
+Output is a count of the record types in the marc file(s).
+
+HELP
+  exit!
+end
+
+marc_files.each do |path|
+  record_types = Marc2LinkedData::Utils.marc_type_count(path.to_s)
+  puts "MARC record types in: #{path}"
+  pp record_types
+end
+

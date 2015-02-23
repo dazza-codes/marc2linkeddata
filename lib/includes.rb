@@ -19,6 +19,7 @@ require 'pry'
 require 'pry-doc'
 
 require_relative 'marc2linkeddata/configuration'
+require_relative 'marc2linkeddata/utils'
 
 require_relative 'marc2linkeddata/resource'
 require_relative 'marc2linkeddata/isni'
