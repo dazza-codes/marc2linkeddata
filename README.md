@@ -55,6 +55,12 @@ Optional Dependencies
     - http://marmotta.apache.org
     - http://stardog.com
 
+MARC resources
+
+  - http://www.loc.gov/marc/
+  - http://wiki.code4lib.org/index.php/Working_with_MaRC
+  - http://openmetadata.lib.harvard.edu/bibdata
+
 Install
 
     gem install marc2linkeddata
@@ -115,18 +121,27 @@ Console Exploration
     => false
     > loc.uniform_title?
     => false
-    > #
     > # Try to retrieve additional linked data resources:
-    > loc.get_viaf
-    => "http://viaf.org/viaf/108317368/"
-    > loc.get_oclc_identity
+    > oclc_uri = loc.get_oclc_identity
     => "http://www.worldcat.org/identities/lccn-n79044798/"
+    > oclc_auth = Marc2LinkedData::OclcIdentity.new oclc_uri
+    > sa_graph = oclc_auth.same_as
+    => #<RDF::Graph:0x3fce1a5ec0f4(default)>
+    > sa_graph.to_ttl
+    => snipped for brevity
+    > oclc_auth.creative_works
+    => [#<RDF::URI:0x3fce1bc0cc6c URI:http://worldcat.org/oclc/747413718>,
+     #<RDF::URI:0x3fce1bc2a668 URI:http://worldcat.org/oclc/004933024>,
+     snipped for brevity
+     #<RDF::URI:0x3fce1be21444 URI:http://worldcat.org/oclc/751661734>]
     > #
-    > # Don't just read this, do the homework:
+    > # Don't just read this, try it out!
     > # There are similar classes for VIAF, ISNI and OCLC entities,
     > # explore the code base for more details and figure out how
     > # to use that VIAF IRI to construct a Viaf object, and
     > # then use it to get more ISNI linked data 8-)
+    > viaf_uri = loc.get_viaf
+    => "http://viaf.org/viaf/108317368/"
 
 
 Scripting
