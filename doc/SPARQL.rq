@@ -1,0 +1,42 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+#
+# Start with an OCLC example work and get works, contributors, etc.
+#
+SELECT * WHERE {
+ <http://www.worldcat.org/oclc/495781917> schema:contributor ?oclc_person .
+ ?oclc_person rdfs:seeAlso ?exampleWork .
+ ?exampleWork schema:exampleOfWork ?work .
+
+ ?loc_person owl:sameAs ?oclc_person .
+ ?lib_person owl:sameAs ?loc_person .
+ ?lib_person owl:sameAs ?other_person .
+ ?lib_person schema:name ?lib_name .
+}
+
+#
+# Start with an LOC authority and get to example works, works, persons, etc.
+#
+SELECT * WHERE {
+
+    ?lib_person owl:sameAs <http://id.loc.gov/authorities/names/n79044798> .
+    <http://id.loc.gov/authorities/names/n79044798> owl:sameAs ?oclc_person .
+    ?loc_person owl:sameAs ?oclc_person .
+
+    ?lib_person a schema:Person .
+        ?lib_person schema:name ?name .
+        ?lib_person owl:sameAs ?same_person .
+
+    OPTIONAL { ?exampleWork schema:creator     ?oclc_person . }
+    OPTIONAL { ?exampleWork schema:contributor ?oclc_person . }
+
+    OPTIONAL { ?exampleWork schema:contributor ?all_persons . }
+
+    OPTIONAL { ?exampleWork schema:exampleOfWork  ?oclc_work . }
+    OPTIONAL { ?exampleWorks schema:exampleOfWork ?oclc_work . }
+}
+
+

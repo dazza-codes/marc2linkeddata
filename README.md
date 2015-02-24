@@ -166,6 +166,18 @@ Scripting
       rapper -c -i turtle $f >>  turtle_syntax_checks.log 2>&1
     done
 
+    # Assert data into a triple store;
+    # e.g. use a clean Kb store on 4store 
+    4s-boss
+    4s-admin stop-stores ld4l && 4s-admin delete-stores ld4l
+    4s-admin create-store ld4l && 4s-admin start-stores ld4l
+    4s-import -f turtle ld4l ./auth_turtle/*.ttl
+    4s-httpd -D -s-1 ld4l
+
+    # SPARQL the triples for use cases;
+    # see docs/SPARQL.rq for details.
+
+
 Example Output Files
 
 - In this example, only data in the MARC record was used, without any RDF link
