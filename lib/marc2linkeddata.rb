@@ -1,5 +1,5 @@
 
-require_relative 'includes'
+require_relative 'requires'
 
 module Marc2LinkedData
 
