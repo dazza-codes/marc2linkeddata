@@ -48,10 +48,14 @@ Gem::Specification.new do |s|
   # Use pry for console and debug config
   s.add_dependency 'pry'
   s.add_dependency 'pry-doc'
+
+  # Development dependencies
   s.add_development_dependency 'rspec', '~> 3.0'
+  s.add_development_dependency 'guard'
+  s.add_development_dependency 'guard-ctags-bundler'
 
   s.files   = `git ls-files`.split($/)
-  dev_files = %w(.gitignore bin/setup.sh bin/test.sh)
+  dev_files = %w(.gitignore bin/setup.sh bin/ctags.rb bin/test.sh)
   dev_files.each {|f| s.files.delete f }
 
   s.executables = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
