@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require 'marc2linkeddata'
+CONFIG = Marc2LinkedData.configuration
+
+marc_files = []
+ARGV.each do |filename|
+  path = Pathname(filename)
+  marc_files.push(path) if path.exist?
+end
+if marc_files.empty?
+  script_name = File.basename(__FILE__)
+  # script_path = File.dirname(__FILE__)
+  # example_env_file = File.absolute_path(File.join(script_path,'..','.env_example'))
+  puts <<HELP
+#{script_name} marc_authority_file1.mrc [ marc_authority_file2.mrc .. marc_authority_fileN.mrc ]
+
+Output is a set of search results for the marc file(s).
+
+HELP
+  exit!
+end
+
+# TODO: code, parse, document CLI options.
+opts = {
+    :last_name => 'Tsuge'
+}
+
+
+marc_files.each do |path|
+  results = Marc2LinkedData::Utils.marc_authority_file_search(path.to_s, opts)
+  puts "MARC record search for: #{path}"
+  pp results
+end
+
