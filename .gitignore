@@ -4,7 +4,7 @@
 /.config
 /.env
 /coverage/
-/data/
+/data
 /InstalledFiles
 /pkg/
 /spec/reports/
