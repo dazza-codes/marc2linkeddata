@@ -14,75 +14,10 @@ def stack_trace(e, record)
   $stderr.write "\n"
 end
 
-# Count all the records in the MARC file.
-def marc_auth_count(marc_file)
-  auth_records = 0
-  until marc_file.eof?
-    begin
-      leader = Marc2LinkedData::ParseMarcAuthority::parse_leader(marc_file)
-      marc_file.seek(leader[:length], IO::SEEK_CUR)
-      auth_records += 1 if leader[:type] == 'z'
-    rescue => e
-      stack_trace(e, record)
-      binding.pry if CONFIG.debug
-    end
-  end
-  marc_file.seek(0, IO::SEEK_SET)
-  auth_records
-end
-
-# Memory intensive loading of all authority records in the MARC file.
-def marc_authority_records(marc_filename)
-  puts "Reading records from: #{marc_filename}"
-  marc_file = File.open(marc_filename,'r')
-  auth_count = 0
-  auth_records = []
-  until marc_file.eof?
-    begin
-      leader = Marc2LinkedData::ParseMarcAuthority::parse_leader(marc_file)
-      raw = marc_file.read(leader[:length])
-      if leader[:type] == 'z'
-        record = MARC::Reader.decode(raw)
-        auth_records << record
-        auth_count += 1
-        $stdout.printf "\b\b\b\b\b\b" if auth_count > 1
-        $stdout.printf '%06d', auth_count
-        break if (CONFIG.test_records > 0 && CONFIG.test_records <= auth_count)
-      end
-    rescue => e
-      stack_trace(e, record)
-      binding.pry if CONFIG.debug
-    end
-  end
-  marc_file.close
-  $stdout.write "\n"
-  auth_records
-end
-
-
-def auth_record_cache(auth)
-
-  # auth_id = "auth:#{auth.get_id}"
-  # triples = nil
-  # # TODO: enable additional persistence options
-  # # Use data already in redis (if enabled)
-  # triples = CONFIG.redis.get(auth_id) if CONFIG.redis_read
-  # if triples.nil?
-  #   triples = auth.to_ttl  # generate new triples
-  #   # Update redis (if enabled) for triples not read from redis
-  #   CONFIG.redis.set(auth_id, triples) if CONFIG.redis_write
-  # end
-
-end
-
-
-
-def marc_record2turtle(record, output_path=nil)
+def marc_record2turtle(auth, output_path=nil)
   begin
     # ParseMarcAuthority is a lazy parser, so
     # init only assigns record to an instance var.
-    auth = Marc2LinkedData::ParseMarcAuthority.new(record)
-    auth_record_cache(auth)
     triples = auth.to_ttl.lines
     binding.pry if (CONFIG.debug && triples.empty?)
     triples.delete_if {|l| l.chomp.empty? }
@@ -94,50 +29,11 @@ def marc_record2turtle(record, output_path=nil)
     ld_file.flush
     ld_file.close
   rescue => e
-    stack_trace(e, record)
+    stack_trace(e, auth.record)
     binding.pry if CONFIG.debug
   end
 end
 
-
-
-def marc_file2ld(marc_filename)
-  ld_filename = marc_filename.gsub('.mrc','.ttl')
-  puts "Translating: #{marc_filename} to #{ld_filename}"
-  ld_file = File.open(ld_filename,'w')
-  # Marc2LinkedData.write_prefixes(ld_file)
-  marc_file = File.open(marc_filename,'r')
-  auth_count = 0
-  auth_records = marc_auth_count(marc_file)
-  progress = ProgressBar.create(:total => auth_records, :format => '%a %f |%b>>%i| %P%% %t')
-  until marc_file.eof?
-    begin
-      leader = Marc2LinkedData::ParseMarcAuthority::parse_leader(marc_file)
-      raw = marc_file.read(leader[:length])
-      if leader[:type] == 'z'
-        progress.increment
-        record = MARC::Reader.decode(raw)
-        # ParseMarcAuthority is a lazy parser, so
-        # init only assigns record to an instance var.
-        auth = Marc2LinkedData::ParseMarcAuthority.new(record)
-        auth_count += 1
-        auth_record_cache(auth)
-        triples = auth.to_ttl.lines
-        binding.pry if (CONFIG.debug && triples.empty?)
-        triples.delete_if {|l| l.chomp.empty? }
-        triples.delete_if {|l| l.start_with?('@prefix') } if auth_count > 1
-        ld_file.write(triples.join)
-        ld_file.flush
-      end
-    rescue => e
-      stack_trace(e, record)
-      binding.pry if CONFIG.debug
-    end
-  end
-  marc_file.close
-  ld_file.flush
-  ld_file.close
-end
 
 
 # ---------------------------------------------------------------------
@@ -176,19 +72,19 @@ marc_files.each do |path|
   output_dir = path.basename.to_s.gsub('.mrc','').gsub('.','_') + '_turtle'
   output_path = File.join(path.dirname.to_s, output_dir)
   Dir.mkdir(output_path, 0775) unless File.directory? output_path
-  auth_records = marc_authority_records(path.to_s)
+  auth_records = Marc2LinkedData::Utils.marc_authority_records(path.to_s)
   if CONFIG.threads
     # Allow Parallel to automatically determine the optimal concurrency model.
     # Note that :in_threads crashed and :in_processes worked.
     # Parallel.each(auth_records, :progress => 'Records: ', :in_threads=>CONFIG.thread_limit) do |r|
     # Parallel.each(auth_records, :progress => 'Records: ', :in_processes=>CONFIG.thread_limit) do |r|
-    Parallel.each(auth_records, :progress => 'Records: ') do |r|
-      marc_record2turtle(r, output_path)
+    Parallel.each(auth_records, :progress => 'Records: ') do |auth|
+      marc_record2turtle(auth, output_path)
     end
   else
     progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
-    auth_records.each do |r|
-      marc_record2turtle(r, output_path)
+    auth_records.each do |auth|
+      marc_record2turtle(auth, output_path)
       progress.increment
     end
   end

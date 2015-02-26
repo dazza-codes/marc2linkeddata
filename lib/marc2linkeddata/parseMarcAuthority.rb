@@ -9,12 +9,18 @@ module Marc2LinkedData
 
     @@config = nil
 
+    attr_reader :marc
+    attr_reader :record
+    attr_reader :file_path
+    attr_reader :file_offset
+
     attr_reader :loc
     attr_reader :isni
     attr_reader :viaf
 
-    def initialize(record)
+    def initialize(record, file_path=nil, file_offset=nil)
       @@config ||= Marc2LinkedData.configuration
+      @marc = record[:marc]
       @record = record
       @graph = RDF::Graph.new
       @loc = nil
@@ -23,7 +29,7 @@ module Marc2LinkedData
     end
 
     def get_fields(field_num)
-      fields = @record.fields.select {|f| f if f.tag == field_num }
+      fields = @marc.fields.select {|f| f if f.tag == field_num }
       raise "Invalid data in field #{field_num}" if fields.length < 1
       fields
     end
@@ -33,8 +39,8 @@ module Marc2LinkedData
     def get_id
       # extract ID from control numbers, see
       # http://www.loc.gov/marc/authority/ad001.html
-      #field001 = record.fields.select {|f| f if f.tag == '001' }.first.value
-      #field003 = record.fields.select {|f| f if f.tag == '003' }.first.value
+      #field001 = marc.fields.select {|f| f if f.tag == '001' }.first.value
+      #field003 = marc.fields.select {|f| f if f.tag == '003' }.first.value
       #"#{field003}-#{field001}"
       get_fields(@@config.field_auth_id).first.value
     end
@@ -141,36 +147,69 @@ module Marc2LinkedData
       end
     end
 
-    def self.parse_leader(file_handle, leader_bytes=24)
-      # example:
-      #record.leader
-      #=> "00774cz  a2200253n  4500"
-      # 00-04: '00774' - record length
-      # 05:    'c' - corrected or revised
-      # 06:    'z' - always 'z' for authority records
-      # 09:    'a' - UCS/Unicode
-      # 12-16: '00253' - base address of data, Length of Leader and Directory
-      # 17:    'n' - Complete authority record
-      # leader_status_codes = {
-      #     'a' => 'Increase in encoding level',
-      #     'c' => 'Corrected or revised',
-      #     'd' => 'Deleted',
-      #     'n' => 'New',
-      #     'o' => 'Obsolete',
-      #     's' => 'Deleted; heading split into two or more headings',
-      #     'x' => 'Deleted; heading replaced by another heading'
-      # }
-      leader = file_handle.read(leader_bytes)
-      file_handle.seek(-1 * leader_bytes, IO::SEEK_CUR)
-      {
-          :length => leader[0..4].to_i,
-          :status => leader[5],  # leader_status_codes[ record.leader[5] ]
-          :type => leader[6],    # always 'z' for authority records
-          :encoding => leader[9],  # translate letter code into ruby encoding string
-          :data_address => leader[12..16].to_i,
-          :complete => leader[17].include?('n')
-      }
+    def get_name
+      if person?
+        return field100[:name].strip
+      elsif name_title?
+        return field100[:name].strip
+      elsif corporation?
+        return field110[:name].strip
+      elsif conference?
+        # e.g. http://id.loc.gov/authorities/names/n79044866
+        return [field111[:name],field111[:date],field111[:city]].join('')
+      elsif uniform_title?
+        return field130[:title].strip  # use 'name' for code below, although it's a title
+      elsif geographic?
+        return field151[:name].strip  # use 'name' for code below, although it's a place
+      else
+        # TODO: find out what type this is.
+        binding.pry if @@config.debug
+        return nil
+      end
     end
+
+    def get_first_name
+      if person?
+        name = field100[:name]
+        return name.split(',')[1].strip rescue nil
+      else
+        return get_name
+      end
+    end
+
+    def get_last_name
+      if person?
+        name = field100[:name]
+        return name.split(',')[0].strip rescue nil
+      else
+        return get_name
+      end
+    end
+
+
+
+    # TODO: find another way to get first and last names without VIAF
+    # # VIAF extracts first and last name, try to use them. Note
+    # # that VIAF uses schema:name, schema:givenName, and schema:familyName.
+    # if @@config.get_viaf && ! @viaf.nil?
+    #   @viaf.family_names.each do |n|
+    #     # ln = URI.encode(n)
+    #     # TODO: try to get a language type, if VIAF provide it.
+    #     # name = RDF::Literal.new(n, :language => :en)
+    #     ln = RDF::Literal.new(n)
+    #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.familyName, ln) if @@config.use_foaf
+    #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.familyName, ln) if @@config.use_schema
+    #   end
+    #   @viaf.given_names.each do |n|
+    #     # fn = URI.encode(n)
+    #     # TODO: try to get a language type, if VIAF provide it.
+    #     # name = RDF::Literal.new(n, :language => :en)
+    #     fn = RDF::Literal.new(n)
+    #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.firstName, fn) if @@config.use_foaf
+    #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.givenName, fn) if @@config.use_schema
+    #   end
+    # end
+
 
 
     # BLOCK ----------------------------------------------------
@@ -238,11 +277,11 @@ module Marc2LinkedData
         # 100 is a personal name or name-title
         return @field100 unless @field100.nil?
         field = get_fields('100').first
-        # field = @record.fields.select {|f| f if f.tag == '100' }.first
         name = field.subfields.select {|f| f.code == 'a' }.first.value rescue ''
         date = field.subfields.select {|f| f.code == 'd' }.first.value rescue ''
         title = field.subfields.select {|f| f.code == 't' }.first.value rescue ''
         lang = field.subfields.select {|f| f.code == 'l' }.first.value rescue ''
+        name = name.gsub(/,$/,'')
         @field100 = {
             :name => name.force_encoding('UTF-8'),
             :date => date,
@@ -271,7 +310,7 @@ module Marc2LinkedData
         a = field.subfields.collect {|f| f.value if f.code == 'a' }.compact rescue []
         b = field.subfields.collect {|f| f.value if f.code == 'b' }.compact rescue []
         c = field.subfields.collect {|f| f.value if f.code == 'c' }.compact rescue []
-        name = [a,b,c].flatten.join(' : ')
+        name = [a,b,c].flatten.join(' ')
         @field110 = {
             :name => name.force_encoding('UTF-8'),
             :error => nil
@@ -440,50 +479,36 @@ module Marc2LinkedData
       #
       # Create triples for various kinds of LOC authority.
       #
-      name = ''
+      name = get_name
       if person?
-        name = field100[:name]
         graph_type_person(@lib.rdf_uri)
-
-        # TODO: find another way to get first and last names without VIAF
-        # # VIAF extracts first and last name, try to use them. Note
-        # # that VIAF uses schema:name, schema:givenName, and schema:familyName.
-        # if @@config.get_viaf && ! @viaf.nil?
-        #   @viaf.family_names.each do |n|
-        #     # ln = URI.encode(n)
-        #     # TODO: try to get a language type, if VIAF provide it.
-        #     # name = RDF::Literal.new(n, :language => :en)
-        #     ln = RDF::Literal.new(n)
-        #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.familyName, ln) if @@config.use_foaf
-        #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.familyName, ln) if @@config.use_schema
-        #   end
-        #   @viaf.given_names.each do |n|
-        #     # fn = URI.encode(n)
-        #     # TODO: try to get a language type, if VIAF provide it.
-        #     # name = RDF::Literal.new(n, :language => :en)
-        #     fn = RDF::Literal.new(n)
-        #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.firstName, fn) if @@config.use_foaf
-        #     @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.givenName, fn) if @@config.use_schema
-        #   end
-        # end
+        # # TODO: try to get a language type?
+        # # name = RDF::Literal.new(n, :language => :en)
+        ln = get_last_name
+        unless ln.nil?
+          @graph << [@lib.rdf_uri, RDF::FOAF.familyName,   RDF::Literal.new(ln)] if @@config.use_foaf
+          @graph << [@lib.rdf_uri, RDF::SCHEMA.familyName, RDF::Literal.new(ln)] if @@config.use_schema
+        end
+        # # TODO: try to get a language type?
+        # # name = RDF::Literal.new(n, :language => :en)
+        fn = get_first_name
+        unless fn.nil?
+          @graph << [@lib.rdf_uri, RDF::FOAF.firstName,   RDF::Literal.new(fn)] if @@config.use_foaf
+          @graph << [@lib.rdf_uri, RDF::SCHEMA.givenName, RDF::Literal.new(fn)] if @@config.use_schema
+        end
       elsif name_title?
         # e.g. http://id.loc.gov/authorities/names/n79044934
         # http://viaf.org/viaf/182251325/rdf.xml
-        name = field100[:name]
         graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle'))
       elsif corporation?
-        name = field110[:name]
         graph_type_organization(@lib.rdf_uri)
       elsif conference?
         # e.g. http://id.loc.gov/authorities/names/n79044866
-        name = [field111[:name],field111[:date],field111[:city]].join('')
         graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.event)
       elsif uniform_title?
-        name = field130[:title]  # use 'name' for code below, although it's a title
         graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
         graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.title)
       elsif geographic?
-        name = field151[:name]  # use 'name' for code below, although it's a place
         graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.Place)
       else
         # TODO: find out what type this is.
@@ -491,7 +516,7 @@ module Marc2LinkedData
         name = ''
         graph_type_agent(@lib.rdf_uri)
       end
-      if name != ''
+      unless name.nil?
         name = RDF::Literal.new(name)
         graph_insert_name(@lib.rdf_uri, name)
       end
@@ -592,7 +617,10 @@ module Marc2LinkedData
         # Try to get additional data from OCLC, using the RDFa
         # available in the OCLC identities pages.
         oclc_auth = OclcIdentity.new oclc_iri
+        graph_insert_sameAs(@lib.rdf_uri, oclc_auth.rdf_uri)
         graph_insert_sameAs(@loc.rdf_uri, oclc_auth.rdf_uri)
+        graph_insert_sameAs(@viaf.rdf_uri, oclc_auth.rdf_uri) unless @viaf.nil?
+        graph_insert_sameAs(@isni.rdf_uri, oclc_auth.rdf_uri) unless @isni.nil?
         oclc_auth.creative_works.each do |creative_work_uri|
           # Notes on work-around for OCLC data inconsistency:
           # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
@@ -659,8 +687,15 @@ module Marc2LinkedData
       # Get LOC control number and add catalog permalink? e.g.
       # http://lccn.loc.gov/n79046291
       graph_insert_sameAs(@lib.rdf_uri, @loc.rdf_uri)
-      graph_insert_sameAs(@lib.rdf_uri, @viaf.rdf_uri) unless @viaf.nil?
-      graph_insert_sameAs(@lib.rdf_uri, @isni.rdf_uri) unless @isni.nil?
+      unless @viaf.nil?
+        graph_insert_sameAs(@lib.rdf_uri, @viaf.rdf_uri)
+        graph_insert_sameAs(@loc.rdf_uri, @viaf.rdf_uri)
+      end
+      unless @isni.nil?
+        graph_insert_sameAs(@lib.rdf_uri, @isni.rdf_uri)
+        graph_insert_sameAs(@loc.rdf_uri, @isni.rdf_uri)
+        graph_insert_sameAs(@viaf.rdf_uri, @isni.rdf_uri) unless @viaf.nil?
+      end
       parse_auth_details
       # Optional elaboration of authority data with OCLC identity and works.
       get_oclc_links if @@config.get_oclc
