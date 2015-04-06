@@ -3,6 +3,8 @@ Dotenv.load
 
 require 'addressable/uri'
 require 'json'
+require 'open-uri'
+require 'nokogiri'
 require 'rest-client'
 RestClient.proxy = ENV['http_proxy'] unless ENV['http_proxy'].nil?
 require 'ruby-progressbar'
