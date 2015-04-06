@@ -415,6 +415,13 @@ Routine commands (use at your own risk):
     # -D = debug info
     # -R = reasoning (query rewriting)
     # -s -1 = no timeouts
+    
+Troubleshoot 4store
+
+    # list all the KB storage
+    ls -alh /var/lib/4store/
+    # setup a new KB
+    sudo 4s-backend-setup store_name
 
 ## Loading Data from the Library of Congress (LOC)
 
