@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'addressable', '~> 2.3'
   s.add_dependency 'linkeddata', '~> 1.0'
   s.add_dependency 'marc', '~> 1.0'
+  s.add_dependency 'nokogiri', '~> 1.6'
   s.add_dependency 'parallel', '~> 1.0'
   s.add_dependency 'rest-client', '~> 1.0'
   s.add_dependency 'ruby-progressbar', '~> 1.0'
