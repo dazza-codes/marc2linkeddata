@@ -458,8 +458,9 @@ Troubleshoot 4store
         cd $YOUR_DOWNLOAD_PATH
         # when the marc2linkeddata gem is installed,
         # this script should be available in the path.
-        # The import could take a long time.
-        loc_4store_import.sh
+        # The import could take a long time.  Ensure there are no
+        # 4s-httpd running, because they conflict with 4s-import.
+        loc_import_4store.sh
 
 - Run the 4s-httpd server for the LOC KB
 
