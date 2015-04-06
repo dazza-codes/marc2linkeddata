@@ -23,13 +23,17 @@ end
 
 # TODO: code, parse, document CLI options.
 opts = {
-    :last_name => 'Tsuge'
+    :last_name => 'Knuth',
+    :first_name => 'Donald',
+    :logical_operator => 'AND'  # 'OR'
 }
 
 
 marc_files.each do |path|
   results = Marc2LinkedData::Utils.marc_authority_file_search(path.to_s, opts)
-  puts "MARC record search for: #{path}"
-  pp results
+  unless results[:search_results].empty?
+    puts "MARC record search results:"
+    pp results
+  end
 end
 
