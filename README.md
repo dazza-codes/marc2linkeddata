@@ -471,6 +471,11 @@ Routine commands (use at your own risk):
         # The import could take a long time.
         loc_4store_import.sh
 
+        # Note that there may be many `raptor error` messages, e.g.
+        Running 4s-import for ./authoritiesnames_madsrdf.nt (31G) ...
+        URI file:///data/src/dlss/ld4l_data/loc_downloads/authoritiesnames_madsrdf.nt:91864092 column 143 raptor error - URI 'http://id.loc.gov/vocabulary/organizations/nic-mu çb eng' contains bad character(s)
+        URI file:///data/src/dlss/ld4l_data/loc_downloads/authoritiesnames_madsrdf.nt:91864096 column 143 raptor error - URI 'http://id.loc.gov/vocabulary/organizations/nic-mu çb eng' contains bad character(s)
+
 - Run the 4s-httpd server for the LOC KB
 
         4s-httpd -D -R -s-1 loc
