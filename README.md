@@ -420,8 +420,13 @@ Troubleshoot 4store
 
     # list all the KB storage
     ls -alh /var/lib/4store/
-    # setup a new KB
-    sudo 4s-backend-setup store_name
+    # nuke a KB and recreate it
+    KB=your_kb_name
+    sudo rm -rf /var/lib/4store/$KB
+    4s-backend-setup $KB
+    4s-admin stop-stores $KB && 4s-admin delete-stores $KB
+    4s-admin create-store $KB && 4s-admin start-stores $KB
+
 
 ## Loading Data from the Library of Congress (LOC)
 
