@@ -22,3 +22,14 @@ if [ $? -eq 0 ]; then
     done
 fi
 
+
+exit
+
+# Notes on installation and setup for 4store:
+KB=loc
+sudo rm -rf /var/lib/4store/$KB
+4s-backend-setup $KB
+4s-admin stop-stores $KB && 4s-admin delete-stores $KB
+4s-admin create-store $KB && 4s-admin start-stores $KB
+4s-httpd -D -s -1 $KB
+
