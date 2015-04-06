@@ -31,5 +31,5 @@ sudo rm -rf /var/lib/4store/$KB
 4s-backend-setup $KB
 4s-admin stop-stores $KB && 4s-admin delete-stores $KB
 4s-admin create-store $KB && 4s-admin start-stores $KB
-4s-httpd -D -s -1 $KB
+# Do NOT startup 4s-httpd, it conflicts with 4s-import.
 
