@@ -81,7 +81,7 @@ module Marc2LinkedData
     end
 
     def self.marc_authority_file_search(marc_filepath, opts={})
-      #TODO: use opts to search on last name
+      marc_filepath = File.realpath(marc_filepath)
       record_results = {
         :filename => marc_filepath,
         :search_params => opts,
@@ -89,11 +89,12 @@ module Marc2LinkedData
       }
       begin
         auth_records = marc_authority_records(marc_filepath)
+        # progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
         auth_records.each do |auth|
           result = marc_authority_record_search(auth, opts)
           record_results[:search_results] << result unless result.empty?
+          # progress.increment  # it's so fast that progress is not required
         end
-
         # if CONFIG.threads
         #   # Allow Parallel to automatically determine the optimal concurrency model.
         #   # Note that :in_threads crashed and :in_processes worked.
@@ -101,12 +102,6 @@ module Marc2LinkedData
         #   # Parallel.each(auth_records, :progress => 'Records: ', :in_processes=>CONFIG.thread_limit) do |r|
         #   Parallel.each(auth_records, :progress => 'Records: ') do |r|
         #     result = marc_authority_record_search(r, opts)
-        #   end
-        # else
-        #   progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
-        #   auth_records.each do |r|
-        #     result = marc_authority_record_search(r, opts)
-        #     progress.increment
         #   end
         # end
       rescue => e
@@ -140,13 +135,24 @@ module Marc2LinkedData
           ln = auth.get_last_name
           unless ln.nil?
             search_result[:last_name] = ln if ln.include? opts[:last_name]
+            binding.pry if ln.include? opts[:last_name]
           end
         end
         # TODO: Enable additional types of search?
         unless search_result.empty?
-          record_result[:record_id] = auth.get_id
-          record_result[:record_offset] = auth.record[:offset]
-          record_result[:search_result] = search_result
+          if opts[:logical_operator] == 'AND'
+            opt_keys = opts.keys
+            opt_keys.delete :logical_operator
+            if search_result.keys == opt_keys
+              record_result[:record_id] = auth.get_id
+              record_result[:record_offset] = auth.record[:offset]
+              record_result[:search_result] = search_result
+            end
+          else
+            record_result[:record_id] = auth.get_id
+            record_result[:record_offset] = auth.record[:offset]
+            record_result[:search_result] = search_result
+          end
         end
       rescue => e
         stack_trace(e, auth.record)
