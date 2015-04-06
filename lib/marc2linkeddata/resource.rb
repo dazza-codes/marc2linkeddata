@@ -49,6 +49,15 @@ module Marc2LinkedData
       end
     end
 
+    def xml
+      return @xml unless @xml.nil?
+      @xml = get_xml(@iri.to_s + '.xml')
+    end
+
+    def get_xml(uri4xml)
+      Nokogiri::XML(open(uri4xml))
+    end
+
     def rdf_uri
       RDF::URI.new(@iri)
     end
