@@ -61,6 +61,16 @@ MARC resources
   - http://wiki.code4lib.org/index.php/Working_with_MaRC
   - http://openmetadata.lib.harvard.edu/bibdata
 
+Linked data resources
+
+  - http://efoundations.typepad.com/efoundations/2011/09/things-their-conceptualisations-skos-foaffocus-modelling-choices.html
+  - http://outgoing.typepad.com/outgoing/2011/04/changes-to-viafs-rdf.html
+  - British National Bibliography
+    - http://www.bl.uk/bibliographic/datafree.html
+    - http://www.bl.uk/bibliographic/pdfs/datamodelv1_01.pdf
+    - http://dataliberate.com/2011/07/significant-bibliographic-linked-data-release-from-the-british-library/
+  - TODO:  add wikidata, id.loc.gov, VIAF/OCLC, ISNI, etc. etc. etc.
+
 Install
 
     gem install marc2linkeddata
@@ -167,7 +177,7 @@ Scripting
     done
 
     # Assert data into a triple store;
-    # e.g. use a clean Kb store on 4store 
+    # e.g. use a clean Kb store on 4store
     4s-boss
     4s-admin stop-stores ld4l && 4s-admin delete-stores ld4l
     4s-admin create-store ld4l && 4s-admin start-stores ld4l
