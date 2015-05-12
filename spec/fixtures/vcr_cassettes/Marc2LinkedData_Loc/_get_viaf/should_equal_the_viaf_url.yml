@@ -1,0 +1,739 @@
+---
+http_interactions:
+- request:
+    method: head
+    uri: http://viaf.org/viaf/sourceID/LC%7Cno99010609%23skos:Concept
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 301
+      message: Moved Permanently
+    headers:
+      Server:
+      - Apache-Coyote/1.1
+      Srwrequestmethod:
+      - HEAD
+      Location:
+      - http://viaf.org/viaf/85312226
+      Content-Type:
+      - application/redirect+xml;charset=ISO-8859-1
+      Content-Length:
+      - '0'
+      Date:
+      - Tue, 12 May 2015 00:58:07 GMT
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 12 May 2015 00:58:07 GMT
+- request:
+    method: head
+    uri: http://viaf.org/viaf/85312226
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 303
+      message: See Other
+    headers:
+      Server:
+      - Apache-Coyote/1.1
+      Location:
+      - 85312226/
+      Content-Type:
+      - text/plain
+      Content-Length:
+      - '20'
+      Date:
+      - Tue, 12 May 2015 00:58:07 GMT
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Tue, 12 May 2015 00:58:08 GMT
+- request:
+    method: get
+    uri: http://viaf.org/viaf/85312226/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*; q=0.5, application/xml"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - Apache-Coyote/1.1
+      Content-Location:
+      - viaf.xml
+      Content-Type:
+      - text/xml
+      Transfer-Encoding:
+      - chunked
+      Date:
+      - Tue, 12 May 2015 00:58:07 GMT
+    body:
+      encoding: UTF-8
+      string: "<?xml version=\"1.0\"  encoding=\"UTF-8\"?> \n<ns2:VIAFCluster xmlns=\"http://viaf.org/viaf/terms#\"
+        xmlns:foaf=\"http://xmlns.com/foaf/0.1/\" xmlns:owl=\"http://www.w3.org/2002/07/owl#\"
+        xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:void=\"http://rdfs.org/ns/void#\"
+        xmlns:ns2=\"http://viaf.org/viaf/terms#\"><ns2:viafID>85312226</ns2:viafID><ns2:Document
+        about=\"http://viaf.org/viaf/85312226/\"><ns2:inDataset resource=\"http://viaf.org/viaf/data\"/><ns2:primaryTopic
+        resource=\"http://viaf.org/viaf/85312226\"/></ns2:Document><ns2:nameType>Personal</ns2:nameType><ns2:sources><ns2:source
+        nsid=\"870979.68120527\">DBC|87097968120527</ns2:source><ns2:source nsid=\"no99010609\">LC|no
+        99010609</ns2:source><ns2:source nsid=\"Q80\">WKP|Q80</ns2:source><ns2:source
+        nsid=\".a11462115\">BNC|a11462115</ns2:source><ns2:source differentiated=\"false\"
+        nsid=\"http://d-nb.info/gnd/159981727\" sparse=\"true\">DNB|159981727</ns2:source><ns2:source
+        nsid=\"00854777\">NDL|00854777</ns2:source><ns2:source nsid=\"0000000124514311\">ISNI|0000000124514311</ns2:source><ns2:source
+        nsid=\"193462516\">NTA|193462516</ns2:source><ns2:source nsid=\"http://d-nb.info/gnd/121649091\">DNB|121649091</ns2:source><ns2:source
+        nsid=\"vtls009033529\">NUKAT|n 2012151802</ns2:source><ns2:source nsid=\"XX1503528\">BNE|XX1503528</ns2:source><ns2:source
+        nsid=\"074709267\">SUDOC|074709267</ns2:source><ns2:source nsid=\"a26647606\">NLP|a26647606</ns2:source><ns2:source
+        nsid=\"xx0000870\">NKC|xx0000870</ns2:source><ns2:source nsid=\"317488\">SELIBR|317488</ns2:source><ns2:source
+        nsid=\"LNC10-000198835\">LNB|LNC10-000198835</ns2:source></ns2:sources><ns2:length>1626</ns2:length><ns2:mainHeadings><ns2:data><ns2:text>Berners-Lee,
+        Tim.</ns2:text><ns2:sources><ns2:s>LC</ns2:s><ns2:s>DNB</ns2:s><ns2:s>DBC</ns2:s><ns2:s>ISNI</ns2:s><ns2:s>SELIBR</ns2:s><ns2:s>BNC</ns2:s><ns2:s>BNE</ns2:s><ns2:s>NDL</ns2:s></ns2:sources></ns2:data><ns2:data><ns2:text>Berners-Lee,
+        Tim, 1955-....</ns2:text><ns2:sources><ns2:s>NTA</ns2:s><ns2:s>NUKAT</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>NLP</ns2:s><ns2:s>DNB</ns2:s></ns2:sources></ns2:data><ns2:data><ns2:text>Tim
+        Berners-Lee</ns2:text><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:data><ns2:data><ns2:text>Berners-Lee,
+        Timothy, 1955-</ns2:text><ns2:sources><ns2:s>LNB</ns2:s></ns2:sources></ns2:data><ns2:data><ns2:text>Berners-Lee,
+        Timothy J., 1955-</ns2:text><ns2:sources><ns2:s>NKC</ns2:s></ns2:sources></ns2:data><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield><ns2:subfield code=\"d\">(1955- ).</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>NLP</ns2:s></ns2:sources><ns2:id>NLP|a26647606</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"forced single date\"/>DNB|121649091</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NTA|193462516</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NKC|xx0000870</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>SELIBR</ns2:s></ns2:sources><ns2:id>SELIBR|317488</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"title\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match type=\"suggested\"/>WKP|Q80</ns2:link><ns2:link><ns2:match
+        type=\"exact name\"/>DNB|159981727</ns2:link><ns2:link><ns2:match type=\"title\"/>NDL|00854777</ns2:link><ns2:link><ns2:match
+        type=\"title\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy,</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>LNB</ns2:s></ns2:sources><ns2:id>LNB|LNC10-000198835</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"joint author\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match type=\"forced
+        single date\"/>NLP|a26647606</ns2:link><ns2:link><ns2:match type=\"suggested\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"exact title\"/>WKP|Q80</ns2:link><ns2:link><ns2:match type=\"standard
+        number\"/>LC|no 99010609</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>NTA|193462516</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>NKC|xx0000870</ns2:link><ns2:link><ns2:match type=\"standard number\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>DNB|121649091</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy J.,</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield><ns2:subfield
+        code=\"7\">xx0000870</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>NKC</ns2:s></ns2:sources><ns2:id>NKC|xx0000870</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"forced single date\"/>DNB|121649091</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NLP|a26647606</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"suggested\"/>WKP|Q80</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>NTA|193462516</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield><ns2:subfield code=\"d\">(1955- ).</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources><ns2:id>NUKAT|n
+        2012151802</ns2:id><ns2:links><ns2:link><ns2:match type=\"exact title\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NLP|a26647606</ns2:link><ns2:link><ns2:match
+        type=\"partial date and publisher\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"exact title\"/>NDL|00854777</ns2:link><ns2:link><ns2:match type=\"exact
+        title\"/>WKP|Q80</ns2:link><ns2:link><ns2:match type=\"standard number\"/>LC|no
+        99010609</ns2:link><ns2:link><ns2:match type=\"forced single date\"/>NTA|193462516</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NKC|xx0000870</ns2:link><ns2:link><ns2:match
+        type=\"standard number\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match type=\"title\"/>SELIBR|317488</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>DNB|121649091</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim,</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>NTA</ns2:s></ns2:sources><ns2:id>NTA|193462516</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"joint author\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match type=\"forced
+        single date\"/>NLP|a26647606</ns2:link><ns2:link><ns2:match type=\"partial
+        date and publisher\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"exact title\"/>WKP|Q80</ns2:link><ns2:link><ns2:match type=\"standard
+        number\"/>LC|no 99010609</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>NKC|xx0000870</ns2:link><ns2:link><ns2:match type=\"standard number\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>DNB|121649091</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>BNE</ns2:s></ns2:sources><ns2:id>BNE|XX1503528</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"suggested\"/>WKP|Q80</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>DNB</ns2:s></ns2:sources><ns2:id>DNB|121649091</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"joint author\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match type=\"forced
+        single date\"/>NLP|a26647606</ns2:link><ns2:link><ns2:match type=\"partial
+        date and publisher\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"suggested\"/>WKP|Q80</ns2:link><ns2:link><ns2:match type=\"joint author\"/>LC|no
+        99010609</ns2:link><ns2:link><ns2:match type=\"forced single date\"/>NTA|193462516</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NKC|xx0000870</ns2:link><ns2:link><ns2:match
+        type=\"joint author\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match type=\"forced
+        single date\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim,</ns2:subfield><ns2:subfield code=\"d\">1955-....</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>SUDOC</ns2:s></ns2:sources><ns2:id>SUDOC|074709267</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"joint author\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match type=\"forced
+        single date\"/>NLP|a26647606</ns2:link><ns2:link><ns2:match type=\"partial
+        date and publisher\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"exact title\"/>WKP|Q80</ns2:link><ns2:link><ns2:match type=\"standard
+        number\"/>LC|no 99010609</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>NTA|193462516</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match type=\"forced single
+        date\"/>NKC|xx0000870</ns2:link><ns2:link><ns2:match type=\"standard number\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>DNB|121649091</ns2:link><ns2:link><ns2:match
+        type=\"forced single date\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>ISNI</ns2:s></ns2:sources><ns2:id>ISNI|0000000124514311</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"joint author\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match type=\"forced
+        single date\"/>NLP|a26647606</ns2:link><ns2:link><ns2:match type=\"forced
+        single date\"/>NKC|xx0000870</ns2:link><ns2:link><ns2:match type=\"joint author\"/>NDL|00854777</ns2:link><ns2:link><ns2:match
+        type=\"exact name\"/>DNB|159981727</ns2:link><ns2:link><ns2:match type=\"forced\"/>LC|no
+        99010609</ns2:link><ns2:link><ns2:match type=\"partial date and publisher\"/>NTA|193462516</ns2:link><ns2:link><ns2:match
+        type=\"suggested\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match type=\"partial
+        date and publisher\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match type=\"joint
+        author\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match type=\"partial date
+        and publisher\"/>DNB|121649091</ns2:link><ns2:link><ns2:match type=\"partial
+        date and publisher\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>NDL</ns2:s></ns2:sources><ns2:id>NDL|00854777</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"exact title\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match type=\"exact
+        name\"/>DNB|159981727</ns2:link><ns2:link><ns2:match type=\"joint author\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"suggested\"/>WKP|Q80</ns2:link><ns2:link><ns2:match type=\"title\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match
+        type=\"title\"/>SELIBR|317488</ns2:link><ns2:link><ns2:match type=\"exact
+        title\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>DNB</ns2:s></ns2:sources><ns2:id>DNB|159981727</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"exact name\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match type=\"exact
+        name\"/>LC|no 99010609</ns2:link><ns2:link><ns2:match type=\"exact name\"/>SELIBR|317488</ns2:link><ns2:link><ns2:match
+        type=\"exact name\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"exact name\"/>NDL|00854777</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>DBC</ns2:s></ns2:sources><ns2:id>DBC|87097968120527</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"joint author\"/>DNB|121649091</ns2:link><ns2:link><ns2:match type=\"exact
+        name\"/>DNB|159981727</ns2:link><ns2:link><ns2:match type=\"joint author\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"exact title\"/>NDL|00854777</ns2:link><ns2:link><ns2:match type=\"joint
+        author\"/>LC|no 99010609</ns2:link><ns2:link><ns2:match type=\"joint author\"/>NTA|193462516</ns2:link><ns2:link><ns2:match
+        type=\"joint author\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match
+        type=\"joint author\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match type=\"title\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match
+        type=\"title\"/>SELIBR|317488</ns2:link><ns2:link><ns2:match type=\"exact
+        title\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim.</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources><ns2:id>BNC|a11462115</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"joint author\"/>DNB|121649091</ns2:link><ns2:link><ns2:match type=\"title\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match
+        type=\"joint author\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"title\"/>NDL|00854777</ns2:link><ns2:link><ns2:match type=\"exact title\"/>WKP|Q80</ns2:link><ns2:link><ns2:match
+        type=\"standard number\"/>LC|no 99010609</ns2:link><ns2:link><ns2:match type=\"standard
+        number\"/>NTA|193462516</ns2:link><ns2:link><ns2:match type=\"standard number\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match
+        type=\"standard number\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match type=\"standard
+        number\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>LC</ns2:s></ns2:sources><ns2:id>LC|no
+        99010609</ns2:id><ns2:links><ns2:link><ns2:match type=\"joint author\"/>DBC|87097968120527</ns2:link><ns2:link><ns2:match
+        type=\"joint author\"/>DNB|121649091</ns2:link><ns2:link><ns2:match type=\"forced\"/>ISNI|0000000124514311</ns2:link><ns2:link><ns2:match
+        type=\"exact title\"/>WKP|Q80</ns2:link><ns2:link><ns2:match type=\"standard
+        number\"/>NTA|193462516</ns2:link><ns2:link><ns2:match type=\"standard number\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match
+        type=\"standard number\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match type=\"standard
+        number\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match type=\"exact name\"/>DNB|159981727</ns2:link><ns2:link><ns2:match
+        type=\"standard number\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl><ns2:mainHeadingEl><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"100\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources><ns2:id>WKP|Q80</ns2:id><ns2:links><ns2:link><ns2:match
+        type=\"suggested\"/>DNB|121649091</ns2:link><ns2:link><ns2:match type=\"suggested\"/>NKC|xx0000870</ns2:link><ns2:link><ns2:match
+        type=\"suggested\"/>NDL|00854777</ns2:link><ns2:link><ns2:match type=\"suggested\"/>BNE|XX1503528</ns2:link><ns2:link><ns2:match
+        type=\"exact title\"/>LC|no 99010609</ns2:link><ns2:link><ns2:match type=\"suggested\"/>NTA|193462516</ns2:link><ns2:link><ns2:match
+        type=\"exact title\"/>LNB|LNC10-000198835</ns2:link><ns2:link><ns2:match type=\"exact
+        title\"/>SUDOC|074709267</ns2:link><ns2:link><ns2:match type=\"exact title\"/>BNC|a11462115</ns2:link><ns2:link><ns2:match
+        type=\"suggested\"/>SELIBR|317488</ns2:link><ns2:link><ns2:match type=\"exact
+        title\"/>NUKAT|n 2012151802</ns2:link></ns2:links></ns2:mainHeadingEl></ns2:mainHeadings><ns2:fixed><ns2:gender>b</ns2:gender></ns2:fixed><ns2:x400s><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim J.</ns2:subfield><ns2:normalized>berners lee tim j</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NLP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim,</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield><ns2:normalized>berners
+        lee tim 1955</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NKC</ns2:s><ns2:s>LNB</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy</ns2:subfield><ns2:normalized>berners lee timothy</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>BNE</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy J.</ns2:subfield><ns2:normalized>berners lee timothy j</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NUKAT</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy J.</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield><ns2:normalized>berners
+        lee timothy j 1955</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>DNB</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy J.</ns2:subfield><ns2:subfield code=\"q\">(Timothy John)</ns2:subfield><ns2:normalized>berners
+        lee timothy j timothy john</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>LC</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy J.</ns2:subfield><ns2:subfield code=\"q\">(Timothy John),</ns2:subfield><ns2:subfield
+        code=\"d\">1955-</ns2:subfield><ns2:normalized>berners lee timothy j timothy
+        john 1955</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>LNB</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy John</ns2:subfield><ns2:normalized>berners lee timothy john</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>ISNI</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy John.</ns2:subfield><ns2:normalized>berners lee timothy john</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy John</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield><ns2:normalized>berners
+        lee timothy john 1955</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>DNB</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy, Sir</ns2:subfield><ns2:normalized>berners lee timothy sir</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy,</ns2:subfield><ns2:subfield code=\"c\">Sir,</ns2:subfield><ns2:subfield
+        code=\"d\">1955-</ns2:subfield><ns2:normalized>berners lee timothy sir 1955</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>LNB</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Timothy.</ns2:subfield><ns2:normalized>berners lee timothy</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Berners-Lee,
+        Tim</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield><ns2:normalized>berners
+        lee tim 1955</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>ISNI</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Lee,
+        Tim Berners-</ns2:subfield><ns2:normalized>lee tim berners</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>LC</ns2:s><ns2:s>DBC</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>ISNI</ns2:s><ns2:s>SELIBR</ns2:s><ns2:s>BNE</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Lee,
+        Tim Berners-,</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield><ns2:normalized>lee
+        tim berners 1955</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>LNB</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Lee,
+        Tim Berners-.</ns2:subfield><ns2:normalized>lee tim berners</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Lee,
+        Tim Berners-</ns2:subfield><ns2:subfield code=\"d\">1955-</ns2:subfield><ns2:normalized>lee
+        tim berners 1955</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>DNB</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Lee,
+        Timothy Berners-.</ns2:subfield><ns2:normalized>lee timothy berners</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NLP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Lee,
+        Timothy J. Berners-.</ns2:subfield><ns2:normalized>lee timothy j berners</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NLP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">Britaniko a sientista ti
+        kompiuter, inbentor ti World Wide Web</ns2:subfield><ns2:normalized>tim berners
+        lee britaniko a sientista ti kompiuter inbentor ti world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">British computer scientist,
+        inventor of the World Wide Web</ns2:subfield><ns2:normalized>tim berners lee
+        british computer scientist inventor of the world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">Brits natuurkundige</ns2:subfield><ns2:normalized>tim
+        berners lee brits natuurkundige</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">brit informatikus, a Vil&#xE1;gh&#xE1;l&#xF3;
+        feltal&#xE1;l&#xF3;ja</ns2:subfield><ns2:normalized>tim berners lee brit informatikus
+        a vilaghalo feltalaloja</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">britannialainen tietotekniikka-asiantuntija
+        ja World Wide Webin keksij&#xE4;</ns2:subfield><ns2:normalized>tim berners
+        lee britannialainen tietotekniikka asiantuntija ja world wide webin keksija</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">britischer Informatiker,
+        Erfinder des World Wide Web</ns2:subfield><ns2:normalized>tim berners lee
+        britischer informatiker erfinder des world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">brytyjski informatyk</ns2:subfield><ns2:normalized>tim
+        berners lee brytyjski informatyk</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">cientista da computa&#xE7;&#xE3;o
+        brit&#xE2;nico, criador da World Wide Web</ns2:subfield><ns2:normalized>tim
+        berners lee cientista da computacao britanico criador da world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">enginyer inform&#xE0;tic
+        brit&#xE0;nic i professor del MIT acreditat com l'inventor de la World Wide
+        Web</ns2:subfield><ns2:normalized>tim berners lee enginyer informatic britanic
+        i professor del mit acreditat com linventor de la world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">foi o creador da WWW (World
+        Wide Web) e &#xE9; o actual director do World Wide Web Consortium.</ns2:subfield><ns2:normalized>tim
+        berners lee foi o creador da www world wide web e e o actual director do world
+        wide web consortium</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">informaticien anglais,
+        principal inventeur du World Wide Web</ns2:subfield><ns2:normalized>tim berners
+        lee informaticien anglais principal inventeur du world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">informatico britannico,
+        inventore insieme a Robert Cailliau del World Wide Web</ns2:subfield><ns2:normalized>tim
+        berners lee informatico britannico inventore insieme a robert cailliau del
+        world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">inform&#xE1;tico ingl&#xE9;s,
+        inventor de la World Wide Web</ns2:subfield><ns2:normalized>tim berners lee
+        informatico ingles inventor de la world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">internettpioner</ns2:subfield><ns2:normalized>tim
+        berners lee internettpioner</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">inventor da World Wide
+        Web</ns2:subfield><ns2:normalized>tim berners lee inventor da world wide web</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Lee</ns2:subfield><ns2:subfield code=\"c\">izumitelj World Wide Weba</ns2:subfield><ns2:normalized>tim
+        berners lee izumitelj world wide weba</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tim
+        Berners-Li</ns2:subfield><ns2:normalized>tim berners li</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Timotheus
+        Ioannes Berners-Lee</ns2:subfield><ns2:normalized>timotheus ioannes berners
+        lee</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">Tims
+        B&#x113;rnerss-L&#x12B;</ns2:subfield><ns2:normalized>tims bernerss li</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x3A4;&#x3B9;&#x3BC;
+        &#x39C;&#x3C0;&#x3AD;&#x3C1;&#x3BD;&#x3B5;&#x3C1;&#x3C2; &#x39B;&#x3B9;</ns2:subfield><ns2:normalized>&#x3C4;&#x3B9;&#x3BC;
+        &#x3BC;&#x3C0;&#x3B5;&#x3C1;&#x3BD;&#x3B5;&#x3C1;&#x3C3; &#x3BB;&#x3B9;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;,
+        &#x422;&#x438;&#x43C;</ns2:subfield><ns2:normalized>&#x431;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;
+        &#x43B;&#x438; &#x442;&#x438;&#x43C;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x422;&#x438;&#x43C;
+        &#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;</ns2:subfield><ns2:normalized>&#x442;&#x438;&#x43C;
+        &#x431;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441; &#x43B;&#x438;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x422;&#x438;&#x43C;
+        &#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;</ns2:subfield><ns2:subfield
+        code=\"c\">&#x431;&#x440;&#x438;&#x442;&#x430;&#x43D;&#x441;&#x43A;&#x438;&#x439;
+        &#x443;&#x447;&#x451;&#x43D;&#x44B;&#x439;, &#x438;&#x437;&#x43E;&#x431;&#x440;&#x435;&#x442;&#x430;&#x442;&#x435;&#x43B;&#x44C;
+        &#x412;&#x441;&#x435;&#x43C;&#x438;&#x440;&#x43D;&#x43E;&#x439; &#x43F;&#x430;&#x443;&#x442;&#x438;&#x43D;&#x44B;</ns2:subfield><ns2:normalized>&#x442;&#x438;&#x43C;
+        &#x431;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441; &#x43B;&#x438; &#x431;&#x440;&#x438;&#x442;&#x430;&#x43D;&#x441;&#x43A;&#x438;&#x438;
+        &#x443;&#x447;&#x435;&#x43D;&#x44B;&#x438; &#x438;&#x437;&#x43E;&#x431;&#x440;&#x435;&#x442;&#x430;&#x442;&#x435;&#x43B;&#x44C;
+        &#x432;&#x441;&#x435;&#x43C;&#x438;&#x440;&#x43D;&#x43E;&#x438; &#x43F;&#x430;&#x443;&#x442;&#x438;&#x43D;&#x44B;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x422;&#x438;&#x43C;
+        &#x411;&#x44A;&#x440;&#x43D;&#x44A;&#x440;&#x441;-&#x41B;&#x438;&#x439;</ns2:subfield><ns2:normalized>&#x442;&#x438;&#x43C;
+        &#x431;&#x44A;&#x440;&#x43D;&#x44A;&#x440;&#x441; &#x43B;&#x438;&#x438;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x422;&#x44B;&#x43C;
+        &#x411;&#x44D;&#x440;&#x43D;&#x44D;&#x440;&#x437;-&#x41B;&#x456;</ns2:subfield><ns2:normalized>&#x442;&#x44B;&#x43C;
+        &#x431;&#x44D;&#x440;&#x43D;&#x44D;&#x440;&#x437; &#x43B;&#x456;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x422;&#x456;&#x43C;
+        &#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x456;</ns2:subfield><ns2:subfield
+        code=\"c\">&#x431;&#x440;&#x438;&#x442;&#x430;&#x43D;&#x441;&#x44C;&#x43A;&#x438;&#x439;
+        &#x441;&#x43F;&#x435;&#x446;&#x456;&#x430;&#x43B;&#x456;&#x441;&#x442; &#x437;
+        &#x456;&#x43D;&#x444;&#x43E;&#x440;&#x43C;&#x430;&#x442;&#x438;&#x43A;&#x438;,
+        &#x432;&#x438;&#x43D;&#x430;&#x445;&#x456;&#x434;&#x43D;&#x438;&#x43A; &#x412;&#x441;&#x435;&#x441;&#x432;&#x456;&#x442;&#x43D;&#x44C;&#x43E;&#x457;
+        &#x43F;&#x430;&#x432;&#x443;&#x442;&#x438;&#x43D;&#x438;</ns2:subfield><ns2:normalized>&#x442;&#x456;&#x43C;
+        &#x431;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441; &#x43B;&#x456; &#x431;&#x440;&#x438;&#x442;&#x430;&#x43D;&#x441;&#x44C;&#x43A;&#x438;&#x438;
+        &#x441;&#x43F;&#x435;&#x446;&#x456;&#x430;&#x43B;&#x456;&#x441;&#x442; &#x437;
+        &#x456;&#x43D;&#x444;&#x43E;&#x440;&#x43C;&#x430;&#x442;&#x438;&#x43A;&#x438;
+        &#x432;&#x438;&#x43D;&#x430;&#x445;&#x456;&#x434;&#x43D;&#x438;&#x43A; &#x432;&#x441;&#x435;&#x441;&#x432;&#x456;&#x442;&#x43D;&#x44C;&#x43E;&#x456;
+        &#x43F;&#x430;&#x432;&#x443;&#x442;&#x438;&#x43D;&#x438;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x426;&#x456;&#x43C;
+        &#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x456;</ns2:subfield><ns2:normalized>&#x446;&#x456;&#x43C;
+        &#x431;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441; &#x43B;&#x456;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x5D8;&#x5D9;&#x5DD;
+        &#x5D1;&#x5E2;&#x5E8;&#x5E0;&#x5E2;&#x5E8;&#x5E1;-&#x5DC;&#x5D9;</ns2:subfield><ns2:normalized>&#x5D8;&#x5D9;&#x5DD;
+        &#x5D1;&#x5E2;&#x5E8;&#x5E0;&#x5E2;&#x5E8;&#x5E1; &#x5DC;&#x5D9;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x5D8;&#x5D9;&#x5DD;
+        &#x5D1;&#x5E8;&#x5E0;&#x5E8;&#x5E1;-&#x5DC;&#x5D9;</ns2:subfield><ns2:normalized>&#x5D8;&#x5D9;&#x5DD;
+        &#x5D1;&#x5E8;&#x5E0;&#x5E8;&#x5E1; &#x5DC;&#x5D9;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x62A;&#x64A;&#x645;
+        &#x628;&#x64A;&#x631;&#x646;&#x631;&#x632; &#x644;&#x649;</ns2:subfield><ns2:normalized>&#x62A;&#x64A;&#x645;
+        &#x628;&#x64A;&#x631;&#x646;&#x631;&#x632; &#x644;&#x649;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x62A;&#x64A;&#x645;
+        &#x628;&#x64A;&#x631;&#x646;&#x631;&#x632; &#x644;&#x64A;</ns2:subfield><ns2:normalized>&#x62A;&#x64A;&#x645;
+        &#x628;&#x64A;&#x631;&#x646;&#x631;&#x632; &#x644;&#x64A;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x62A;&#x6CC;&#x645;
+        &#x628;&#x631;&#x646;&#x631;&#x632; &#x644;&#x6CC;</ns2:subfield><ns2:subfield
+        code=\"c\">&#x62F;&#x627;&#x646;&#x634;&#x645;&#x646;&#x62F; &#x639;&#x644;&#x648;&#x645;
+        &#x6A9;&#x627;&#x645;&#x67E;&#x6CC;&#x648;&#x62A;&#x631; &#x648; &#x641;&#x6CC;&#x632;&#x6CC;&#x6A9;&#x200C;&#x62F;&#x627;&#x646;
+        &#x628;&#x631;&#x6CC;&#x62A;&#x627;&#x646;&#x6CC;&#x627;&#x6CC;&#x6CC;</ns2:subfield><ns2:normalized>&#x62A;&#x6CC;&#x645;
+        &#x628;&#x631;&#x646;&#x631;&#x632; &#x644;&#x6CC; &#x62F;&#x627;&#x646;&#x634;&#x645;&#x646;&#x62F;
+        &#x639;&#x644;&#x648;&#x645; &#x6A9;&#x627;&#x645;&#x67E;&#x6CC;&#x648;&#x62A;&#x631;
+        &#x648; &#x641;&#x6CC;&#x632;&#x6CC;&#x6A9;&#x62F;&#x627;&#x646; &#x628;&#x631;&#x6CC;&#x62A;&#x627;&#x646;&#x6CC;&#x627;&#x6CC;&#x6CC;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x62A;&#x6CC;&#x645;
+        &#x628;&#x6CE;&#x631;&#x646;&#x6D5;&#x631;&#x632; &#x644;&#x6CC;</ns2:subfield><ns2:normalized>&#x62A;&#x6CC;&#x645;
+        &#x628;&#x6CE;&#x631;&#x646;&#x6D5;&#x631;&#x632; &#x644;&#x6CC;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x679;&#x645;
+        &#x628;&#x631;&#x646;&#x631;&#x632; &#x644;&#x6CC;</ns2:subfield><ns2:normalized>&#x679;&#x645;
+        &#x628;&#x631;&#x646;&#x631;&#x632; &#x644;&#x6CC;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x91F;&#x93F;&#x92E;
+        &#x92C;&#x930;&#x94D;&#x928;&#x930;&#x94D;&#x938; &#x932;&#x940;</ns2:subfield><ns2:normalized>&#x91F;&#x92E;
+        &#x92C;&#x930;&#x928;&#x930;&#x938; &#x932;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x99F;&#x9BF;&#x9AE;
+        &#x9AC;&#x9BE;&#x9B0;&#x9CD;&#x9A8;&#x9BE;&#x9B0;&#x9CD;&#x9B8;-&#x9B2;&#x9BF;</ns2:subfield><ns2:normalized>&#x99F;&#x9AE;
+        &#x9AC;&#x9B0;&#x9A8;&#x9B0;&#x9B8; &#x9B2;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x99F;&#x9BF;&#x9AE;
+        &#x9AC;&#x9BE;&#x9F0;&#x9CD;&#x9A8;&#x9BE;&#x9F0;&#x9CD;&#x99B; &#x9B2;&#x9C0;</ns2:subfield><ns2:normalized>&#x99F;&#x9AE;
+        &#x9AC;&#x9F0;&#x9A8;&#x9F0;&#x99B; &#x9B2;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#xB9F;&#xBBF;&#xBAE;&#xBCD;
+        &#xBAA;&#xBC7;&#xBB0;&#xBCD;&#xBA9;&#xBC7;&#xBB0;&#xBCD;&#xBB8;&#xBCD;-&#xBB2;&#xBC0;</ns2:subfield><ns2:subfield
+        code=\"c\">&#xB87;&#xBA3;&#xBC8;&#xBAF;&#xBA4;&#xBCD; &#xBA4;&#xBA8;&#xBCD;&#xBA4;&#xBC8;,
+        &#xBAA;&#xBBF;&#xBB0;&#xBBF;&#xBA4;&#xBCD;&#xBA4;&#xBBE;&#xBA9;&#xBBF;&#xBAF;
+        &#xB95;&#xBA3;&#xBBF;&#xBA9;&#xBBF; &#xBA8;&#xBBF;&#xBAA;&#xBC1;&#xBA3;&#xBB0;&#xBCD;</ns2:subfield><ns2:normalized>&#xB9F;&#xBAE;
+        &#xBAA;&#xBB0;&#xBA9;&#xBB0;&#xBB8; &#xBB2; &#xB87;&#xBA3;&#xBAF;&#xBA4; &#xBA4;&#xBA8;&#xBA4;
+        &#xBAA;&#xBB0;&#xBA4;&#xBA4;&#xBA9;&#xBAF; &#xB95;&#xBA3;&#xBA9; &#xBA8;&#xBAA;&#xBA3;&#xBB0;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#xC1F;&#xC3F;&#xC2E;&#xC4D;
+        &#xC2C;&#xC46;&#xC30;&#xC4D;&#xC28;&#xC30;&#xC4D;&#xC38;&#xC4D; &#xC32;&#xC40;</ns2:subfield><ns2:normalized>&#xC1F;&#xC2E;
+        &#xC2C;&#xC30;&#xC28;&#xC30;&#xC38; &#xC32;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#xC9F;&#xCBF;&#xCAE;&#xCCD;
+        &#xCAC;&#xCB0;&#xCCD;&#xCA8;&#xCB0;&#xCCD;&#xCB8;&#xCCD; &#xCB2;&#xCC0;</ns2:subfield><ns2:normalized>&#xC9F;&#xCAE;
+        &#xCAC;&#xCB0;&#xCA8;&#xCB0;&#xCB8; &#xCB2;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#xD1F;&#xD3F;&#xD02;
+        &#xD2C;&#xD7C;&#xD23;&#xD47;&#xD2F;&#xD4D;&#xD38;&#xD4D; &#xD32;&#xD40;</ns2:subfield><ns2:normalized>&#xD1F;
+        &#xD2C;&#xD7C;&#xD23;&#xD2F;&#xD38; &#xD32;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#xE17;&#xE34;&#xE21;
+        &#xE40;&#xE1A;&#xE2D;&#xE23;&#xE4C;&#xE40;&#xE19;&#xE34;&#xE23;&#xE4C;&#xE2A;-&#xE25;&#xE35;</ns2:subfield><ns2:normalized>&#xE17;&#xE21;
+        &#xE40;&#xE1A;&#xE2D;&#xE23;&#xE40;&#xE19;&#xE23;&#xE2A; &#xE25;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x1010;&#x1004;&#x103A;&#x1019;&#x103A;
+        &#x1018;&#x102C;&#x1014;&#x102C;&#x101C;&#x102E;</ns2:subfield><ns2:normalized>&#x1010;&#x1004;&#x1019;
+        &#x1018;&#x1014;&#x101C;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x10E2;&#x10D8;&#x10DB;
+        &#x10D1;&#x10D4;&#x10E0;&#x10DC;&#x10D4;&#x10E0;&#x10E1;-&#x10DA;&#x10D8;</ns2:subfield><ns2:normalized>&#x10E2;&#x10D8;&#x10DB;
+        &#x10D1;&#x10D4;&#x10E0;&#x10DC;&#x10D4;&#x10E0;&#x10E1; &#x10DA;&#x10D8;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x1794;&#x17CA;&#x17BA;&#x178E;&#x17BA;&#x179F;
+        &#x179B;&#x17B8;</ns2:subfield><ns2:normalized>&#x1794;&#x178E;&#x179F; &#x179B;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x30C6;&#x30A3;&#x30E0;&#x30FB;&#x30D0;&#x30FC;&#x30CA;&#x30FC;&#x30BA;&#xFF1D;&#x30EA;&#x30FC;</ns2:subfield><ns2:subfield
+        code=\"c\">&#x30A4;&#x30AE;&#x30EA;&#x30B9;&#x306E;&#x8A08;&#x7B97;&#x6A5F;&#x79D1;&#x5B66;&#x8005;</ns2:subfield><ns2:normalized>&#x30C6;&#x30A3;&#x30E0;
+        &#x30CF;&#x30CA;&#x30B9; &#x30EA; &#x30A4;&#x30AD;&#x30EA;&#x30B9;&#x306E;&#x8A08;&#x7958;&#x673A;&#x79D1;&#x5B78;&#x8005;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"1\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x30D0;&#x30FC;&#x30CA;&#x30FC;&#x30BA;=&#x30EA;&#x30FC;,
+        &#x30C6;&#x30A3;&#x30E0;</ns2:subfield><ns2:normalized>&#x30CF;&#x30CA;&#x30B9;
+        &#x30EA; &#x30C6;&#x30A3;&#x30E0;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>NDL</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x63D0;&#x59C6;&#xB7;&#x67CF;&#x7D0D;-&#x674E;</ns2:subfield><ns2:subfield
+        code=\"c\">&#x82F1;&#x570B;&#x96FB;&#x8166;&#x79D1;&#x5B78;&#x5BB6;&#x3001;&#x842C;&#x7DAD;&#x7DB2;&#x7684;&#x767C;&#x660E;&#x8005;</ns2:subfield><ns2:normalized>&#x63D0;&#x4F6C;
+        &#x67CF;&#x7D0D; &#x674E; &#x82F1;&#x5700;&#x7535;&#x5318;&#x79D1;&#x5B78;&#x50A2;
+        &#x534D;&#x7DAD;&#x34C1;&#x7684;&#x5F42;&#x660E;&#x8005;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x674E;&#x67CF;&#x7D0D;</ns2:subfield><ns2:normalized>&#x674E;&#x67CF;&#x7D0D;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#x8482;&#x59C6;&#xB7;&#x4F2F;&#x7EB3;&#x65AF;-&#x674E;</ns2:subfield><ns2:subfield
+        code=\"c\">&#x82F1;&#x56FD;&#x8BA1;&#x7B97;&#x673A;&#x79D1;&#x5B66;&#x5BB6;&#x3001;&#x4E07;&#x7EF4;&#x7F51;&#x7684;&#x53D1;&#x660E;&#x8005;</ns2:subfield><ns2:normalized>&#x8482;&#x4F6C;
+        &#x4F2F;&#x7D0D;&#x65AF; &#x674E; &#x82F1;&#x56FD;&#x8A08;&#x7958;&#x673A;&#x79D1;&#x5B78;&#x50A2;
+        &#x534D;&#x7DAD;&#x34C1;&#x7684;&#x5F42;&#x660E;&#x8005;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400><ns2:x400><ns2:datafield
+        dtype=\"MARC21\" ind1=\"0\" ind2=\" \" tag=\"400\"><ns2:subfield code=\"a\">&#xD300;
+        &#xBC84;&#xB108;&#xC2A4;&#xB9AC;</ns2:subfield><ns2:normalized>&#x1110;&#x1175;&#x11B7;
+        &#x1107;&#x1165;&#x1102;&#x1165;&#x1109;&#x1173;&#x1105;&#x1175;</ns2:normalized></ns2:datafield><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources></ns2:x400></ns2:x400s><ns2:coauthors><ns2:data
+        count=\"21\" tag=\"950\"><ns2:text>Fischetti, Mark</ns2:text><ns2:sources><ns2:s>LC</ns2:s><ns2:s>DNB</ns2:s><ns2:s>DBC</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>ISNI</ns2:s><ns2:s>NTA</ns2:s><ns2:s>BNC</ns2:s><ns2:s>NUKAT</ns2:s><ns2:s>LNB</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"4\" tag=\"950\"><ns2:text>Wijsman, Marlou 1947-</ns2:text><ns2:sources><ns2:s>NTA</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"4\" tag=\"950\"><ns2:text>Steenis-Perela&#xEB;r, E.H. van</ns2:text><ns2:sources><ns2:s>NTA</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\" tag=\"950\"><ns2:text>&#x9AD8;&#x6A4B;, &#x5FB9; 1941-</ns2:text><ns2:sources><ns2:s>NDL</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\" tag=\"950\"><ns2:text>Takahashi, Tooru, 1941-</ns2:text><ns2:sources><ns2:s>NDL</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\" tag=\"950\"><ns2:text>Secret, Arthur.</ns2:text><ns2:sources><ns2:s>LC</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\" tag=\"950\"><ns2:text>Manning, Gerard.</ns2:text><ns2:sources><ns2:s>LC</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\" tag=\"950\"><ns2:text>Dertouzos, Michael L.</ns2:text><ns2:sources><ns2:s>NUKAT</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\" tag=\"950\"><ns2:text>Wilber, Rick (1948- ).</ns2:text><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\" tag=\"951\"><ns2:text>Universitat Rovira i Virgili.</ns2:text><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\" tag=\"950\"><ns2:text>Tubella, Imma, 1953-</ns2:text><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data></ns2:coauthors><ns2:publishers><ns2:data
+        count=\"6\"><ns2:text>HarperSanFrancisco</ns2:text><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>LC</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"4\"><ns2:text>Orion Business Books</ns2:text><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"4\"><ns2:text>Harper</ns2:text><ns2:sources><ns2:s>NTA</ns2:s><ns2:s>NUKAT</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"3\"><ns2:text>Universitat Oberta de Catalunya</ns2:text><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>BNE</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"3\"><ns2:text>Dedicon</ns2:text><ns2:sources><ns2:s>NTA</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\"><ns2:text>&#x6BCF;&#x65E5;&#x30B3;&#x30DF;&#x30E5;&#x30CB;&#x30B1;&#x30FC;&#x30B7;&#x30E7;&#x30F3;&#x30BA;</ns2:text><ns2:sources><ns2:s>NDL</ns2:s><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\"><ns2:text>now publishers</ns2:text><ns2:sources><ns2:s>NTA</ns2:s><ns2:s>BNC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>Texere</ns2:text><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>Tachyon Publications</ns2:text><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>Siglo XXI de Espa&#xF1;a editores</ns2:text><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>HarperCollins Publishers</ns2:text><ns2:sources><ns2:s>LNB</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>Econ</ns2:text><ns2:sources><ns2:s>DNB</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>Adlandia</ns2:text><ns2:sources><ns2:s>DBC</ns2:s></ns2:sources></ns2:data></ns2:publishers><ns2:birthDate>1955-06-08</ns2:birthDate><ns2:deathDate>0</ns2:deathDate><ns2:dateType>lived</ns2:dateType><ns2:dates
+        max=\"201\" min=\"199\"><ns2:date count=\"14\" scaled=\"3.81\">199</ns2:date><ns2:date
+        count=\"26\" scaled=\"4.70\">200</ns2:date><ns2:date count=\"1\" scaled=\"0.00\">201</ns2:date></ns2:dates><ns2:RecFormats><ns2:data
+        count=\"1\"><ns2:text>a</ns2:text><ns2:sources><ns2:s>DBC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>aa</ns2:text><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"21\"><ns2:text>am</ns2:text><ns2:sources><ns2:s>LNB</ns2:s><ns2:s>LC</ns2:s><ns2:s>DNB</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>BNC</ns2:s><ns2:s>NUKAT</ns2:s><ns2:s>BNE</ns2:s><ns2:s>NDL</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\"><ns2:text>dm</ns2:text><ns2:sources><ns2:s>LC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\"><ns2:text>im</ns2:text><ns2:sources><ns2:s>NTA</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>jm</ns2:text><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data></ns2:RecFormats><ns2:ISBNs
+        unique=\"13\"><ns2:data count=\"7\"><ns2:text>9780062515872</ns2:text><ns2:sources><ns2:s>LC</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>BNC</ns2:s><ns2:s>NUKAT</ns2:s><ns2:s>LNB</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"4\"><ns2:text>9780062515865</ns2:text><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>LC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"3\"><ns2:text>9789057120909</ns2:text><ns2:sources><ns2:s>NTA</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"3\"><ns2:text>9781933019338</ns2:text><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>LC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"3\"><ns2:text>9780752820903</ns2:text><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>9788798117926</ns2:text><ns2:sources><ns2:s>DBC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>9788432310409</ns2:text><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>9784839902872</ns2:text><ns2:sources><ns2:s>NDL</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>9783430114684</ns2:text><ns2:sources><ns2:s>DNB</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>9781933019802</ns2:text><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>9781616960209</ns2:text><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources></ns2:data></ns2:ISBNs><ns2:covers><ns2:data
+        count=\"7\"><ns2:text>006251587X</ns2:text><ns2:xtext>+-+K230607155</ns2:xtext><ns2:sources><ns2:s>LC</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>BNC</ns2:s><ns2:s>NUKAT</ns2:s><ns2:s>LNB</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"4\"><ns2:text>0062515861</ns2:text><ns2:xtext>+-+6130607155</ns2:xtext><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>LC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"3\"><ns2:text>1933019336</ns2:text><ns2:xtext>+-+1884658846</ns2:xtext><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>LC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>1616960205</ns2:text><ns2:xtext>+-+0575141616</ns2:xtext><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>1587990180</ns2:text><ns2:xtext>+-+5365442306</ns2:xtext><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\"><ns2:text>0694521256</ns2:text><ns2:xtext>+-+1076709415</ns2:xtext><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources></ns2:data></ns2:covers><ns2:countries><ns2:data
+        count=\"13\" scaled=\"4\"><ns2:text>US</ns2:text><ns2:sources><ns2:s>LC</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>BNC</ns2:s><ns2:s>NUKAT</ns2:s><ns2:s>LNB</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"4\" scaled=\"2\"><ns2:text>GB</ns2:text><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"3\" scaled=\"2\"><ns2:text>NL</ns2:text><ns2:sources><ns2:s>NTA</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"2\" scaled=\"1\"><ns2:text>ES</ns2:text><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>BNE</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\" scaled=\"1\"><ns2:text>JP</ns2:text><ns2:sources><ns2:s>NDL</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\" scaled=\"1\"><ns2:text>DK</ns2:text><ns2:sources><ns2:s>DBC</ns2:s></ns2:sources></ns2:data><ns2:data
+        count=\"1\" scaled=\"1\"><ns2:text>DE</ns2:text><ns2:sources><ns2:s>DNB</ns2:s></ns2:sources></ns2:data></ns2:countries><ns2:nationalityOfEntity><ns2:data><ns2:text>GB</ns2:text><ns2:sources><ns2:s>WKP</ns2:s><ns2:s>DNB</ns2:s></ns2:sources></ns2:data><ns2:data><ns2:text>xxk</ns2:text><ns2:sources><ns2:s>SELIBR</ns2:s></ns2:sources></ns2:data><ns2:data><ns2:text>gb</ns2:text><ns2:sources><ns2:s>ISNI</ns2:s></ns2:sources></ns2:data></ns2:nationalityOfEntity><ns2:xLinks><ns2:xLink
+        type=\"WKP\">http://af.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://als.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://an.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ar.wikipedia.org/wiki/&#x62A;&#x64A;&#x645;_&#x628;&#x64A;&#x631;&#x646;&#x631;&#x632;_&#x644;&#x64A;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://arz.wikipedia.org/wiki/&#x62A;&#x64A;&#x645;_&#x628;&#x64A;&#x631;&#x646;&#x631;&#x632;_&#x644;&#x649;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://as.wikipedia.org/wiki/&#x99F;&#x9BF;&#x9AE;_&#x9AC;&#x9BE;&#x9F0;&#x9CD;&#x9A8;&#x9BE;&#x9F0;&#x9CD;&#x99B;_&#x9B2;&#x9C0;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://az.wikipedia.org/wiki/Tim_Berners-Li</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://bar.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://bat_smg.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://be.wikipedia.org/wiki/&#x426;&#x456;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x456;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://be_x_old.wikipedia.org/wiki/&#x422;&#x44B;&#x43C;_&#x411;&#x44D;&#x440;&#x43D;&#x44D;&#x440;&#x437;-&#x41B;&#x456;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://bg.wikipedia.org/wiki/&#x422;&#x438;&#x43C;_&#x411;&#x44A;&#x440;&#x43D;&#x44A;&#x440;&#x441;-&#x41B;&#x438;&#x439;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://bn.wikipedia.org/wiki/&#x99F;&#x9BF;&#x9AE;_&#x9AC;&#x9BE;&#x9B0;&#x9CD;&#x9A8;&#x9BE;&#x9B0;&#x9CD;&#x9B8;-&#x9B2;&#x9BF;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://br.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://bs.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ca.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ce.wikipedia.org/wiki/&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;,_&#x422;&#x438;&#x43C;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ckb.wikipedia.org/wiki/&#x62A;&#x6CC;&#x645;_&#x628;&#x6CE;&#x631;&#x646;&#x6D5;&#x631;&#x632;_&#x644;&#x6CC;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://cs.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://cy.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://da.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://de.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://el.wikipedia.org/wiki/&#x3A4;&#x3B9;&#x3BC;_&#x39C;&#x3C0;&#x3AD;&#x3C1;&#x3BD;&#x3B5;&#x3C1;&#x3C2;_&#x39B;&#x3B9;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://en.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://eo.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://es.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://et.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://eu.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://fa.wikipedia.org/wiki/&#x62A;&#x6CC;&#x645;_&#x628;&#x631;&#x646;&#x631;&#x632;_&#x644;&#x6CC;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://fi.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://fr.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://fy.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ga.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://gd.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://gl.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://he.wikipedia.org/wiki/&#x5D8;&#x5D9;&#x5DD;_&#x5D1;&#x5E8;&#x5E0;&#x5E8;&#x5E1;-&#x5DC;&#x5D9;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://hi.wikipedia.org/wiki/&#x91F;&#x93F;&#x92E;_&#x92C;&#x930;&#x94D;&#x928;&#x930;&#x94D;&#x938;_&#x932;&#x940;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://hif.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://hr.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://hu.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://id.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ilo.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://is.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://it.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ja.wikipedia.org/wiki/&#x30C6;&#x30A3;&#x30E0;&#x30FB;&#x30D0;&#x30FC;&#x30CA;&#x30FC;&#x30BA;&#xFF1D;&#x30EA;&#x30FC;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://jv.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ka.wikipedia.org/wiki/&#x10E2;&#x10D8;&#x10DB;_&#x10D1;&#x10D4;&#x10E0;&#x10DC;&#x10D4;&#x10E0;&#x10E1;-&#x10DA;&#x10D8;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://kk.wikipedia.org/wiki/&#x422;&#x438;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://km.wikipedia.org/wiki/&#x1794;&#x17CA;&#x17BA;&#x178E;&#x17BA;&#x179F;_&#x179B;&#x17B8;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://kn.wikipedia.org/wiki/&#xC9F;&#xCBF;&#xCAE;&#xCCD;_&#xCAC;&#xCB0;&#xCCD;&#xCA8;&#xCB0;&#xCCD;&#xCB8;&#xCCD;_&#xCB2;&#xCC0;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ko.wikipedia.org/wiki/&#xD300;_&#xBC84;&#xB108;&#xC2A4;&#xB9AC;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ksh.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://la.wikipedia.org/wiki/Timotheus_Ioannes_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://lb.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://li.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://lmo.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://lt.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://lv.wikipedia.org/wiki/Tims_B&#x113;rnerss-L&#x12B;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://mg.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://mk.wikipedia.org/wiki/&#x422;&#x438;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ml.wikipedia.org/wiki/&#xD1F;&#xD3F;&#xD02;_&#xD2C;&#xD7C;&#xD23;&#xD47;&#xD34;&#xD4D;&#xD38;&#xD4D;_&#xD32;&#xD40;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://mn.wikipedia.org/wiki/&#x422;&#x438;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ms.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://mt.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://my.wikipedia.org/wiki/&#x1010;&#x1004;&#x103A;&#x1019;&#x103A;_&#x1018;&#x102C;&#x1014;&#x102C;&#x101C;&#x102E;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://new.wikipedia.org/wiki/&#x91F;&#x93F;&#x92E;_&#x92C;&#x930;&#x94D;&#x928;&#x930;&#x94D;&#x938;-&#x932;&#x940;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://nl.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://nn.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://no.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://oc.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://pl.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://pms.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://pnb.wikipedia.org/wiki/&#x679;&#x645;_&#x628;&#x631;&#x646;&#x631;&#x632;_&#x644;&#x6CC;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://pt.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ro.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ru.wikipedia.org/wiki/&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;,_&#x422;&#x438;&#x43C;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://rue.wikipedia.org/wiki/&#x422;&#x456;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x456;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://sah.wikipedia.org/wiki/&#x422;&#x438;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://scn.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://sh.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://simple.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://sk.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://sl.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://sq.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://sr.wikipedia.org/wiki/&#x422;&#x438;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://sv.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://sw.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ta.wikipedia.org/wiki/&#xB9F;&#xBBF;&#xBAE;&#xBCD;_&#xBAA;&#xBC7;&#xBB0;&#xBCD;&#xBA9;&#xBC7;&#xBB0;&#xBCD;&#xBB8;&#xBCD;-&#xBB2;&#xBC0;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://te.wikipedia.org/wiki/&#xC1F;&#xC3F;&#xC2E;&#xC4D;_&#xC2C;&#xC46;&#xC30;&#xC4D;&#xC28;&#xC30;&#xC4D;&#xC38;&#xC4D;_&#xC32;&#xC40;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://tg.wikipedia.org/wiki/&#x422;&#x438;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x438;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://th.wikipedia.org/wiki/&#xE17;&#xE34;&#xE21;_&#xE40;&#xE1A;&#xE2D;&#xE23;&#xE4C;&#xE40;&#xE19;&#xE34;&#xE23;&#xE4C;&#xE2A;-&#xE25;&#xE35;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://tl.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://tr.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://tt.wikipedia.org/wiki/Tim_Berners-Li</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://uk.wikipedia.org/wiki/&#x422;&#x456;&#x43C;_&#x411;&#x435;&#x440;&#x43D;&#x435;&#x440;&#x441;-&#x41B;&#x456;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://ur.wikipedia.org/wiki/&#x679;&#x645;_&#x628;&#x631;&#x646;&#x631;&#x632;_&#x644;&#x6CC;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://uz.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://vec.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://vi.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://vo.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://war.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://yi.wikipedia.org/wiki/&#x5D8;&#x5D9;&#x5DD;_&#x5D1;&#x5E2;&#x5E8;&#x5E0;&#x5E2;&#x5E8;&#x5E1;-&#x5DC;&#x5D9;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://yo.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://za.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://zh.wikipedia.org/wiki/&#x8482;&#x59C6;&#xB7;&#x4F2F;&#x7EB3;&#x65AF;-&#x674E;</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://zh_min_nan.wikipedia.org/wiki/Tim_Berners-Lee</ns2:xLink><ns2:xLink
+        type=\"WKP\">http://zh_yue.wikipedia.org/wiki/&#x674E;&#x67CF;&#x7D0D;</ns2:xLink></ns2:xLinks><ns2:titles><ns2:work><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources><ns2:title>La
+        Ciencia de la red</ns2:title></ns2:work><ns2:work id=\"VIAF|314463439\"><ns2:sources><ns2:s>XR</ns2:s><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>LC</ns2:s></ns2:sources><ns2:title>Framework
+        for web science</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>NUKAT</ns2:s></ns2:sources><ns2:title>Future
+        media</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>BNC</ns2:s><ns2:s>BNE</ns2:s></ns2:sources><ns2:title>[Investidura
+        com a] doctor honoris causa de Sir Timothy Berners-Lee: sessi&#xF3; acad&#xE8;mica
+        ordin&#xE0;ria, 23 de juliol de 2008.</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>WKP</ns2:s></ns2:sources><ns2:title>Menenun
+        Jaringan Sejagat</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>BNC</ns2:s></ns2:sources><ns2:title>Tejiendo
+        la red : el inventor del world wide web nos descubre su origen</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>SELIBR</ns2:s></ns2:sources><ns2:title>Weaving
+        the Web, cop. 1999:</ns2:title></ns2:work><ns2:work id=\"VIAF|315441791\"><ns2:sources><ns2:s>LC</ns2:s><ns2:s>NDL</ns2:s><ns2:s>DBC</ns2:s><ns2:s>SUDOC</ns2:s><ns2:s>BNC</ns2:s><ns2:s>NTA</ns2:s><ns2:s>XR</ns2:s><ns2:s>WKP</ns2:s><ns2:s>NUKAT</ns2:s><ns2:s>LNB</ns2:s></ns2:sources><ns2:title>Weaving
+        the Web : the original design and ultimate destiny of the World Wide Web by
+        its inventor</ns2:title></ns2:work><ns2:work id=\"VIAF|314415869\"><ns2:sources><ns2:s>XR</ns2:s></ns2:sources><ns2:title>Weaving
+        the Web : The past, present and future of the World Wide Web by its inventor</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>NDL</ns2:s></ns2:sources><ns2:title>Web
+        no so&#x304;sei : World Wide Web wa ikanishite umare dokoni mukaunoka</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>DNB</ns2:s></ns2:sources><ns2:title>&#x98;Der&#x9C;
+        Web-Report der Sch&#xF6;pfer des World Wide Webs &#xFC;ber das grenzenlose
+        Potential des Internets</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>DBC</ns2:s></ns2:sources><ns2:title>Webbets
+        vej til verden</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>NDL</ns2:s></ns2:sources><ns2:title>Web&#x306E;&#x5275;&#x6210;
+        : World Wide Web&#x306F;&#x3044;&#x304B;&#x306B;&#x3057;&#x3066;&#x751F;&#x307E;&#x308C;&#x3069;&#x3053;&#x306B;&#x5411;&#x304B;&#x3046;&#x306E;&#x304B;</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>NTA</ns2:s></ns2:sources><ns2:title>De
+        wereld van het World Wide Web : het oorspronkelijke ontwerp en de uiteindelijke
+        bestemming van het World Wide Web, beschreven door zijn uitvinder</ns2:title></ns2:work><ns2:work><ns2:sources><ns2:s>LC</ns2:s></ns2:sources><ns2:title>World
+        Wide Web virtual library</ns2:title></ns2:work></ns2:titles><ns2:history><ns2:ht
+        recid=\"NKC|xx0000870\" time=\"2009-05-07T09:12:05+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DNB|121649091\" time=\"2010-06-24T11:32:46+00:00\" type=\"add\"/><ns2:ht
+        recid=\"LC|no 99010609\" time=\"2010-06-24T11:32:46+00:00\" type=\"add\"/><ns2:ht
+        recid=\"SUDOC|074709267\" time=\"2011-12-15T07:58:56+00:00\" type=\"add\"/><ns2:ht
+        recid=\"BIBSYS|x00000792\" time=\"2012-02-21T07:28:41+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DNB|121649091\" time=\"2012-11-26T09:56:13+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"DNB|159981727\" time=\"2012-11-26T09:56:13+00:00\" type=\"add\"/><ns2:ht
+        recid=\"NDL|00854777\" time=\"2012-11-26T09:56:13+00:00\" type=\"add\"/><ns2:ht
+        recid=\"NUKAT|n 2012151802\" time=\"2012-11-26T09:56:13+00:00\" type=\"add\"/><ns2:ht
+        recid=\"SELIBR|317488\" time=\"2012-11-26T09:56:13+00:00\" type=\"add\"/><ns2:ht
+        recid=\"SUDOC|074709267\" time=\"2012-11-26T09:56:13+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"WKP|Tim_Berners-Lee\" time=\"2012-11-26T09:56:13+00:00\" type=\"add\"/><ns2:ht
+        recid=\"BIBSYS|x00000792\" time=\"2012-11-27T04:00:16+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"SUDOC|074709267\" time=\"2012-11-27T04:00:16+00:00\" type=\"add\"/><ns2:ht
+        recid=\"NTA|193462516\" time=\"2012-12-19T19:11:18+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DNB|121649091\" time=\"2013-01-14T22:09:03+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DNB|159981727\" time=\"2013-01-14T22:09:03+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"DNB|121649091\" time=\"2013-02-15T19:30:59+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"DNB|159981727\" time=\"2013-02-15T19:30:59+00:00\" type=\"add\"/><ns2:ht
+        recid=\"ISNI|0000000078666209\" time=\"2013-09-16T16:15:07+00:00\" type=\"add\"/><ns2:ht
+        recid=\"BNE|XX1503528\" time=\"2013-11-23T21:33:28+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DNB|121649091\" time=\"2013-11-23T21:33:28+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DNB|159981727\" time=\"2013-11-23T21:33:28+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"ISNI|0000000078666209\" time=\"2013-11-23T21:33:28+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"ISNI|0000000124514311\" time=\"2013-11-23T21:33:28+00:00\" type=\"add\"/><ns2:ht
+        recid=\"BNC|a11462115\" time=\"2014-01-15T05:38:27+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DNB|159981727\" time=\"2014-01-15T05:38:27+00:00\" type=\"add\"/><ns2:ht
+        recid=\"NLP|a26647606\" time=\"2014-03-10T20:04:09+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DBC|87097968120527\" time=\"2014-04-14T18:18:00+00:00\" type=\"add\"/><ns2:ht
+        recid=\"LNB|LNC10-000198835\" time=\"2014-05-14T22:19:01+00:00\" type=\"add\"/><ns2:ht
+        recid=\"BNC|a11462115\" time=\"2014-10-21T12:48:43+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"BNE|XX1503528\" time=\"2014-10-21T12:48:43+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"NUKAT|n 2012151802\" time=\"2014-10-21T12:48:43+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"BNE|XX1503528\" time=\"2014-10-27T16:17:29+00:00\" type=\"add\"/><ns2:ht
+        recid=\"NUKAT|n 2012151802\" time=\"2014-10-27T16:17:29+00:00\" type=\"add\"/><ns2:ht
+        recid=\"BNE|XX1503528\" time=\"2014-11-13T21:28:10+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"BNC|a11462115\" time=\"2014-12-15T16:26:32+00:00\" type=\"add\"/><ns2:ht
+        recid=\"BNE|XX1503528\" time=\"2014-12-15T16:26:32+00:00\" type=\"add\"/><ns2:ht
+        recid=\"BNE|XX1503528\" time=\"2015-02-16T15:07:12+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"DNB|159981727\" time=\"2015-02-16T15:07:12+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"SELIBR|317488\" time=\"2015-02-16T15:07:12+00:00\" type=\"delete\"/><ns2:ht
+        recid=\"BNE|XX1503528\" time=\"2015-03-11T21:41:54+00:00\" type=\"add\"/><ns2:ht
+        recid=\"DNB|159981727\" time=\"2015-03-11T21:41:54+00:00\" type=\"add\"/><ns2:ht
+        recid=\"SELIBR|317488\" time=\"2015-03-11T21:41:54+00:00\" type=\"add\"/><ns2:ht
+        recid=\"WKP|Q80\" time=\"2015-04-14T18:56:54+00:00\" type=\"add\"/><ns2:ht
+        recid=\"WKP|Tim_Berners-Lee\" time=\"2015-04-14T18:56:54+00:00\" type=\"delete\"/></ns2:history></ns2:VIAFCluster>"
+    http_version: 
+  recorded_at: Tue, 12 May 2015 00:58:08 GMT
+recorded_with: VCR 2.9.3

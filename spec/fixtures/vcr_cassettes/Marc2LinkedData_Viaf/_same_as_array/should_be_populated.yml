@@ -1,0 +1,169 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://sameas.org/rdf?uri=http://viaf.org/viaf/7466303
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/n-triples, text/plain;q=0.5, application/n-quads, text/x-nquads,
+        application/ld+json, application/x-ld+json, application/rdf+json, text/html;q=0.5,
+        application/xhtml+xml, image/svg+xml, text/n3, text/rdf+n3, application/rdf+n3,
+        application/rdf+xml, application/trig, application/x-trig, application/trix,
+        text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, */*;q=0.1
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 12 May 2015 00:58:17 GMT
+      Server:
+      - Apache/2.0.52 (Red Hat)
+      X-Powered-By:
+      - PHP/4.3.9
+      Access-Control-Allow-Origin:
+      - "*"
+      Connection:
+      - close
+      Transfer-Encoding:
+      - chunked
+      Content-Type:
+      - application/rdf+xml
+    body:
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="utf-8"?>
+        <rdf:RDF
+          xmlns:rdf  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:rdfs = "http://www.w3.org/2000/01/rdf-schema#"
+          xmlns:owl  = "http://www.w3.org/2002/07/owl#"
+          xmlns:dc   = "http://purl.org/dc/elements/1.1/"
+          xmlns:dct  = "http://purl.org/dc/terms/"
+          xmlns:foaf = "http://xmlns.com/foaf/0.1/"
+        >
+
+          <rdf:Description rdf:about="http://sameas.org/rdf?uri=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ17457">
+            <dc:creator>sameAs.org</dc:creator>
+            <dc:title>Co-references from sameAs.org for http://viaf.org/viaf/7466303</dc:title>
+            <foaf:primaryTopic rdf:resource="http://viaf.org/viaf/7466303" />
+            <dct:license rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+          </rdf:Description>
+
+          <rdf:Description rdf:about="http://viaf.org/viaf/7466303">
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/D._Knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/Knuthput" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/Don_Knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/D._E._Knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/Donald_knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/Donald_E_Knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/Donald_E._Knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/Donald_Ervin_Knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/Professor_Donald_E._Knuth" />
+            <owl:sameAs rdf:resource="http://dbpedia.org/resource/%E9%AB%98%E5%BE%B7%E7%BA%B3" />
+            <owl:sameAs rdf:resource="http://ar.dbpedia.org/resource/\u062F\u0648\u0646\u0627\u0644\u062F_\u0643\u0627\u0646\u0648\u062B" />
+            <owl:sameAs rdf:resource="http://ast.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://be.dbpedia.org/resource/\u0414\u043E\u043D\u0430\u043B\u044C\u0434_\u042D\u0440\u0432\u0456\u043D_\u041A\u043D\u0443\u0442" />
+            <owl:sameAs rdf:resource="http://bg.dbpedia.org/resource/\u0414\u043E\u043D\u0430\u043B\u0434_\u041A\u043D\u0443\u0442" />
+            <owl:sameAs rdf:resource="http://bn.dbpedia.org/resource/\u09A1\u09CB\u09A8\u09BE\u09B2\u09CD\u09A1_\u0995\u09BE\u09A8\u09C1\u09A5" />
+            <owl:sameAs rdf:resource="http://bnb.data.bl.uk/id/person/KnuthDonaldErvin1938-" />
+            <owl:sameAs rdf:resource="http://bs.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://ca.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://cs.dbpedia.org/resource/Donald_Ervin_Knuth" />
+            <owl:sameAs rdf:resource="http://d-nb.info/gnd/121578437" />
+            <owl:sameAs rdf:resource="http://d-nb.info/gnd/160012007" />
+            <owl:sameAs rdf:resource="http://d-nb.info/gnd/186415729" />
+            <owl:sameAs rdf:resource="http://da.dbpedia.org/resource/Donald_E._Knuth" />
+            <owl:sameAs rdf:resource="http://data.bnf.fr/12358391" />
+            <owl:sameAs rdf:resource="http://datos.bne.es/resource/XX995432" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/8094#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/8095#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/8096#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/693093#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/846052#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/951266#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/13142700#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/16176486#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/20732537#id" />
+            <owl:sameAs rdf:resource="http://dbpedialite.org/things/21580861#id" />
+            <owl:sameAs rdf:resource="http://de.dbpedia.org/resource/Donald_E._Knuth" />
+            <owl:sameAs rdf:resource="http://el.dbpedia.org/resource/\u039D\u03C4\u03CC\u03BD\u03B1\u03BB\u03BD\u03C4_\u039A\u03BD\u03BF\u03C5\u03B8" />
+            <owl:sameAs rdf:resource="http://eo.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://es.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://eu.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://fa.dbpedia.org/resource/\u062F\u0627\u0646\u0644\u062F_\u06A9\u0646\u0648\u062A" />
+            <owl:sameAs rdf:resource="http://fi.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://fr.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://fy.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://gd.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://gl.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://he.dbpedia.org/resource/\u05D3\u05D5\u05E0\u05DC\u05D3_\u05E7\u05E0\u05D5\u05EA'" />
+            <owl:sameAs rdf:resource="http://ht.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://hu.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://hy.dbpedia.org/resource/\u0534\u0578\u0576\u0561\u056C\u0564_\u053F\u0576\u0578\u0582\u057F" />
+            <owl:sameAs rdf:resource="http://id.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://id.loc.gov/authorities/names/n79135509" />
+            <owl:sameAs rdf:resource="http://is.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://isni-url.oclc.nl/isni/000000012119421X" />
+            <owl:sameAs rdf:resource="http://it.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://ja.dbpedia.org/resource/\u30C9\u30CA\u30EB\u30C9\u30FB\u30AF\u30CC\u30FC\u30B9" />
+            <owl:sameAs rdf:resource="http://jv.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://ka.dbpedia.org/resource/\u10D3\u10DD\u10DC\u10D0\u10DA\u10D3_\u10D9\u10DC\u10E3\u10D7\u10D8" />
+            <owl:sameAs rdf:resource="http://kk.dbpedia.org/resource/\u0414\u043E\u043D\u0430\u043B\u044C\u0434_\u041A\u043D\u0443\u0442" />
+            <owl:sameAs rdf:resource="http://ko.dbpedia.org/resource/\uB3C4\uB110\uB4DC_\uD06C\uB204\uC2A4" />
+            <owl:sameAs rdf:resource="http://lb.dbpedia.org/resource/Donald_E._Knuth" />
+            <owl:sameAs rdf:resource="http://libris.kb.se/resource/auth/193948" />
+            <owl:sameAs rdf:resource="http://lt.dbpedia.org/resource/Donald_Ervin_Knuth" />
+            <owl:sameAs rdf:resource="http://lv.dbpedia.org/resource/Donalds_Knuts" />
+            <owl:sameAs rdf:resource="http://mk.dbpedia.org/resource/\u0414\u043E\u043D\u0430\u043B\u0434_\u041A\u043D\u0443\u0442" />
+            <owl:sameAs rdf:resource="http://ml.dbpedia.org/resource/\u0D21\u0D4A\u0D23\u0D3E\u0D7E\u0D21\u0D4D_\u0D15\u0D28\u0D42\u0D24\u0D4D\u0D24\u0D4D" />
+            <owl:sameAs rdf:resource="http://mpii.de/yago/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://mr.dbpedia.org/resource/\u0921\u094B\u0928\u093E\u0932\u094D\u0921_\u0915\u094D\u0928\u0941\u0925" />
+            <owl:sameAs rdf:resource="http://nektar.oszk.hu/resource/auth/127979" />
+            <owl:sameAs rdf:resource="http://nl.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://nn.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://no.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://pl.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://pt.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://rdf.freebase.com/ns/m.0283x" />
+            <owl:sameAs rdf:resource="http://rdf.freebase.com/ns/en.donald_knuth" />
+            <owl:sameAs rdf:resource="http://rdf.freebase.com/ns/guid.9202a8c04000641f800000000001207c" />
+            <owl:sameAs rdf:resource="http://ro.dbpedia.org/resource/Donald_E._Knuth" />
+            <owl:sameAs rdf:resource="http://ru.dbpedia.org/resource/\u041A\u043D\u0443\u0442,_\u0414\u043E\u043D\u0430\u043B\u044C\u0434_\u042D\u0440\u0432\u0438\u043D" />
+            <owl:sameAs rdf:resource="http://sh.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://sk.dbpedia.org/resource/Donald_Ervin_Knuth" />
+            <owl:sameAs rdf:resource="http://sl.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://sr.dbpedia.org/resource/Donald_Knut" />
+            <owl:sameAs rdf:resource="http://sv.dbpedia.org/resource/Donald_Ervin_Knuth" />
+            <owl:sameAs rdf:resource="http://sw.cyc.com/concept/Mx4rjnF6jHonTci36e1w_4t-yQ" />
+            <owl:sameAs rdf:resource="http://ta.dbpedia.org/resource/\u0B9F\u0BCA\u0BA9\u0BBE\u0BB2\u0BCD\u0B9F\u0BCD_\u0B95\u0BC1\u0BA9\u0BC1\u0BA4\u0BCD" />
+            <owl:sameAs rdf:resource="http://te.dbpedia.org/resource/\u0C21\u0C4A\u0C28\u0C3E\u0C32\u0C4D\u0C21\u0C4D_\u0C28\u0C42\u0C24\u0C4D" />
+            <owl:sameAs rdf:resource="http://th.dbpedia.org/resource/\u0E42\u0E14\u0E19\u0E31\u0E25\u0E14\u0E4C_\u0E04\u0E19\u0E39\u0E18" />
+            <owl:sameAs rdf:resource="http://tl.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://tr.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://uk.dbpedia.org/resource/\u0414\u043E\u043D\u0430\u043B\u044C\u0434_\u041A\u043D\u0443\u0442" />
+            <owl:sameAs rdf:resource="http://umbel.org/umbel/ne/wikipedia/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://vi.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://viaf.org/viaf/7466303" />
+            <owl:sameAs rdf:resource="http://viaf.org/viaf/88023037" />
+            <owl:sameAs rdf:resource="http://viaf.org/viaf/97965937" />
+            <owl:sameAs rdf:resource="http://war.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://www.idref.fr/032581270" />
+            <owl:sameAs rdf:resource="http://www.idref.fr/032581270/id" />
+            <owl:sameAs rdf:resource="http://www.wikidata.org/entity/Q17457" />
+            <owl:sameAs rdf:resource="http://yago-knowledge.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://yo.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://zh.dbpedia.org/resource/\u9AD8\u5FB7\u7EB3" />
+          </rdf:Description>
+
+        </rdf:RDF>
+    http_version: 
+  recorded_at: Tue, 12 May 2015 00:58:10 GMT
+recorded_with: VCR 2.9.3

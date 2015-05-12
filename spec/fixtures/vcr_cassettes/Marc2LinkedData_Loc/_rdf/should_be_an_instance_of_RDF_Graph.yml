@@ -1,0 +1,132 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://id.loc.gov/authorities/names/no99010609.rdf
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/n-triples, text/plain;q=0.5, application/n-quads, text/x-nquads,
+        application/ld+json, application/x-ld+json, application/rdf+json, text/html;q=0.5,
+        application/xhtml+xml, image/svg+xml, text/n3, text/rdf+n3, application/rdf+n3,
+        application/rdf+xml, application/trig, application/x-trig, application/trix,
+        text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, */*;q=0.1
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/rdf+xml
+      Cache-Control:
+      - public, max-age=43200
+      Etag:
+      - d68738f71e662ee56a6014acc171205c
+      X-Uri:
+      - http://id.loc.gov/authorities/names/no99010609
+      Server:
+      - Apache
+      Content-Length:
+      - '7544'
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Tue, 12 May 2015 00:58:01 GMT
+      X-Varnish:
+      - 1870773860 1870770130
+      Age:
+      - '1100'
+      Via:
+      - 1.1 varnish
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n
+        \ <madsrdf:PersonalName rdf:about=\"http://id.loc.gov/authorities/names/no99010609\"
+        xmlns:madsrdf=\"http://www.loc.gov/mads/rdf/v1#\">\n    <rdf:type rdf:resource=\"http://www.loc.gov/mads/rdf/v1#Authority\"/>\n
+        \   <madsrdf:authoritativeLabel xml:lang=\"en\">Berners-Lee, Tim</madsrdf:authoritativeLabel>\n
+        \   <madsrdf:elementList rdf:parseType=\"Collection\">\n      <madsrdf:FullNameElement>\n\t<madsrdf:elementValue
+        xml:lang=\"en\">Berners-Lee, Tim</madsrdf:elementValue>\n      </madsrdf:FullNameElement>\n
+        \   </madsrdf:elementList>\n    <madsrdf:isMemberOfMADSCollection rdf:resource=\"http://id.loc.gov/authorities/names/collection_NamesAuthorizedHeadings\"/>\n
+        \   <madsrdf:isMemberOfMADSCollection rdf:resource=\"http://id.loc.gov/authorities/names/collection_LCNAF\"/>\n
+        \   <madsrdf:hasExactExternalAuthority rdf:resource=\"http://viaf.org/viaf/sourceID/LC%7Cno+99010609#skos:Concept\"/>\n
+        \   <madsrdf:isMemberOfMADSScheme rdf:resource=\"http://id.loc.gov/authorities/names\"/>\n
+        \   <madsrdf:identifiesRWO>\n      <madsrdf:RWO>\n\t<rdf:type rdf:resource=\"http://xmlns.com/foaf/0.1/Person\"/>\n
+        \     </madsrdf:RWO>\n    </madsrdf:identifiesRWO>\n    <madsrdf:hasVariant>\n
+        \     <madsrdf:PersonalName>\n\t<rdf:type rdf:resource=\"http://www.loc.gov/mads/rdf/v1#Variant\"/>\n\t<madsrdf:variantLabel
+        xml:lang=\"en\">Lee, Tim Berners-</madsrdf:variantLabel>\n\t<madsrdf:elementList
+        rdf:parseType=\"Collection\">\n\t  <madsrdf:FullNameElement>\n\t    <madsrdf:elementValue
+        xml:lang=\"en\">Lee, Tim Berners-</madsrdf:elementValue>\n\t  </madsrdf:FullNameElement>\n\t</madsrdf:elementList>\n
+        \     </madsrdf:PersonalName>\n    </madsrdf:hasVariant>\n    <madsrdf:hasVariant>\n
+        \     <madsrdf:PersonalName>\n\t<rdf:type rdf:resource=\"http://www.loc.gov/mads/rdf/v1#Variant\"/>\n\t<madsrdf:variantLabel
+        xml:lang=\"en\">Berners-Lee, Timothy J. (Timothy John)</madsrdf:variantLabel>\n\t<madsrdf:elementList
+        rdf:parseType=\"Collection\">\n\t  <madsrdf:FullNameElement>\n\t    <madsrdf:elementValue
+        xml:lang=\"en\">Berners-Lee, Timothy J.</madsrdf:elementValue>\n\t  </madsrdf:FullNameElement>\n\t
+        \ <madsrdf:FullNameElement>\n\t    <madsrdf:elementValue xml:lang=\"en\">(Timothy
+        John)</madsrdf:elementValue>\n\t  </madsrdf:FullNameElement>\n\t</madsrdf:elementList>\n
+        \     </madsrdf:PersonalName>\n    </madsrdf:hasVariant>\n    <identifiers:lccn
+        xmlns:identifiers=\"http://id.loc.gov/vocabulary/identifiers/\">no 99010609</identifiers:lccn>\n
+        \   <identifiers:local xmlns:identifiers=\"http://id.loc.gov/vocabulary/identifiers/\">(OCoLC)oca04921729</identifiers:local>\n
+        \   <madsrdf:hasSource>\n      <madsrdf:Source>\n\t<madsrdf:citation-source>The
+        WWW virtual library Web site, Feb. 15, 1999</madsrdf:citation-source>\n\t<madsrdf:citation-note
+        xml:lang=\"en\">about the virtual library (Tim Berners-Lee; creator of the
+        Web)</madsrdf:citation-note>\n\t<madsrdf:citation-status>found</madsrdf:citation-status>\n
+        \     </madsrdf:Source>\n    </madsrdf:hasSource>\n    <madsrdf:hasSource>\n
+        \     <madsrdf:Source>\n\t<madsrdf:citation-source>OCLC, Feb. 12, 1999</madsrdf:citation-source>\n\t<madsrdf:citation-note
+        xml:lang=\"en\">(hdg.: Berners-Lee, Tim; usage: Tim Berners-Lee)</madsrdf:citation-note>\n\t<madsrdf:citation-status>found</madsrdf:citation-status>\n
+        \     </madsrdf:Source>\n    </madsrdf:hasSource>\n    <madsrdf:hasSource>\n
+        \     <madsrdf:Source>\n\t<madsrdf:citation-source>Gaines, A. Tim Berners-Lee
+        and the development of the World Wide Web, 2001:</madsrdf:citation-source>\n\t<madsrdf:citation-note
+        xml:lang=\"en\">CIP galley (Timothy J. Berners-Lee; b. London, England, June
+        8, 1955)</madsrdf:citation-note>\n\t<madsrdf:citation-status>found</madsrdf:citation-status>\n
+        \     </madsrdf:Source>\n    </madsrdf:hasSource>\n    <madsrdf:hasSource>\n
+        \     <madsrdf:Source>\n\t<madsrdf:citation-source>Tim Berners-Lee, 2008:</madsrdf:citation-source>\n\t<madsrdf:citation-note
+        xml:lang=\"en\">ECIP (Timothy John Berners-Lee)</madsrdf:citation-note>\n\t<madsrdf:citation-status>found</madsrdf:citation-status>\n
+        \     </madsrdf:Source>\n    </madsrdf:hasSource>\n    <madsrdf:adminMetadata>\n
+        \     <ri:RecordInfo xmlns:ri=\"http://id.loc.gov/ontologies/RecordInfo#\">\n\t<ri:recordChangeDate
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#dateTime\">1999-02-16T00:00:00</ri:recordChangeDate>\n\t<ri:recordStatus
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">new</ri:recordStatus>\n\t<ri:recordContentSource
+        rdf:resource=\"http://id.loc.gov/vocabulary/organizations/nbl\"/>\n\t<ri:languageOfCataloging
+        rdf:resource=\"http://id.loc.gov/vocabulary/iso639-2/eng\"/>\n      </ri:RecordInfo>\n
+        \   </madsrdf:adminMetadata>\n    <madsrdf:adminMetadata>\n      <ri:RecordInfo
+        xmlns:ri=\"http://id.loc.gov/ontologies/RecordInfo#\">\n\t<ri:recordChangeDate
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#dateTime\">2008-12-01T09:12:21</ri:recordChangeDate>\n\t<ri:recordStatus
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">revised</ri:recordStatus>\n\t<ri:recordContentSource
+        rdf:resource=\"http://id.loc.gov/vocabulary/organizations/nbl\"/>\n\t<ri:languageOfCataloging
+        rdf:resource=\"http://id.loc.gov/vocabulary/iso639-2/eng\"/>\n      </ri:RecordInfo>\n
+        \   </madsrdf:adminMetadata>\n    <rdf:type rdf:resource=\"http://www.w3.org/2004/02/skos/core#Concept\"/>\n
+        \   <skos:prefLabel xml:lang=\"en\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\">Berners-Lee,
+        Tim</skos:prefLabel>\n    <skosxl:altLabel xmlns:skosxl=\"http://www.w3.org/2008/05/skos-xl#\">\n
+        \     <rdf:Description>\n\t<rdf:type rdf:resource=\"http://www.w3.org/2008/05/skos-xl#Label\"/>\n\t<skosxl:literalForm
+        xml:lang=\"en\">Lee, Tim Berners-</skosxl:literalForm>\n      </rdf:Description>\n
+        \   </skosxl:altLabel>\n    <skosxl:altLabel xmlns:skosxl=\"http://www.w3.org/2008/05/skos-xl#\">\n
+        \     <rdf:Description>\n\t<rdf:type rdf:resource=\"http://www.w3.org/2008/05/skos-xl#Label\"/>\n\t<skosxl:literalForm
+        xml:lang=\"en\">Berners-Lee, Timothy J. (Timothy John)</skosxl:literalForm>\n
+        \     </rdf:Description>\n    </skosxl:altLabel>\n    <skos:exactMatch rdf:resource=\"http://viaf.org/viaf/sourceID/LC%7Cno+99010609#skos:Concept\"
+        xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\"/>\n    <skos:inScheme
+        rdf:resource=\"http://id.loc.gov/authorities/names\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\"/>\n
+        \   <skos:altLabel xml:lang=\"en\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\">Lee,
+        Tim Berners-</skos:altLabel>\n    <skos:altLabel xml:lang=\"en\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\">Berners-Lee,
+        Timothy J. (Timothy John)</skos:altLabel>\n    <skos:changeNote xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\">\n
+        \     <cs:ChangeSet xmlns:cs=\"http://purl.org/vocab/changeset/schema#\">\n\t<cs:subjectOfChange
+        rdf:resource=\"http://id.loc.gov/authorities/names/no99010609\"/>\n\t<cs:creatorName
+        rdf:resource=\"http://id.loc.gov/vocabulary/organizations/nbl\"/>\n\t<cs:createdDate
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#dateTime\">1999-02-16T00:00:00</cs:createdDate>\n\t<cs:changeReason
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">new</cs:changeReason>\n
+        \     </cs:ChangeSet>\n    </skos:changeNote>\n    <skos:changeNote xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\">\n
+        \     <cs:ChangeSet xmlns:cs=\"http://purl.org/vocab/changeset/schema#\">\n\t<cs:subjectOfChange
+        rdf:resource=\"http://id.loc.gov/authorities/names/no99010609\"/>\n\t<cs:creatorName
+        rdf:resource=\"http://id.loc.gov/vocabulary/organizations/nbl\"/>\n\t<cs:createdDate
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#dateTime\">2008-12-01T09:12:21</cs:createdDate>\n\t<cs:changeReason
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">revised</cs:changeReason>\n
+        \     </cs:ChangeSet>\n    </skos:changeNote>\n  </madsrdf:PersonalName>\n</rdf:RDF>\n"
+    http_version: 
+  recorded_at: Tue, 12 May 2015 00:58:05 GMT
+recorded_with: VCR 2.9.3
