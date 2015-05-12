@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Marc2LinkedData
 
-  describe Viaf do
+  describe Viaf, :vcr do
 
     before :all do
       # valid data (Knuth, Donald Ervin)

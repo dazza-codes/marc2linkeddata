@@ -90,3 +90,16 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+require 'vcr'
+cassette_ttl = 28 * 24 * 60 * 60  # 28 days, in seconds
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
+  c.hook_into :webmock
+  c.allow_http_connections_when_no_cassette = true
+  c.default_cassette_options = {
+    :record => :new_episodes,
+    :re_record_interval => cassette_ttl
+  }
+  c.configure_rspec_metadata!
+end

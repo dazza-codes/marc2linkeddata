@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Marc2LinkedData
 
-  describe Loc do
+  describe Loc, :vcr do
 
     before :all do
       # loc_urls = ['http://id.loc.gov/authorities/names/no99010609', 'http://id.loc.gov/authorities/names/no99010609/']

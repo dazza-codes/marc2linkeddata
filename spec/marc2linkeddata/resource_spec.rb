@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Marc2LinkedData
 
-  describe Resource do
+  describe Resource, :vcr do
 
     before :all do
       @auth_id = 'no99010609'

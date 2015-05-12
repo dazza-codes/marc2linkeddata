@@ -51,9 +51,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'pry-doc'
 
   # Development dependencies
-  s.add_development_dependency 'rspec', '~> 3.0'
+  s.add_development_dependency 'rspec'
   s.add_development_dependency 'guard'
   s.add_development_dependency 'guard-ctags-bundler'
+  s.add_development_dependency 'vcr'
+  s.add_development_dependency 'webmock'
 
   s.files   = `git ls-files`.split($/)
   dev_files = %w(.gitignore bin/setup.sh bin/ctags.rb bin/test.sh)
