@@ -76,9 +76,9 @@ marc_files.each do |path|
   if CONFIG.threads
     # Allow Parallel to automatically determine the optimal concurrency model.
     # Note that :in_threads crashed and :in_processes worked.
-    # Parallel.each(auth_records, :progress => 'Records: ', :in_threads=>CONFIG.thread_limit) do |auth|
-    Parallel.each(auth_records, :progress => 'Records: ', :in_processes=>CONFIG.thread_limit) do |auth|
     # Parallel.each(auth_records, :progress => 'Records: ') do |auth|
+    # Parallel.each(auth_records, :progress => 'Records: ', :in_threads=>CONFIG.thread_limit) do |auth|
+    Parallel.each(auth_records, :progress=>'Records: ', :in_processes=>CONFIG.thread_limit) do |auth|
       marc_record2turtle(auth, output_path)
     end
   else
