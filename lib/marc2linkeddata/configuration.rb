@@ -43,7 +43,7 @@ module Marc2LinkedData
       @test_records = ENV['TEST_RECORDS'].to_i
 
       @threads = env_boolean('THREADS')
-      @thread_limit = ENV['THREAD_LIMIT'].to_i || 25
+      @thread_limit = ENV['THREAD_LIMIT'].to_i || 4
 
       # logging
       log_file = ENV['LOG_FILE'] || 'marc2ld.log'
@@ -60,7 +60,7 @@ module Marc2LinkedData
         log_file = $stderr
         @log_file = 'STDERR'
       end
-      @logger = Logger.new(log_file, shift_age = 'monthly')
+      @logger = Logger.new(log_file, 'monthly')
       @logger.level = @debug ? Logger::DEBUG : Logger::INFO
 
       # RDF prefixes
