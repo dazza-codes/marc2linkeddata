@@ -543,15 +543,15 @@ module Marc2LinkedData
         # # name = RDF::Literal.new(n, :language => :en)
         ln = last_name
         unless ln.nil?
-          @graph << [entity.rdf_uri, RDF::FOAF.familyName,   RDF::Literal.new(ln)] if @@config.use_foaf
-          @graph << [entity.rdf_uri, RDF::SCHEMA.familyName, RDF::Literal.new(ln)] if @@config.use_schema
+          @graph << [entity.rdf_uri, RDF::Vocab::FOAF.familyName,   RDF::Literal.new(ln)] if @@config.use_foaf
+          @graph << [entity.rdf_uri, RDF::Vocab::SCHEMA.familyName, RDF::Literal.new(ln)] if @@config.use_schema
         end
         # # TODO: try to get a language type?
         # # name = RDF::Literal.new(n, :language => :en)
         fn = first_name
         unless fn.nil?
-          @graph << [entity.rdf_uri, RDF::FOAF.firstName,   RDF::Literal.new(fn)] if @@config.use_foaf
-          @graph << [entity.rdf_uri, RDF::SCHEMA.givenName, RDF::Literal.new(fn)] if @@config.use_schema
+          @graph << [entity.rdf_uri, RDF::Vocab::FOAF.firstName,   RDF::Literal.new(fn)] if @@config.use_foaf
+          @graph << [entity.rdf_uri, RDF::Vocab::SCHEMA.givenName, RDF::Literal.new(fn)] if @@config.use_schema
         end
       when :name_title
         # can this be an entity?  Should be a Person and a Work?
@@ -561,13 +561,13 @@ module Marc2LinkedData
         graph_type_organization(entity.rdf_uri)
       when :conference
         # e.g. http://id.loc.gov/authorities/names/n79044866
-        graph_insert_type(entity.rdf_uri, RDF::SCHEMA.event)
+        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.event)
       when :uniform_title
         # can this be an entity?  Should be a Work?
         graph_insert_type(entity.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
-        graph_insert_type(entity.rdf_uri, RDF::SCHEMA.title)
+        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.title)
       when :geographic
-        graph_insert_type(entity.rdf_uri, RDF::SCHEMA.Place)
+        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.Place)
       else
         # TODO: find out what type this is.
         binding.pry if @@config.debug
@@ -575,7 +575,7 @@ module Marc2LinkedData
       end
       unless name.nil?
         name = RDF::Literal.new(name)
-        graph_insert_name(@entity.rdf_uri, name)
+        graph_insert_name(entity.rdf_uri, name)
       end
     end
 
@@ -599,16 +599,16 @@ module Marc2LinkedData
             # TODO: try to get a language type, if VIAF provide it.
             # name = RDF::Literal.new(n, :language => :en)
             ln = RDF::Literal.new(n)
-            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.familyName, ln) if @@config.use_foaf
-            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.familyName, ln) if @@config.use_schema
+            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::Vocab::FOAF.familyName, ln) if @@config.use_foaf
+            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::Vocab::SCHEMA.familyName, ln) if @@config.use_schema
           end
           @viaf.given_names.each do |n|
             # fn = URI.encode(n)
             # TODO: try to get a language type, if VIAF provide it.
             # name = RDF::Literal.new(n, :language => :en)
             fn = RDF::Literal.new(n)
-            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::FOAF.firstName, fn) if @@config.use_foaf
-            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::SCHEMA.givenName, fn) if @@config.use_schema
+            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::Vocab::FOAF.firstName, fn) if @@config.use_foaf
+            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::Vocab::SCHEMA.givenName, fn) if @@config.use_schema
           end
         end
       elsif @loc.name_title?
@@ -622,15 +622,15 @@ module Marc2LinkedData
       elsif @loc.conference?
         # e.g. http://id.loc.gov/authorities/names/n79044866
         name = @loc.label || [field111[:name],field111[:date],field111[:city]].join('')
-        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.event)
+        graph_insert_type(@lib.rdf_uri, RDF::Vocab::SCHEMA.event)
       elsif @loc.geographic?
         # e.g. http://id.loc.gov/authorities/names/n79045127
         name = @loc.label || field151[:name]
-        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.Place)
+        graph_insert_type(@lib.rdf_uri, RDF::Vocab::SCHEMA.Place)
       elsif @loc.uniform_title?
         name = field130[:title]  # use 'name' for code below, although it's a title
         graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
-        graph_insert_type(@lib.rdf_uri, RDF::SCHEMA.title)
+        graph_insert_type(@lib.rdf_uri, RDF::Vocab::SCHEMA.title)
       else
         # TODO: find out what type this is.
         binding.pry if @@config.debug
@@ -814,25 +814,25 @@ module Marc2LinkedData
       graph_insert(uriS, RDF::RDFS.seeAlso, uriO)
     end
     def graph_insert_creator(uriS, uriO)
-      graph_insert(uriS, RDF::SCHEMA.creator, uriO)
+      graph_insert(uriS, RDF::Vocab::SCHEMA.creator, uriO)
     end
     def graph_insert_contributor(uriS, uriO)
-      graph_insert(uriS, RDF::SCHEMA.contributor, uriO)
+      graph_insert(uriS, RDF::Vocab::SCHEMA.contributor, uriO)
     end
     def graph_insert_editor(uriS, uriO)
-      graph_insert(uriS, RDF::SCHEMA.editor, uriO)
+      graph_insert(uriS, RDF::Vocab::SCHEMA.editor, uriO)
     end
     def graph_insert_exampleOfWork(uriS, uriO)
-      graph_insert(uriS, RDF::SCHEMA.exampleOfWork, uriO)
+      graph_insert(uriS, RDF::Vocab::SCHEMA.exampleOfWork, uriO)
     end
     def graph_insert_foafFocus(uriS, uriO)
       # http://xmlns.com/foaf/spec/#term_focus
       # relates SKOS:Concept to a 'real world thing'
-      graph_insert(uriS, RDF::FOAF.focus, uriO)
+      graph_insert(uriS, RDF::Vocab::FOAF.focus, uriO)
     end
     def graph_insert_name(uriS, name)
-      graph_insert(uriS, RDF::FOAF.name, name) if @@config.use_foaf
-      graph_insert(uriS, RDF::SCHEMA.name, name) if @@config.use_schema
+      graph_insert(uriS, RDF::Vocab::FOAF.name, name) if @@config.use_foaf
+      graph_insert(uriS, RDF::Vocab::SCHEMA.name, name) if @@config.use_schema
     end
 
     # ----
@@ -844,22 +844,22 @@ module Marc2LinkedData
 
     def graph_type_agent(uriS)
       # Note: schema.org has no immediate parent for Person or Organization
-      graph_insert_type(uriS, RDF::FOAF.Agent) if @@config.use_foaf
-      graph_insert_type(uriS, RDF::SCHEMA.Thing) if @@config.use_schema
+      graph_insert_type(uriS, RDF::Vocab::FOAF.Agent) if @@config.use_foaf
+      graph_insert_type(uriS, RDF::Vocab::SCHEMA.Thing) if @@config.use_schema
     end
 
     def graph_type_concept(uriS)
-      graph_insert_type(uriS, RDF::SKOS.Concept)
+      graph_insert_type(uriS, RDF::Vocab::SKOS.Concept)
     end
 
     def graph_type_organization(uriS)
-      graph_insert_type(uriS, RDF::FOAF.Organization) if @@config.use_foaf
-      graph_insert_type(uriS, RDF::SCHEMA.Organization) if @@config.use_schema
+      graph_insert_type(uriS, RDF::Vocab::FOAF.Organization) if @@config.use_foaf
+      graph_insert_type(uriS, RDF::Vocab::SCHEMA.Organization) if @@config.use_schema
     end
 
     def graph_type_person(uriS)
-      graph_insert_type(uriS, RDF::FOAF.Person) if @@config.use_foaf
-      graph_insert_type(uriS, RDF::SCHEMA.Person) if @@config.use_schema
+      graph_insert_type(uriS, RDF::Vocab::FOAF.Person) if @@config.use_foaf
+      graph_insert_type(uriS, RDF::Vocab::SCHEMA.Person) if @@config.use_schema
     end
   end
 
