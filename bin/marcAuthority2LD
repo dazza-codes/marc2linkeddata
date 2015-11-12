@@ -22,8 +22,8 @@ def marc_record2turtle(auth, output_path=nil)
     binding.pry if (CONFIG.debug && triples.empty?)
     triples.delete_if {|l| l.chomp.empty? }
     # Output the triples to a turtle file.
-    ld_filename = File.join(output_path, "auth_#{auth.get_id}.ttl")
-    CONFIG.logger.info "Writing triples in turtle to #{ld_filename}"
+    ld_filename = File.join(output_path, "auth_#{auth.id}.ttl")
+    CONFIG.logger.info "Writing triples to #{ld_filename}"
     ld_file = File.open(ld_filename,'w')
     ld_file.write(triples.join)
     ld_file.flush
@@ -76,9 +76,9 @@ marc_files.each do |path|
   if CONFIG.threads
     # Allow Parallel to automatically determine the optimal concurrency model.
     # Note that :in_threads crashed and :in_processes worked.
-    # Parallel.each(auth_records, :progress => 'Records: ', :in_threads=>CONFIG.thread_limit) do |r|
-    # Parallel.each(auth_records, :progress => 'Records: ', :in_processes=>CONFIG.thread_limit) do |r|
-    Parallel.each(auth_records, :progress => 'Records: ') do |auth|
+    # Parallel.each(auth_records, :progress => 'Records: ', :in_threads=>CONFIG.thread_limit) do |auth|
+    Parallel.each(auth_records, :progress => 'Records: ', :in_processes=>CONFIG.thread_limit) do |auth|
+    # Parallel.each(auth_records, :progress => 'Records: ') do |auth|
       marc_record2turtle(auth, output_path)
     end
   else
