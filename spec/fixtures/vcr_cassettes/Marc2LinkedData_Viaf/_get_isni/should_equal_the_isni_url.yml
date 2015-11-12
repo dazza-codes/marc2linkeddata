@@ -19,18 +19,18 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 12 May 2015 00:58:10 GMT
+      - Thu, 12 Nov 2015 18:58:30 GMT
       Server:
       - Apache/2.2.3 (CentOS)
       X-Powered-By:
       - PHP/5.3.3
       Set-Cookie:
-      - SESScb57e534dd37122735ab075a3ab350ca=0pqmkkhttief58k55dul8pfm64; expires=Thu,
-        04-Jun-2015 04:31:30 GMT; path=/; domain=.isni.org
+      - SESScb57e534dd37122735ab075a3ab350ca=jv1d43e9d2ll4k6ahvidp6tfb1; expires=Sat,
+        05-Dec-2015 22:31:50 GMT; path=/; domain=.isni.org
       Expires:
       - Sun, 19 Nov 1978 05:00:00 GMT
       Last-Modified:
-      - Tue, 12 May 2015 00:58:10 GMT
+      - Thu, 12 Nov 2015 18:58:30 GMT
       Cache-Control:
       - post-check=0, pre-check=0
       - store, no-cache, must-revalidate
@@ -46,5 +46,5 @@ http_interactions:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Tue, 12 May 2015 00:58:11 GMT
-recorded_with: VCR 2.9.3
+  recorded_at: Thu, 12 Nov 2015 18:58:31 GMT
+recorded_with: VCR 3.0.0

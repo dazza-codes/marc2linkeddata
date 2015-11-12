@@ -10,9 +10,10 @@ http_interactions:
       Accept:
       - application/n-triples, text/plain;q=0.5, application/n-quads, text/x-nquads,
         application/ld+json, application/x-ld+json, application/rdf+json, text/html;q=0.5,
-        application/xhtml+xml, image/svg+xml, text/n3, text/rdf+n3, application/rdf+n3,
-        application/rdf+xml, application/trig, application/x-trig, application/trix,
-        text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, */*;q=0.1
+        application/xhtml+xml;q=0.7, image/svg+xml, text/n3, text/rdf+n3, application/rdf+n3,
+        application/rdf+xml, text/csv, text/tab-separated-values, application/csvm+json,
+        text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, application/trig,
+        application/x-trig, application/trix, */*;q=0.1
       Accept-Encoding:
       - gzip, deflate
       User-Agent:
@@ -27,21 +28,23 @@ http_interactions:
       Cache-Control:
       - public, max-age=43200
       Etag:
-      - d68738f71e662ee56a6014acc171205c
+      - 7e4c6e4188112b52d71195923d662f77
+      X-Preflabel:
+      - Berners-Lee, Tim
       X-Uri:
       - http://id.loc.gov/authorities/names/no99010609
       Server:
       - Apache
       Content-Length:
-      - '7544'
+      - '7773'
       Accept-Ranges:
       - bytes
       Date:
-      - Tue, 12 May 2015 00:58:01 GMT
+      - Thu, 12 Nov 2015 18:58:02 GMT
       X-Varnish:
-      - 1870773860 1870770130
+      - 624509891 624509168
       Age:
-      - '1100'
+      - '270'
       Via:
       - 1.1 varnish
       Connection:
@@ -58,9 +61,11 @@ http_interactions:
         \   <madsrdf:isMemberOfMADSCollection rdf:resource=\"http://id.loc.gov/authorities/names/collection_LCNAF\"/>\n
         \   <madsrdf:hasExactExternalAuthority rdf:resource=\"http://viaf.org/viaf/sourceID/LC%7Cno+99010609#skos:Concept\"/>\n
         \   <madsrdf:isMemberOfMADSScheme rdf:resource=\"http://id.loc.gov/authorities/names\"/>\n
-        \   <madsrdf:identifiesRWO>\n      <madsrdf:RWO>\n\t<rdf:type rdf:resource=\"http://xmlns.com/foaf/0.1/Person\"/>\n
-        \     </madsrdf:RWO>\n    </madsrdf:identifiesRWO>\n    <madsrdf:hasVariant>\n
-        \     <madsrdf:PersonalName>\n\t<rdf:type rdf:resource=\"http://www.loc.gov/mads/rdf/v1#Variant\"/>\n\t<madsrdf:variantLabel
+        \   <madsrdf:identifiesRWO>\n      <madsrdf:RWO>\n\t<rdf:type rdf:resource=\"http://xmlns.com/foaf/0.1/Person\"/>\n\t<madsrdf:birthDate>\n\t
+        \ <skos:Concept xmlns:skos=\"http://www.w3.org/2004/02/skos/core#\">\n\t    <rdfs:label
+        xmlns:rdfs=\"http://www.w3.org/2000/01/rdf-schema#\">(edtf) 1955-06-08</rdfs:label>\n\t
+        \ </skos:Concept>\n\t</madsrdf:birthDate>\n      </madsrdf:RWO>\n    </madsrdf:identifiesRWO>\n
+        \   <madsrdf:hasVariant>\n      <madsrdf:PersonalName>\n\t<rdf:type rdf:resource=\"http://www.loc.gov/mads/rdf/v1#Variant\"/>\n\t<madsrdf:variantLabel
         xml:lang=\"en\">Lee, Tim Berners-</madsrdf:variantLabel>\n\t<madsrdf:elementList
         rdf:parseType=\"Collection\">\n\t  <madsrdf:FullNameElement>\n\t    <madsrdf:elementValue
         xml:lang=\"en\">Lee, Tim Berners-</madsrdf:elementValue>\n\t  </madsrdf:FullNameElement>\n\t</madsrdf:elementList>\n
@@ -97,7 +102,7 @@ http_interactions:
         rdf:resource=\"http://id.loc.gov/vocabulary/iso639-2/eng\"/>\n      </ri:RecordInfo>\n
         \   </madsrdf:adminMetadata>\n    <madsrdf:adminMetadata>\n      <ri:RecordInfo
         xmlns:ri=\"http://id.loc.gov/ontologies/RecordInfo#\">\n\t<ri:recordChangeDate
-        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#dateTime\">2008-12-01T09:12:21</ri:recordChangeDate>\n\t<ri:recordStatus
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#dateTime\">2015-08-25T08:39:08</ri:recordChangeDate>\n\t<ri:recordStatus
         rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">revised</ri:recordStatus>\n\t<ri:recordContentSource
         rdf:resource=\"http://id.loc.gov/vocabulary/organizations/nbl\"/>\n\t<ri:languageOfCataloging
         rdf:resource=\"http://id.loc.gov/vocabulary/iso639-2/eng\"/>\n      </ri:RecordInfo>\n
@@ -124,9 +129,9 @@ http_interactions:
         \     <cs:ChangeSet xmlns:cs=\"http://purl.org/vocab/changeset/schema#\">\n\t<cs:subjectOfChange
         rdf:resource=\"http://id.loc.gov/authorities/names/no99010609\"/>\n\t<cs:creatorName
         rdf:resource=\"http://id.loc.gov/vocabulary/organizations/nbl\"/>\n\t<cs:createdDate
-        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#dateTime\">2008-12-01T09:12:21</cs:createdDate>\n\t<cs:changeReason
+        rdf:datatype=\"http://www.w3.org/2001/XMLSchema#dateTime\">2015-08-25T08:39:08</cs:createdDate>\n\t<cs:changeReason
         rdf:datatype=\"http://www.w3.org/2001/XMLSchema#string\">revised</cs:changeReason>\n
         \     </cs:ChangeSet>\n    </skos:changeNote>\n  </madsrdf:PersonalName>\n</rdf:RDF>\n"
     http_version: 
-  recorded_at: Tue, 12 May 2015 00:58:05 GMT
-recorded_with: VCR 2.9.3
+  recorded_at: Thu, 12 Nov 2015 18:58:26 GMT
+recorded_with: VCR 3.0.0

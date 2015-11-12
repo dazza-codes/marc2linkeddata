@@ -10,9 +10,10 @@ http_interactions:
       Accept:
       - application/n-triples, text/plain;q=0.5, application/n-quads, text/x-nquads,
         application/ld+json, application/x-ld+json, application/rdf+json, text/html;q=0.5,
-        application/xhtml+xml, image/svg+xml, text/n3, text/rdf+n3, application/rdf+n3,
-        application/rdf+xml, application/trig, application/x-trig, application/trix,
-        text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, */*;q=0.1
+        application/xhtml+xml;q=0.7, image/svg+xml, text/n3, text/rdf+n3, application/rdf+n3,
+        application/rdf+xml, text/csv, text/tab-separated-values, application/csvm+json,
+        text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, application/trig,
+        application/x-trig, application/trix, */*;q=0.1
       Accept-Encoding:
       - gzip, deflate
       User-Agent:
@@ -23,7 +24,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 12 May 2015 00:58:14 GMT
+      - Thu, 12 Nov 2015 18:58:37 GMT
       Server:
       - Apache/2.0.52 (Red Hat)
       X-Powered-By:
@@ -49,7 +50,7 @@ http_interactions:
           xmlns:foaf = "http://xmlns.com/foaf/0.1/"
         >
 
-          <rdf:Description rdf:about="http://sameas.org/rdf?uri=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ80">
+          <rdf:Description rdf:about="http://sameas.org/rdf?uri=http%3A%2F%2Fwikidata.dbpedia.org%2Fresource%2FQ80">
             <dc:creator>sameAs.org</dc:creator>
             <dc:title>Co-references from sameAs.org for http://id.loc.gov/authorities/names/no99010609</dc:title>
             <foaf:primaryTopic rdf:resource="http://id.loc.gov/authorities/names/no99010609" />
@@ -178,6 +179,7 @@ http_interactions:
             <owl:sameAs rdf:resource="http://cy.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://d-nb.info/gnd/121649091" />
             <owl:sameAs rdf:resource="http://d-nb.info/gnd/159981727" />
+            <owl:sameAs rdf:resource="http://d-nb.info/gnd/121649091/about/rdf" />
             <owl:sameAs rdf:resource="http://da.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://data.bibsys.no/data/notrbib/authorityentry/x00000792" />
             <owl:sameAs rdf:resource="http://datos.bne.es/resource/XX1503528" />
@@ -229,6 +231,7 @@ http_interactions:
             <owl:sameAs rdf:resource="http://fa.dbpedia.org/resource/\u062A\u06CC\u0645_\u0628\u0631\u0646\u0631\u0632_\u0644\u06CC" />
             <owl:sameAs rdf:resource="http://fi.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://fr.dbpedia.org/resource/Tim_Berners-Lee" />
+            <owl:sameAs rdf:resource="http://freebase.com//m/07d5b" />
             <owl:sameAs rdf:resource="http://fy.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://ga.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://gd.dbpedia.org/resource/Tim_Berners-Lee" />
@@ -241,6 +244,7 @@ http_interactions:
             <owl:sameAs rdf:resource="http://hu.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://id.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://id.loc.gov/authorities/names/no99010609" />
+            <owl:sameAs rdf:resource="http://id.ndl.go.jp/auth/ndla/00854777" />
             <owl:sameAs rdf:resource="http://identi.ca/user/45563" />
             <owl:sameAs rdf:resource="http://is.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://isni-url.oclc.nl/isni/0000000124514311" />
@@ -323,9 +327,11 @@ http_interactions:
             <owl:sameAs rdf:resource="http://vo.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://war.dbpedia.org/resource/Tim_Berners-Lee" />
             <owl:sameAs rdf:resource="http://webscience.org/person/6" />
+            <owl:sameAs rdf:resource="http://wikidata.dbpedia.org/resource/Q80" />
             <owl:sameAs rdf:resource="http://www.advogato.org/person/timbl/foaf.rdf#me" />
             <owl:sameAs rdf:resource="http://www.bbc.co.uk/things/2166d5db-3cd1-4d8a-a066-bddb220ef216#id" />
             <owl:sameAs rdf:resource="http://www.idref.fr/074709267" />
+            <owl:sameAs rdf:resource="http://www.idref.fr/074709267/id" />
             <owl:sameAs rdf:resource="http://www.lespetitescases.net/amusons-nous-avec-rdfa#berners" />
             <owl:sameAs rdf:resource="http://www.lespetitescases.net/du-web-semantique-au-web-de-donnees-1#bernerslee" />
             <owl:sameAs rdf:resource="http://www.ontosearch.com/2008/01/identification#EID-abcb3e8871a57215f287ff3e6902ab0e" />
@@ -363,5 +369,5 @@ http_interactions:
 
         </rdf:RDF>
     http_version: 
-  recorded_at: Tue, 12 May 2015 00:58:07 GMT
-recorded_with: VCR 2.9.3
+  recorded_at: Thu, 12 Nov 2015 18:58:27 GMT
+recorded_with: VCR 3.0.0

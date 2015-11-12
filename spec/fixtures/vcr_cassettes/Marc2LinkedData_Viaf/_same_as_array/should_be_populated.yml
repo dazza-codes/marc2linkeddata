@@ -10,9 +10,10 @@ http_interactions:
       Accept:
       - application/n-triples, text/plain;q=0.5, application/n-quads, text/x-nquads,
         application/ld+json, application/x-ld+json, application/rdf+json, text/html;q=0.5,
-        application/xhtml+xml, image/svg+xml, text/n3, text/rdf+n3, application/rdf+n3,
-        application/rdf+xml, application/trig, application/x-trig, application/trix,
-        text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, */*;q=0.1
+        application/xhtml+xml;q=0.7, image/svg+xml, text/n3, text/rdf+n3, application/rdf+n3,
+        application/rdf+xml, text/csv, text/tab-separated-values, application/csvm+json,
+        text/turtle, text/rdf+turtle, application/turtle, application/x-turtle, application/trig,
+        application/x-trig, application/trix, */*;q=0.1
       Accept-Encoding:
       - gzip, deflate
       User-Agent:
@@ -23,7 +24,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 12 May 2015 00:58:17 GMT
+      - Thu, 12 Nov 2015 18:58:39 GMT
       Server:
       - Apache/2.0.52 (Red Hat)
       X-Powered-By:
@@ -49,7 +50,7 @@ http_interactions:
           xmlns:foaf = "http://xmlns.com/foaf/0.1/"
         >
 
-          <rdf:Description rdf:about="http://sameas.org/rdf?uri=http%3A%2F%2Fwww.wikidata.org%2Fentity%2FQ17457">
+          <rdf:Description rdf:about="http://sameas.org/rdf?uri=http%3A%2F%2Fwikidata.dbpedia.org%2Fresource%2FQ17457">
             <dc:creator>sameAs.org</dc:creator>
             <dc:title>Co-references from sameAs.org for http://viaf.org/viaf/7466303</dc:title>
             <foaf:primaryTopic rdf:resource="http://viaf.org/viaf/7466303" />
@@ -80,6 +81,7 @@ http_interactions:
             <owl:sameAs rdf:resource="http://d-nb.info/gnd/121578437" />
             <owl:sameAs rdf:resource="http://d-nb.info/gnd/160012007" />
             <owl:sameAs rdf:resource="http://d-nb.info/gnd/186415729" />
+            <owl:sameAs rdf:resource="http://d-nb.info/gnd/121578437/about/rdf" />
             <owl:sameAs rdf:resource="http://da.dbpedia.org/resource/Donald_E._Knuth" />
             <owl:sameAs rdf:resource="http://data.bnf.fr/12358391" />
             <owl:sameAs rdf:resource="http://datos.bne.es/resource/XX995432" />
@@ -101,6 +103,7 @@ http_interactions:
             <owl:sameAs rdf:resource="http://fa.dbpedia.org/resource/\u062F\u0627\u0646\u0644\u062F_\u06A9\u0646\u0648\u062A" />
             <owl:sameAs rdf:resource="http://fi.dbpedia.org/resource/Donald_Knuth" />
             <owl:sameAs rdf:resource="http://fr.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://freebase.com//m/0283x" />
             <owl:sameAs rdf:resource="http://fy.dbpedia.org/resource/Donald_Knuth" />
             <owl:sameAs rdf:resource="http://gd.dbpedia.org/resource/Donald_Knuth" />
             <owl:sameAs rdf:resource="http://gl.dbpedia.org/resource/Donald_Knuth" />
@@ -110,6 +113,7 @@ http_interactions:
             <owl:sameAs rdf:resource="http://hy.dbpedia.org/resource/\u0534\u0578\u0576\u0561\u056C\u0564_\u053F\u0576\u0578\u0582\u057F" />
             <owl:sameAs rdf:resource="http://id.dbpedia.org/resource/Donald_Knuth" />
             <owl:sameAs rdf:resource="http://id.loc.gov/authorities/names/n79135509" />
+            <owl:sameAs rdf:resource="http://id.ndl.go.jp/auth/ndla/00445973" />
             <owl:sameAs rdf:resource="http://is.dbpedia.org/resource/Donald_Knuth" />
             <owl:sameAs rdf:resource="http://isni-url.oclc.nl/isni/000000012119421X" />
             <owl:sameAs rdf:resource="http://it.dbpedia.org/resource/Donald_Knuth" />
@@ -155,6 +159,7 @@ http_interactions:
             <owl:sameAs rdf:resource="http://viaf.org/viaf/88023037" />
             <owl:sameAs rdf:resource="http://viaf.org/viaf/97965937" />
             <owl:sameAs rdf:resource="http://war.dbpedia.org/resource/Donald_Knuth" />
+            <owl:sameAs rdf:resource="http://wikidata.dbpedia.org/resource/Q17457" />
             <owl:sameAs rdf:resource="http://www.idref.fr/032581270" />
             <owl:sameAs rdf:resource="http://www.idref.fr/032581270/id" />
             <owl:sameAs rdf:resource="http://www.wikidata.org/entity/Q17457" />
@@ -165,5 +170,5 @@ http_interactions:
 
         </rdf:RDF>
     http_version: 
-  recorded_at: Tue, 12 May 2015 00:58:10 GMT
-recorded_with: VCR 2.9.3
+  recorded_at: Thu, 12 Nov 2015 18:58:30 GMT
+recorded_with: VCR 3.0.0
