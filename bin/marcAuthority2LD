@@ -73,16 +73,12 @@ marc_files.each do |path|
   output_path = File.join(path.dirname.to_s, output_dir)
   Dir.mkdir(output_path, 0775) unless File.directory? output_path
   auth_records = Marc2LinkedData::Utils.marc_authority_records(path.to_s)
+  progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
   if CONFIG.threads
-    # Allow Parallel to automatically determine the optimal concurrency model.
-    # Note that :in_threads crashed and :in_processes worked.
-    # Parallel.each(auth_records, :progress => 'Records: ') do |auth|
-    # Parallel.each(auth_records, :progress => 'Records: ', :in_threads=>CONFIG.thread_limit) do |auth|
-    Parallel.each(auth_records, :progress=>'Records: ', :in_processes=>CONFIG.thread_limit) do |auth|
+    Parallel.each(auth_records, :start => lambda {|auth,i| progress.increment }, :in_processes=>CONFIG.thread_limit) do |auth|
       marc_record2turtle(auth, output_path)
     end
   else
-    progress = ProgressBar.create(:total => auth_records.length, :format => '%a %f |%b>>%i| %P%% %t')
     auth_records.each do |auth|
       marc_record2turtle(auth, output_path)
       progress.increment
