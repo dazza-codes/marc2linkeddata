@@ -6,16 +6,21 @@ module Marc2LinkedData
 
     PREFIX = 'http://viaf.org/viaf/'
 
-    # def id
-    #   return nil if @iri.nil?
-    #   iri.path.gsub('viaf/','').gsub('/','')
-    # end
-
     def rdf
       return nil if @iri.nil?
       return @rdf unless @rdf.nil?
       uri4rdf = @iri.to_s + '/rdf.xml'
       @rdf = get_rdf(uri4rdf)
+    end
+
+    # A VIAF document has a URI ending with '/'
+    def uri_record
+      RDF::URI.new(@iri.to_s + '/')
+    end
+
+    # A VIAF entity has a URI without a trailing '/'
+    def uri_entity
+      RDF::URI.new(@iri)
     end
 
     def get_isni

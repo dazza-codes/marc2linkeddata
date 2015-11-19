@@ -52,9 +52,10 @@ module Marc2LinkedData
     end
 
     def entity
-      return @entity unless @entity.nil?
-      entity_iri = iri.sub('record', 'entity')
-      @entity = Marc2LinkedData::Resource.new(entity_iri)
+      @entity ||= begin
+        entity_iri = iri.sub('record', 'entity')
+        Marc2LinkedData::Resource.new(entity_iri)
+      end
     end
 
     # def entity
@@ -590,7 +591,7 @@ module Marc2LinkedData
       name = ''
       if @loc.person?
         name = @loc.label || field100[:name]
-        graph_type_person(@lib.rdf_uri)
+        graph_type_person(entity.rdf_uri)
         # VIAF extracts first and last name, try to use them. Note
         # that VIAF uses schema:name, schema:givenName, and schema:familyName.
         if @@config.get_viaf && ! @viaf.nil?
@@ -599,47 +600,47 @@ module Marc2LinkedData
             # TODO: try to get a language type, if VIAF provide it.
             # name = RDF::Literal.new(n, :language => :en)
             ln = RDF::Literal.new(n)
-            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::Vocab::FOAF.familyName, ln) if @@config.use_foaf
-            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::Vocab::SCHEMA.familyName, ln) if @@config.use_schema
+            @graph.insert RDF::Statement(entity.rdf_uri, RDF::Vocab::FOAF.familyName, ln) if @@config.use_foaf
+            @graph.insert RDF::Statement(entity.rdf_uri, RDF::Vocab::SCHEMA.familyName, ln) if @@config.use_schema
           end
           @viaf.given_names.each do |n|
             # fn = URI.encode(n)
             # TODO: try to get a language type, if VIAF provide it.
             # name = RDF::Literal.new(n, :language => :en)
             fn = RDF::Literal.new(n)
-            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::Vocab::FOAF.firstName, fn) if @@config.use_foaf
-            @graph.insert RDF::Statement(@lib.rdf_uri, RDF::Vocab::SCHEMA.givenName, fn) if @@config.use_schema
+            @graph.insert RDF::Statement(entity.rdf_uri, RDF::Vocab::FOAF.firstName, fn) if @@config.use_foaf
+            @graph.insert RDF::Statement(entity.rdf_uri, RDF::Vocab::SCHEMA.givenName, fn) if @@config.use_schema
           end
         end
       elsif @loc.name_title?
         # e.g. http://id.loc.gov/authorities/names/n79044934
         # http://viaf.org/viaf/182251325/rdf.xml
         name = @loc.label || field100[:name]
-        graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle'))
+        graph_insert_type(entity.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle'))
       elsif @loc.corporation?
         name = @loc.label || field110[:name]
-        graph_type_organization(@lib.rdf_uri)
+        graph_type_organization(entity.rdf_uri)
       elsif @loc.conference?
         # e.g. http://id.loc.gov/authorities/names/n79044866
         name = @loc.label || [field111[:name],field111[:date],field111[:city]].join('')
-        graph_insert_type(@lib.rdf_uri, RDF::Vocab::SCHEMA.event)
+        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.event)
       elsif @loc.geographic?
         # e.g. http://id.loc.gov/authorities/names/n79045127
         name = @loc.label || field151[:name]
-        graph_insert_type(@lib.rdf_uri, RDF::Vocab::SCHEMA.Place)
+        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.Place)
       elsif @loc.uniform_title?
         name = field130[:title]  # use 'name' for code below, although it's a title
-        graph_insert_type(@lib.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
-        graph_insert_type(@lib.rdf_uri, RDF::Vocab::SCHEMA.title)
+        graph_insert_type(entity.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
+        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.title)
       else
         # TODO: find out what type this is.
         binding.pry if @@config.debug
         name = @loc.label || ''
-        graph_type_agent(@lib.rdf_uri)
+        graph_type_agent(entity.rdf_uri)
       end
       if name != ''
         name = RDF::Literal.new(name)
-        graph_insert_name(@lib.rdf_uri, name)
+        graph_insert_name(entity.rdf_uri, name)
       end
     end
 
@@ -681,15 +682,14 @@ module Marc2LinkedData
         # available in the OCLC identities pages.
         oclc_auth = OclcIdentity.new oclc_iri
 
-        # TODO: DOUBLE CHECK THE sameAs relations.  The LOC is not a
-        # foaf/schema:Person but the VIAF is.
+        graph_insert_closeMatch(oclc_auth.rdf_uri, @lib.rdf_uri)
+        graph_insert_closeMatch(oclc_auth.rdf_uri, @loc.rdf_uri)
+        graph_insert_closeMatch(oclc_auth.rdf_uri, @viaf.uri_record) unless @viaf.nil?
 
-        graph_insert_sameAs(@lib.rdf_uri, oclc_auth.rdf_uri)
+        graph_insert_foafFocus(oclc_auth.rdf_uri, entity.rdf_uri)
+        graph_insert_foafFocus(oclc_auth.rdf_uri, @viaf.uri_entity) unless @viaf.nil?
+        graph_insert_foafFocus(oclc_auth.rdf_uri, @isni.rdf_uri) unless @isni.nil?
 
-        graph_insert_sameAs(@loc.rdf_uri, oclc_auth.rdf_uri)
-
-        graph_insert_sameAs(@viaf.rdf_uri, oclc_auth.rdf_uri) unless @viaf.nil?
-        graph_insert_sameAs(@isni.rdf_uri, oclc_auth.rdf_uri) unless @isni.nil?
         oclc_auth.creative_works.each do |creative_work_uri|
           # Notes on work-around for OCLC data inconsistency:
           # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
@@ -704,6 +704,9 @@ module Marc2LinkedData
           if @@config.oclc_auth2works
             # Try to use VIAF to relate auth to work as creator, contributor, editor, etc.
             # Note that this requires additional RDF retrieval for each work (slower processing).
+            #
+            # TODO: use viaf record or entity?
+            #
             unless @viaf.nil?
               if creative_work.creator? @viaf.iri
                 graph_insert_creator(creative_work.rdf_uri, oclc_auth.rdf_uri)
@@ -751,52 +754,33 @@ module Marc2LinkedData
       # might require VIAF to get ISNI.
       @isni = Isni.new get_iri4isni rescue nil
 
-      # TODO: ORCID? VIVO? Stanford CAP? Harvard Profiles?  WikiData?
-
-
-      # TODO: DOUBLE CHECK THE sameAs relations.  The LOC is not a
-      # foaf/schema:Person but the VIAF is.
-
-      # madsrdf:identitiesRWO
-      # binding.pry
-
+      # TODO: ORCID? Stanford CAP? Harvard Profiles?  WikiData?
+      # http://vladimiralexiev.github.io/CH-names/readme.html
       # http://efoundations.typepad.com/efoundations/2011/09/things-their-conceptualisations-skos-foaffocus-modelling-choices.html
 
-      # <http://viaf.org/viaf/sourceID/LC%7Cn++79044798#skos:Concept> a skos:Concept;
-      #    skos:altLabel "Byrnes, Ch. I. (Christopher I.), 1949-";
-      #    skos:exactMatch <http://id.loc.gov/authorities/names/n79044798>;
-      #    skos:inScheme <http://viaf.org/authorityScheme/LC>;
-      #    skos:prefLabel "Byrnes, Christopher I., 1949-....";
-      #    foaf:focus <http://viaf.org/viaf/108317368> .
-
-      # TODO: differentiate between VIAF URIs ????
-      # - record ends with '/'
-      # - entity ends with '#{VIAF_ID}' without the '/'
-
-
-      # Create authority records as skos:Concept
-      graph_type_concept(@lib.rdf_uri)
+      # Create authority records as foaf:Document or schema:Report
+      graph_type_document(@lib.rdf_uri)
       graph_insert_foafFocus(@lib.rdf_uri, entity.rdf_uri)
-      graph_type_concept(@loc.rdf_uri)
-      graph_insert_sameAs(@lib.rdf_uri, @loc.rdf_uri)
+      graph_type_document(@loc.rdf_uri)
+      graph_insert_closeMatch(@lib.rdf_uri, @loc.rdf_uri)
       unless @viaf.nil?
-        graph_type_concept(@viaf.rdf_uri)
-        graph_insert_sameAs(@lib.rdf_uri, @viaf.rdf_uri)
-        graph_insert_sameAs(@loc.rdf_uri, @viaf.rdf_uri)
+        # VIAF URIs are an authority record when they end with '/', but
+        # without it they are an entity of some kind.
+        graph_type_document(@viaf.uri_record)
+        graph_insert_foafFocus(@viaf.uri_record, @viaf.uri_entity)
+        graph_insert_foafFocus(@lib.rdf_uri, @viaf.uri_entity)
+        graph_insert_closeMatch(@lib.rdf_uri, @viaf.uri_record)
+        graph_insert_closeMatch(entity.rdf_uri, @viaf.uri_entity)
+        # Try to find all the VIAF entity sameAs URIs ???
       end
       unless @isni.nil?
-        graph_type_concept(@isni.rdf_uri)
-        graph_insert_sameAs(@lib.rdf_uri, @isni.rdf_uri)
-        graph_insert_sameAs(@loc.rdf_uri, @isni.rdf_uri)
-        graph_insert_sameAs(@viaf.rdf_uri, @isni.rdf_uri) unless @viaf.nil?
+        # ISNI URIs are an entity of some kind.
+        graph_insert_foafFocus(@lib.rdf_uri, @isni.rdf_uri)
+        graph_insert_closeMatch(entity.rdf_uri, @isni.rdf_uri)
       end
-
-
 
       # Construct authority entity
       parse_auth_details
-
-      # Try to find all the VIAF entity sameAs URIs ???
 
       # Optional elaboration of authority data with OCLC identity and works.
       get_oclc_links if @@config.get_oclc
@@ -809,6 +793,9 @@ module Marc2LinkedData
     end
     def graph_insert_sameAs(uriS, uriO)
       graph_insert(uriS, RDF::OWL.sameAs, uriO)
+    end
+    def graph_insert_closeMatch(uriS, uriO)
+      graph_insert(uriS, RDF::Vocab::SKOS.closeMatch, uriO)
     end
     def graph_insert_seeAlso(uriS, uriO)
       graph_insert(uriS, RDF::RDFS.seeAlso, uriO)
@@ -850,6 +837,11 @@ module Marc2LinkedData
 
     def graph_type_concept(uriS)
       graph_insert_type(uriS, RDF::Vocab::SKOS.Concept)
+    end
+
+    def graph_type_document(uriS)
+      graph_insert_type(uriS, RDF::Vocab::FOAF.Document) if @@config.use_foaf
+      graph_insert_type(uriS, RDF::Vocab::SCHEMA.Report) if @@config.use_schema
     end
 
     def graph_type_organization(uriS)
