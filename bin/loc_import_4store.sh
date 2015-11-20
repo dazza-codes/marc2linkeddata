@@ -5,6 +5,7 @@
 
 # Check that a 4store KB is available and running.  This
 # script assumes that the KB is called 'loc'.
+4s-boss
 4s-admin list-stores | grep -q -E 'loc.*available.*running'
 if [ $? -eq 0 ]; then
     echo "4store KB 'loc' is available and running."
@@ -28,8 +29,8 @@ exit
 # Notes on installation and setup for 4store:
 KB=loc
 sudo rm -rf /var/lib/4store/$KB
+4s-boss
 4s-backend-setup $KB
 4s-admin stop-stores $KB && 4s-admin delete-stores $KB
 4s-admin create-store $KB && 4s-admin start-stores $KB
 # Do NOT startup 4s-httpd, it conflicts with 4s-import.
-
