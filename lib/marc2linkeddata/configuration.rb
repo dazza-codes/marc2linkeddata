@@ -4,6 +4,7 @@ module Marc2LinkedData
   class Configuration
 
     attr_accessor :debug
+    attr_accessor :test_offset
     attr_accessor :test_records
 
     attr_accessor :threads
@@ -40,6 +41,7 @@ module Marc2LinkedData
 
     def initialize
       @debug = env_boolean('DEBUG')
+      @test_offset  = ENV['TEST_OFFSET'].to_i
       @test_records = ENV['TEST_RECORDS'].to_i
 
       @threads = env_boolean('THREADS')

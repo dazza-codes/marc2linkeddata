@@ -35,24 +35,34 @@ module Marc2LinkedData
       marc_filepath = File.realpath(marc_filepath)
       marc_file = File.open(marc_filepath,'r')
       puts "Reading records from: #{marc_filepath}"
+      record_offset = 0
       record_count = 0
       records = []
       until marc_file.eof?
         begin
           # marc_parse_leader reads leader and then rewinds to begining of record.
           leader = marc_parse_leader(marc_file)
+          record_offset += 1
+          if config.test_offset >= record_offset
+            $stdout.printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" if record_offset > 1
+            $stdout.printf "Skipping %6d", record_offset
+            $stdout.printf "\n" if config.test_offset == record_offset
+            marc_file.seek(leader[:length], IO::SEEK_CUR)
+            next
+          end
           if record_types.include? leader[:type]
             raw = marc_file.read(leader[:length])
+            marc = MARC::Reader.decode(raw)
             record = {
               :filepath => marc_filepath,
               :type => leader[:type],
               :offset => leader[:offset],
-              :marc => MARC::Reader.decode(raw)
+              :marc => marc
             }
             records << record
             record_count += 1
-            $stdout.printf "\b\b\b\b\b\b" if record_count > 1
-            $stdout.printf '%06d', record_count
+            $stdout.printf "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" if record_count > 1
+            $stdout.printf "Reading  %6d", record_count
             break if (config.test_records > 0 && config.test_records <= record_count)
           else
             marc_file.seek(leader[:length], IO::SEEK_CUR)

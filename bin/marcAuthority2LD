@@ -16,18 +16,22 @@ end
 
 def marc_record2turtle(auth, output_path=nil)
   begin
-    # ParseMarcAuthority is a lazy parser, so
-    # init only assigns record to an instance var.
-    triples = auth.to_ttl.lines
-    binding.pry if (CONFIG.debug && triples.empty?)
-    triples.delete_if {|l| l.chomp.empty? }
-    # Output the triples to a turtle file.
     ld_filename = File.join(output_path, "auth_#{auth.id}.ttl")
-    CONFIG.logger.info "Writing triples to #{ld_filename}"
-    ld_file = File.open(ld_filename,'w')
-    ld_file.write(triples.join)
-    ld_file.flush
-    ld_file.close
+    if File.exist? ld_filename
+      CONFIG.logger.info "Data exists in #{ld_filename}"
+    else
+      # ParseMarcAuthority is a lazy parser, so
+      # init only assigns record to an instance var.
+      triples = auth.to_ttl.lines
+      binding.pry if (CONFIG.debug && triples.empty?)
+      triples.delete_if {|l| l.chomp.empty? }
+      # Output the triples to a turtle file.
+      CONFIG.logger.info "Writing triples to #{ld_filename}"
+      ld_file = File.open(ld_filename,'w')
+      ld_file.write(triples.join)
+      ld_file.flush
+      ld_file.close
+    end
   rescue => e
     stack_trace(e, auth.record)
     binding.pry if CONFIG.debug
