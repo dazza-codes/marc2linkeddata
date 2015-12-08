@@ -9,6 +9,7 @@ module Marc2LinkedData
 
     attr_accessor :threads
     attr_accessor :thread_limit
+    attr_accessor :thread_pause
 
     attr_accessor :field_auth_id
     attr_accessor :field_auth_loc
@@ -46,6 +47,7 @@ module Marc2LinkedData
 
       @threads = env_boolean('THREADS')
       @thread_limit = ENV['THREAD_LIMIT'].to_i || 4
+      @thread_pause = ENV['THREAD_PAUSE'].to_i || 4  # +/- 3
 
       # logging
       log_file = ENV['LOG_FILE'] || 'marc2ld.log'

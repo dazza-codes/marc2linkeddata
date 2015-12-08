@@ -80,5 +80,50 @@ module Marc2LinkedData
       end
     end
 
+    describe '#threads' do
+      it 'default value is true' do
+        config = Configuration.new
+        expect(config.threads).to be true
+      end
+    end
+
+    describe '#threads=' do
+      it 'can set value' do
+        config = Configuration.new
+        config.threads = false
+        expect(config.threads).to be false
+      end
+    end
+
+    describe '#thread_limit' do
+      it 'default value is 4' do
+        config = Configuration.new
+        expect(config.thread_limit).to eq(4)
+      end
+    end
+
+    describe '#thread_limit=' do
+      it 'can set value' do
+        config = Configuration.new
+        config.thread_limit = 10
+        expect(config.thread_limit).to eq(10)
+      end
+    end
+
+    describe '#thread_pause' do
+      it 'default value is 10' do
+        config = Configuration.new
+        expect(config.thread_pause).to eq(10)
+      end
+    end
+
+    describe '#thread_pause=' do
+      it 'can set value' do
+        config = Configuration.new
+        config.thread_pause = 20
+        expect(config.thread_pause).to eq(20)
+      end
+    end
+
   end
 end
