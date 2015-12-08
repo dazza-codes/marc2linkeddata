@@ -14,11 +14,22 @@ def stack_trace(e, record)
   $stderr.write "\n"
 end
 
+# throttle process to avoid flooding RDF services
+def marc_record_pause
+  if CONFIG.thread_pause > 0
+    min = CONFIG.thread_pause - 3
+    min = min > 0 ? min : 0
+    max = CONFIG.thread_pause + 3
+    sleep [*min..max].sample(1).first
+  end
+end
+
 def marc_record2turtle(auth, output_path=nil)
   begin
     ld_filename = File.join(output_path, "auth_#{auth.id}.ttl")
     if File.exist? ld_filename
-      CONFIG.logger.info "Data exists in #{ld_filename}"
+      # Disable logging for existing record, too verbose.
+      #CONFIG.logger.info "Data exists in #{ld_filename}"
     else
       # ParseMarcAuthority is a lazy parser, so
       # init only assigns record to an instance var.
@@ -31,6 +42,7 @@ def marc_record2turtle(auth, output_path=nil)
       ld_file.write(triples.join)
       ld_file.flush
       ld_file.close
+      marc_record_pause
     end
   rescue => e
     stack_trace(e, auth.record)
