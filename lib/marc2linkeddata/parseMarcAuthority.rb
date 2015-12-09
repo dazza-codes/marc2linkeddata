@@ -13,7 +13,7 @@ module Marc2LinkedData
     attr_reader :file_offset
     attr_reader :marc
     attr_reader :record
-    attr_reader :type
+    attr_reader :auth_type
 
     attr_reader :id
     attr_reader :iri
@@ -27,7 +27,7 @@ module Marc2LinkedData
       @file_offset = record[:offset]
       @marc = record[:marc]
       @record = record
-      @type = type
+      @auth_type = auth_type
       @graph = RDF::Graph.new
       @id = nil
       @iri = nil
@@ -48,96 +48,90 @@ module Marc2LinkedData
     end
 
     def iri
-      @iri ||= "#{@@config.prefixes['lib_auth']}record/#{id}"
+      @iri ||= "#{@@config.prefixes['lib_auth']}#{id}"
     end
 
     def entity
       @entity ||= begin
-        entity_iri = iri.sub('record', 'entity')
-        Marc2LinkedData::Resource.new(entity_iri)
+        case auth_type
+        when :person
+          Marc2LinkedData::Resource.new(iri + '#Person')
+        when :name_title
+          Marc2LinkedData::Resource.new(iri + '#NameTitle')
+        when :corporation
+          Marc2LinkedData::Resource.new(iri + '#Organization')
+        when :conference
+          Marc2LinkedData::Resource.new(iri + '#Conference')
+        when :uniform_title
+          Marc2LinkedData::Resource.new(iri + '#UniformTitle')
+        when :geographic
+          Marc2LinkedData::Resource.new(iri + '#Place')
+        else
+          Marc2LinkedData::Resource.new(iri + '#RWO')
+        end
       end
     end
 
-    # def entity
-    #   return @entity unless @entity.nil?
-    #   entity_iri = iri.sub('record', 'entity')
-    #   case type
-    #   when :person
-    #     @entity = Marc2LinkedData::Resource.new(entity_iri + '#Person')
-    #   when :name_title
-    #     # can this be an entity?  Should be a Person and a Work?
-    #     @entity = Marc2LinkedData::Resource.new(entity_iri + '#NameTitle')
-    #   when :corporation
-    #     @entity = Marc2LinkedData::Resource.new(entity_iri + '#Organization')
-    #   when :conference
-    #     @entity = Marc2LinkedData::Resource.new(entity_iri + '#Conference')
-    #   when :uniform_title
-    #     # can this be an entity?  Should be a Work?
-    #     @entity = Marc2LinkedData::Resource.new(entity_iri + '#UniformTitle')
-    #   when :geographic
-    #     @entity = Marc2LinkedData::Resource.new(entity_iri + '#Place')
-    #   else
-    #     return nil
-    #   end
-    # end
-
-    def type
-      return @type unless @type.nil?
-      if person?
-        @type = :person
-      elsif name_title?
-        @type = :name_title
-      elsif corporation?
-        @type = :corporation
-      elsif conference?
-        @type = :conference
-      elsif uniform_title?
-        @type = :uniform_title
-      elsif geographic?
-        @type = :geographic
-      else
-        # TODO: find out what type this is.
-        binding.pry if @@config.debug
-        return nil
+    def auth_type
+      @auth_type ||= begin
+        if person?
+          :person
+        elsif name_title?
+          :name_title
+        elsif corporation?
+          :corporation
+        elsif conference?
+          :conference
+        elsif uniform_title?
+          :uniform_title
+        elsif geographic?
+          :geographic
+        else
+          # TODO: find out what type this is.
+          binding.pry if @@config.debug
+          nil
+        end
       end
     end
 
     def label
-      return @label unless @label.nil?
-      case type
-      when :person
-        @label = field100[:name].strip
-      when :name_title
-        @label = field100[:name].strip
-      when :corporation
-        @label = field110[:name].strip
-      when :conference
-        @label = [field111[:name],field111[:date],field111[:city]].join('')
-      when :uniform_title
-        @label = field130[:title].strip  # use 'name' for code below, although it's a title
-      when :geographic
-        @label = field151[:name].strip  # use 'name' for code below, although it's a place
-      else
-        @label = nil
+      @label ||= begin
+        case auth_type
+        when :person
+          field100[:name].strip
+        when :name_title
+          field100[:name].strip
+        when :corporation
+          field110[:name].strip
+        when :conference
+          [field111[:name],field111[:date],field111[:city]].join('')
+        when :uniform_title
+          field130[:title].strip # use 'name' for code below, although it's a title
+        when :geographic
+          field151[:name].strip  # use 'name' for code below, although it's a place
+        else
+          nil
+        end
       end
-      @label
     end
 
     def first_name
-      return @first_name unless @first_name.nil?
-      if type == :person
-        @first_name ||= field100[:name].split(',')[1].strip rescue nil
-      else
-        return nil
+      @first_name ||= begin
+        if person?
+          field100[:name].split(',')[1].strip rescue nil
+        else
+          nil
+        end
       end
     end
 
     def last_name
-      return @last_name unless @last_name.nil?
-      if person?
-        @last_name ||= field100[:name].split(',')[0].strip rescue nil
-      else
-        return nil
+      @last_name ||= begin
+        if person?
+          field100[:name].split(',')[0].strip rescue nil
+        else
+          nil
+        end
       end
     end
 
@@ -206,7 +200,7 @@ module Marc2LinkedData
           if loc_iri.nil?
             # If it gets here, it's a problem.
             binding.pry if @@config.debug
-            @@config.logger.error 'FAILURE to resolve LOC IRI'
+            @@config.logger.error "FAILURE to resolve LOC IRI: #{loc_id}"
           else
             @@config.logger.debug "DISCOVERED LOC IRI: #{loc_iri}"
           end
@@ -495,30 +489,20 @@ module Marc2LinkedData
     # Parse authority record
 
     def parse_auth_details
-      if @loc.iri.to_s =~ /name/
+      if @loc.nil?
+        # There is no LOC authority record, so parse MARC without RDF.
+        parse_auth_name
+      elsif @loc.iri.to_s =~ /name/
         if @@config.get_loc
           # Retrieve and use LOC RDF
           parse_auth_name_rdf
         else
-          # Use only the MARC record, without RDF retrieval
+          # Use only the MARC record
           parse_auth_name
         end
       elsif @loc.iri.to_s =~ /subjects/
         # TODO: what to do with subjects?
         # http://id.loc.gov/authorities/subjects
-        #
-        # For example,
-        #
-        # @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-        # @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-        # @prefix lcsh: <http://id.loc.gov/authorities/subjects/> .
-        # lcsh:sh85089767 a skos:Concept ;
-        #   rdfs:label "Napoleonic Wars, 1800-1815"@en ;
-        #   skos:prefLabel "Napoleonic Wars, 1800-1815"@en ;
-        #   skos:altLabel "Napoleonic Wars, 1800-1814"@en ;
-        #   skos:broader lcsh:sh85045703 ;
-        #   skos:narrower lcsh:sh85144863 ;
-        #   skos:inScheme <http://id.loc.gov/authorities/subjects> .
         #
         binding.pry if @@config.debug
         # parse_auth_subject_rdf
@@ -536,47 +520,52 @@ module Marc2LinkedData
       #
       # Create triples for various kinds of LOC authority.
       #
+      s = entity.rdf_uri
       name = label
-      case type
+      case auth_type
       when :person
-        graph_type_person(entity.rdf_uri)
+        graph_type_person(s)
         # # TODO: try to get a language type?
         # # name = RDF::Literal.new(n, :language => :en)
         ln = last_name
         unless ln.nil?
-          @graph << [entity.rdf_uri, RDF::Vocab::FOAF.familyName,   RDF::Literal.new(ln)] if @@config.use_foaf
-          @graph << [entity.rdf_uri, RDF::Vocab::SCHEMA.familyName, RDF::Literal.new(ln)] if @@config.use_schema
+          o = RDF::Literal.new(ln)
+          @graph << [s, RDF::Vocab::FOAF.familyName,   o] if @@config.use_foaf
+          @graph << [s, RDF::Vocab::SCHEMA.familyName, o] if @@config.use_schema
         end
         # # TODO: try to get a language type?
         # # name = RDF::Literal.new(n, :language => :en)
         fn = first_name
         unless fn.nil?
-          @graph << [entity.rdf_uri, RDF::Vocab::FOAF.firstName,   RDF::Literal.new(fn)] if @@config.use_foaf
-          @graph << [entity.rdf_uri, RDF::Vocab::SCHEMA.givenName, RDF::Literal.new(fn)] if @@config.use_schema
+          o = RDF::Literal.new(fn)
+          @graph << [s, RDF::Vocab::FOAF.firstName,   o] if @@config.use_foaf
+          @graph << [s, RDF::Vocab::SCHEMA.givenName, o] if @@config.use_schema
         end
       when :name_title
-        # can this be an entity?  Should be a Person and a Work?
+        # can this be an entity?  Should be a Work?
         # http://viaf.org/viaf/182251325/rdf.xml
-        graph_insert_type(entity.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle'))
+        o = RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle')
+        graph_insert_type(s, o)
       when :corporation
-        graph_type_organization(entity.rdf_uri)
+        graph_type_organization(s)
       when :conference
         # e.g. http://id.loc.gov/authorities/names/n79044866
-        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.event)
+        o = RDF::Vocab::SCHEMA.event
+        graph_insert_type(s, o)
       when :uniform_title
         # can this be an entity?  Should be a Work?
-        graph_insert_type(entity.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
-        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.title)
+        graph_insert_type(s, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
+        graph_insert_type(s, RDF::Vocab::SCHEMA.title)
       when :geographic
-        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.Place)
+        graph_insert_type(s, RDF::Vocab::SCHEMA.Place)
       else
         # TODO: find out what type this is.
         binding.pry if @@config.debug
-        graph_type_agent(entity.rdf_uri)
+        graph_type_agent(s)
       end
       unless name.nil?
         name = RDF::Literal.new(name)
-        graph_insert_name(entity.rdf_uri, name)
+        graph_insert_name(s, name)
       end
     end
 
@@ -588,10 +577,11 @@ module Marc2LinkedData
     # This method relies on RDF data retrieval.
     def parse_auth_name_rdf
       @@config.logger.warn "#{@loc.iri} DEPRECATED" if @loc.deprecated?
+      s = entity.rdf_uri
       name = ''
       if @loc.person?
         name = @loc.label || field100[:name]
-        graph_type_person(entity.rdf_uri)
+        graph_type_person(s)
         # VIAF extracts first and last name, try to use them. Note
         # that VIAF uses schema:name, schema:givenName, and schema:familyName.
         if @@config.get_viaf && ! @viaf.nil?
@@ -600,51 +590,49 @@ module Marc2LinkedData
             # TODO: try to get a language type, if VIAF provide it.
             # name = RDF::Literal.new(n, :language => :en)
             ln = RDF::Literal.new(n)
-            @graph.insert RDF::Statement(entity.rdf_uri, RDF::Vocab::FOAF.familyName, ln) if @@config.use_foaf
-            @graph.insert RDF::Statement(entity.rdf_uri, RDF::Vocab::SCHEMA.familyName, ln) if @@config.use_schema
+            @graph.insert RDF::Statement(s, RDF::Vocab::FOAF.familyName, ln) if @@config.use_foaf
+            @graph.insert RDF::Statement(s, RDF::Vocab::SCHEMA.familyName, ln) if @@config.use_schema
           end
           @viaf.given_names.each do |n|
             # fn = URI.encode(n)
             # TODO: try to get a language type, if VIAF provide it.
             # name = RDF::Literal.new(n, :language => :en)
             fn = RDF::Literal.new(n)
-            @graph.insert RDF::Statement(entity.rdf_uri, RDF::Vocab::FOAF.firstName, fn) if @@config.use_foaf
-            @graph.insert RDF::Statement(entity.rdf_uri, RDF::Vocab::SCHEMA.givenName, fn) if @@config.use_schema
+            @graph.insert RDF::Statement(s, RDF::Vocab::FOAF.firstName, fn) if @@config.use_foaf
+            @graph.insert RDF::Statement(s, RDF::Vocab::SCHEMA.givenName, fn) if @@config.use_schema
           end
         end
       elsif @loc.name_title?
         # e.g. http://id.loc.gov/authorities/names/n79044934
         # http://viaf.org/viaf/182251325/rdf.xml
         name = @loc.label || field100[:name]
-        graph_insert_type(entity.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle'))
+        graph_insert_type(s, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#NameTitle'))
       elsif @loc.corporation?
         name = @loc.label || field110[:name]
-        graph_type_organization(entity.rdf_uri)
+        graph_type_organization(s)
       elsif @loc.conference?
         # e.g. http://id.loc.gov/authorities/names/n79044866
         name = @loc.label || [field111[:name],field111[:date],field111[:city]].join('')
-        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.event)
+        graph_insert_type(s, RDF::Vocab::SCHEMA.event)
       elsif @loc.geographic?
         # e.g. http://id.loc.gov/authorities/names/n79045127
         name = @loc.label || field151[:name]
-        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.Place)
+        graph_insert_type(s, RDF::Vocab::SCHEMA.Place)
       elsif @loc.uniform_title?
         name = field130[:title]  # use 'name' for code below, although it's a title
-        graph_insert_type(entity.rdf_uri, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
-        graph_insert_type(entity.rdf_uri, RDF::Vocab::SCHEMA.title)
+        graph_insert_type(s, RDF::URI.new('http://www.loc.gov/mads/rdf/v1#Title'))
+        graph_insert_type(s, RDF::Vocab::SCHEMA.title)
       else
         # TODO: find out what type this is.
         binding.pry if @@config.debug
         name = @loc.label || ''
-        graph_type_agent(entity.rdf_uri)
+        graph_type_agent(s)
       end
       if name != ''
         name = RDF::Literal.new(name)
-        graph_insert_name(entity.rdf_uri, name)
+        graph_insert_name(s, name)
       end
     end
-
-
 
     def parse_auth_subject_rdf
       # LCSH?
@@ -660,30 +648,39 @@ module Marc2LinkedData
       # X81 - geographic subdivision names
       # X82 - chronological subdivision terms
       # X85 - form subdivision terms
-
+      #
       # It's worth emphasising the point made in the penultimate sentence: not
       # all concepts "have a focus"; some concepts are "just concepts" (poetry,
       # slavery, conscientious objection, anarchism etc etc etc).
-
+      #
+      # For example,
+      #
+      # @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+      # @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+      # @prefix lcsh: <http://id.loc.gov/authorities/subjects/> .
+      # lcsh:sh85089767 a skos:Concept ;
+      #   rdfs:label "Napoleonic Wars, 1800-1815"@en ;
+      #   skos:prefLabel "Napoleonic Wars, 1800-1815"@en ;
+      #   skos:altLabel "Napoleonic Wars, 1800-1814"@en ;
+      #   skos:broader lcsh:sh85045703 ;
+      #   skos:narrower lcsh:sh85144863 ;
+      #   skos:inScheme <http://id.loc.gov/authorities/subjects> .
+      #
     end
 
     def get_oclc_links
-      oclc_iri = nil
-      begin
-        # Try to get OCLC using LOC ID.
-        oclc_iri = @loc.get_oclc_identity
-      rescue
-        # Try to get OCLC using 035a field data, but
-        # this is not as reliable/accurate as LOC.
-        oclc_iri = get_iri4oclc
-      end
+      # Try to get OCLC using LOC ID.
+      oclc_iri = @loc.get_oclc_identity rescue nil
+      # Try to get OCLC using 035a field data, but
+      # this is not as reliable/accurate as LOC.
+      oclc_iri ||= get_iri4oclc
       unless oclc_iri.nil?
         # Try to get additional data from OCLC, using the RDFa
         # available in the OCLC identities pages.
         oclc_auth = OclcIdentity.new oclc_iri
 
         graph_insert_closeMatch(oclc_auth.rdf_uri, @lib.rdf_uri)
-        graph_insert_closeMatch(oclc_auth.rdf_uri, @loc.rdf_uri)
+        graph_insert_closeMatch(oclc_auth.rdf_uri, @loc.rdf_uri) unless @loc.nil?
         graph_insert_closeMatch(oclc_auth.rdf_uri, @viaf.uri_record) unless @viaf.nil?
 
         graph_insert_foafFocus(oclc_auth.rdf_uri, entity.rdf_uri)
@@ -691,29 +688,46 @@ module Marc2LinkedData
         graph_insert_foafFocus(oclc_auth.rdf_uri, @isni.rdf_uri) unless @isni.nil?
 
         oclc_auth.creative_works.each do |creative_work_uri|
-          # Notes on work-around for OCLC data inconsistency:
-          # RDFa for http://www.worldcat.org/identities/lccn-n79044798 contains:
-          # <http://worldcat.org/oclc/747413718> a <http://schema.org/CreativeWork> .
-          # However, the RDF for <http://worldcat.org/oclc/747413718> contains:
-          # <http://www.worldcat.org/oclc/747413718> schema:exampleOfWork <http://worldcat.org/entity/work/id/994448191> .
-          # Note how the subject here is 'WWW.worldcat.org' instead of 'worldcat.org'.
-          #creative_work_iri = creative_work.to_s.gsub('worldcat.org','www.worldcat.org')
-          #creative_work_iri = creative_work_iri.gsub('wwwwww','www') # in case it gets added already by OCLC
           creative_work = OclcCreativeWork.new creative_work_uri
           graph_insert_seeAlso(oclc_auth.rdf_uri, creative_work.rdf_uri)
+          graph_insert_seeAlso(creative_work.rdf_uri, oclc_auth.rdf_uri)
+          creative_work.iri_types.each do |type|
+            graph_insert_type(creative_work.rdf_uri, type[:o])
+          end
+          if creative_work.name
+            predicates = [
+              # RDF::Vocab::SCHEMA.name,
+              # RDF::Vocab::SKOS.prefLabel,
+              RDF::RDFS.label
+            ]
+            predicates.each do |p|
+              graph_insert(creative_work.rdf_uri, p, creative_work.name)
+            end
+          end
+          creative_work.isbn.each do |isbn|
+            p = RDF::Vocab::SCHEMA.workExample
+            graph_insert(creative_work.rdf_uri, p, isbn)
+          end
+          creative_work.fast.each do |fast|
+            p = RDF::Vocab::SCHEMA.about
+            graph_insert(creative_work.rdf_uri, p, fast)
+          end
           if @@config.oclc_auth2works
             # Try to use VIAF to relate auth to work as creator, contributor, editor, etc.
             # Note that this requires additional RDF retrieval for each work (slower processing).
-            #
-            # TODO: use viaf record or entity?
-            #
             unless @viaf.nil?
-              if creative_work.creator? @viaf.iri
+              if creative_work.creator? @viaf.uri_entity
                 graph_insert_creator(creative_work.rdf_uri, oclc_auth.rdf_uri)
-              elsif creative_work.contributor? @viaf.iri
+                graph_insert_creator(creative_work.rdf_uri, @viaf.uri_entity)
+                graph_insert_creator(creative_work.rdf_uri, entity.rdf_uri)
+              elsif creative_work.contributor? @viaf.uri_entity
                 graph_insert_contributor(creative_work.rdf_uri, oclc_auth.rdf_uri)
-              elsif creative_work.editor? @viaf.iri
+                graph_insert_contributor(creative_work.rdf_uri, @viaf.uri_entity)
+                graph_insert_contributor(creative_work.rdf_uri, entity.rdf_uri)
+              elsif creative_work.editor? @viaf.uri_entity
                 graph_insert_editor(creative_work.rdf_uri, oclc_auth.rdf_uri)
+                graph_insert_editor(creative_work.rdf_uri, @viaf.uri_entity)
+                graph_insert_editor(creative_work.rdf_uri, entity.rdf_uri)
               end
             end
             # TODO: Is auth the subject of the work (as in biography) or both (as in autobiography)?
@@ -739,30 +753,22 @@ module Marc2LinkedData
     end
 
     def graph
-      # TODO: figure out how to specify all the graph prefixes.
       return @graph unless @graph.empty?
       @lib = LibAuth.new iri
-      # Try to find LOC, VIAF, and ISNI IRIs in the MARC record
-      @loc = Loc.new get_iri4loc rescue nil
-      # Try to identify problems in getting an LOC IRI.
-      if @loc.nil?
-        binding.pry if @@config.debug
-        raise 'Failed to get authority at LOC'
-      end
-      # might require LOC to get ISNI.
-      @viaf = Viaf.new get_iri4viaf rescue nil
-      # might require VIAF to get ISNI.
-      @isni = Isni.new get_iri4isni rescue nil
-
-      # TODO: ORCID? Stanford CAP? Harvard Profiles?  WikiData?
-      # http://vladimiralexiev.github.io/CH-names/readme.html
-      # http://efoundations.typepad.com/efoundations/2011/09/things-their-conceptualisations-skos-foaffocus-modelling-choices.html
-
       # Create authority records as foaf:Document or schema:Report
       graph_type_document(@lib.rdf_uri)
       graph_insert_foafFocus(@lib.rdf_uri, entity.rdf_uri)
-      graph_type_document(@loc.rdf_uri)
-      graph_insert_closeMatch(@lib.rdf_uri, @loc.rdf_uri)
+      # Try to find LOC, VIAF, and ISNI IRIs in the MARC record
+      @loc = Loc.new get_iri4loc rescue nil
+      if @loc.nil?
+        # Try to identify problems in getting an LOC IRI.
+        binding.pry if @@config.debug
+      else
+        graph_type_document(@loc.rdf_uri)
+        graph_insert_closeMatch(@lib.rdf_uri, @loc.rdf_uri)
+      end
+      # might require LOC to get ISNI.
+      @viaf = Viaf.new get_iri4viaf rescue nil
       unless @viaf.nil?
         # VIAF URIs are an authority record when they end with '/', but
         # without it they are an entity of some kind.
@@ -773,18 +779,22 @@ module Marc2LinkedData
         graph_insert_closeMatch(entity.rdf_uri, @viaf.uri_entity)
         # Try to find all the VIAF entity sameAs URIs ???
       end
+      # might require VIAF to get ISNI.
+      @isni = Isni.new get_iri4isni rescue nil
       unless @isni.nil?
         # ISNI URIs are an entity of some kind.
         graph_insert_foafFocus(@lib.rdf_uri, @isni.rdf_uri)
         graph_insert_closeMatch(entity.rdf_uri, @isni.rdf_uri)
       end
 
+      # TODO: ORCID? Stanford CAP? Harvard Profiles?  WikiData?
+      # http://vladimiralexiev.github.io/CH-names/readme.html
+      # http://efoundations.typepad.com/efoundations/2011/09/things-their-conceptualisations-skos-foaffocus-modelling-choices.html
+
       # Construct authority entity
       parse_auth_details
-
       # Optional elaboration of authority data with OCLC identity and works.
       get_oclc_links if @@config.get_oclc
-      # @@config.logger.info "Extracted #{@loc.id}"
       @graph
     end
 

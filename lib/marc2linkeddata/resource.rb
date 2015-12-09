@@ -30,20 +30,19 @@ module Marc2LinkedData
     # RDF services use variations in the URL 'extension' patterns; e.g.
     # see Loc#rdf and Viaf#rdf
     def rdf
-      return @rdf unless @rdf.nil?
       # TODO: try to retrieve the rdf from a local triple store
       # TODO: if local triple store fails, try remote source(s)
       # TODO: if retrieved from a remote source, save the rdf to a local triple store
-      @rdf = get_rdf(@iri.to_s)
+      @rdf ||= get_rdf(@iri.to_s)
     end
 
     def get_rdf(uri4rdf)
       tries = 0
       begin
         tries += 1
-        @rdf = RDF::Graph.load(uri4rdf)
+        RDF::Graph.load(uri4rdf)
       rescue
-        retry if tries <= 2
+        retry if tries < 2
         binding.pry if @@config.debug
         nil
       end

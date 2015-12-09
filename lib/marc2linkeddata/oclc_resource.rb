@@ -7,7 +7,8 @@ module Marc2LinkedData
     PREFIX = 'http://www.worldcat.org/oclc/'
 
     def initialize(uri=nil)
-      # Ensure the OCLC IRI contains 'www' in the host name.
+      # Try to ensure the OCLC IRI will work for RDF retrieval.
+      uri = uri.to_s.gsub('experiment','')
       unless uri =~ /www\./
         uri = uri.to_s.gsub('worldcat.org','www.worldcat.org')
       end
@@ -18,10 +19,11 @@ module Marc2LinkedData
       # e.g. 'http://worldcat.org/oclc/004957186'
       # also 'http://www.worldcat.org/oclc/004957186'
       return nil if @iri.nil?
-      return @rdf unless @rdf.nil?
-      uri4rdf = @iri.to_s
-      uri4rdf += '.rdf' unless uri4rdf.end_with? '.rdf'
-      @rdf = get_rdf(uri4rdf)
+      @rdf ||= begin
+        uri4rdf = @iri.to_s
+        uri4rdf += '.rdf' unless uri4rdf.end_with? '.rdf'
+        get_rdf(uri4rdf)
+      end
     end
 
     def book?
