@@ -1,0 +1,61 @@
+
+
+Find cross-institutional links for authorities
+
+
+- see https://linkedjazz.org/tools/
+  - entity resolution tools
+  - vizualisation tools
+
+
+- e.g. Barack Obama
+  - Harvard law?
+  - viaf record/uri IS a foaf:Person !
+  - loc (strings to things?)  is NOT owl:sameAs viaf because
+    the id.loc.gov entry is a record about the foaf:Person
+  - wikidata
+
+- e.g. Stephen J. Gould
+  - Harvard faculty
+    - profiles: http://profiles.catalyst.harvard.edu/
+
+  - Stanford publications
+  - Cornell collaborators?
+  - wikipedia
+    - http://en.wikipedia.org/wiki/Stephen_Jay_Gould
+    - http://www.wikidata.org/wiki/Q180619
+    - <http://www.wikidata.org/entity/Q180619>
+    - works by Gould <http://www.wikidata.org/entity/Q8306728>
+
+    - Douglas Adams on wikidata
+      - https://tools.wmflabs.org/reasonator/?q=Q42
+      - https://tools.wmflabs.org/wikidata-todo/cloudy_concept.php?q=42&lang=en
+
+    - wikidata bots
+      - https://www.wikidata.org/wiki/Special:MyLanguage/Help:Contents
+      - https://www.wikidata.org/wiki/Special:MyLanguage/Wikidata:API
+      - https://www.wikidata.org/wiki/Special:MyLanguage/Wikidata:Bots
+
+
+ - e.g. Lynden A. Archer
+  - Cornell faculty links
+    - vivo link:  http://vivo.cornell.edu/individual/individual6105
+    - department link:  http://www.cheme.cornell.edu/people/profile.cfm?netid=laa25
+      - Dept: Chemical and Biomolecular Engineering
+      - Title: William C. Hooey Director and Professor of Chemical and Biomolecular Engineering
+      - Address: 348 Olin Hall
+      - Phone: 607 254-8825
+      - email: LAA25@cornell.edu
+  - Ph.D. at Stanford
+    - Stanford links for Ph.D.?
+      - BS (Chemical Engineering), University of Southern California, 1989
+      - Ph D (Chemical Engineering), Stanford University, 1993
+
+  - linkedIn: https://www.linkedin.com/pub/lynden-archer/28/a20/9b7
+
+  - google scholar: http://scholar.google.com/citations?user=QERLHwsAAAAJ&hl=en
+
+  - rateMyProfessor: http://www.ratemyprofessors.com/ShowRatings.jsp?tid=1005139
+
+  - Lynden's students
+    - USC student: http://composites.usc.edu/people/graduate-students439653/daniel-kim.htm

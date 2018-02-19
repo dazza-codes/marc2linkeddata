@@ -8,61 +8,49 @@ module Marc2LinkedData
     PREFIX_NAMES = "#{PREFIX}names/"
     PREFIX_SUBJECTS = "#{PREFIX}subjects/"
 
-    # def id
-    #   return nil if @iri.nil?
-    #   @id ||= @iri.basename
-    #   # Could get id from rdf, but that incurs costs for RDF retrieval and parsing etc.
-    #   #oclc_id = '<identifiers:oclcnum>oca04921729</identifiers:oclcnum>'
-    #   #<identifiers:lccn>no 99010609</identifiers:lccn>
-    #   #<identifiers:oclcnum>oca04921729</identifiers:oclcnum>
-    # end
-
     def rdf
       return nil if @iri.nil?
-      return @rdf unless @rdf.nil?
-      uri4rdf = @iri.to_s + '.rdf'
-      @rdf = get_rdf(uri4rdf)
+      @rdf ||= begin
+        uri4rdf = @iri.to_s + '.rdf'
+        get_rdf(uri4rdf)
+      end
     end
 
     def label
-      label_predicate = '<http://www.loc.gov/mads/rdf/v1#authoritativeLabel>'
-      query = SPARQL.parse("SELECT * WHERE { <#{@iri}> #{label_predicate} ?o }")
-      rdf.query(query).first[:o].to_s rescue nil
+      q = [rdf_uri, RDF::Vocab::MADS.authoritativeLabel, nil]
+      rdf.query(q).objects.first
     end
 
     def authority?
-      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#Authority' }.length > 0
+      iri_type_match? 'http://www.loc.gov/mads/rdf/v1#Authority'
     end
 
     def deprecated?
-      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#DeprecatedAuthority' }.length > 0
+      iri_type_match? 'http://www.loc.gov/mads/rdf/v1#DeprecatedAuthority'
     end
 
     def conference?
-      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#ConferenceName' }.length > 0
+      iri_type_match? 'http://www.loc.gov/mads/rdf/v1#ConferenceName'
     end
 
     def corporation?
-      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#CorporateName' }.length > 0
+      iri_type_match? 'http://www.loc.gov/mads/rdf/v1#CorporateName'
     end
 
     def name_title?
-      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#NameTitle' }.length > 0
+      iri_type_match? 'http://www.loc.gov/mads/rdf/v1#NameTitle'
     end
 
     def person?
-      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#PersonalName' }.length > 0
-      # iri_types.filter {|s| s[:o] =~ /PersonalName/ }.length > 0
-      # obj = rdf_find_object 'PersonalName'
-      # obj.nil? ? false : true
+      iri_type_match? 'http://www.loc.gov/mads/rdf/v1#PersonalName'
     end
 
     def geographic?
-      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#Geographic' }.length > 0
+      iri_type_match? 'http://www.loc.gov/mads/rdf/v1#Geographic'
     end
 
     def uniform_title?
-      iri_types.filter {|s| s[:o] == 'http://www.loc.gov/mads/rdf/v1#Title' }.length > 0
+      iri_type_match? 'http://www.loc.gov/mads/rdf/v1#Title'
     end
 
     def get_oclc_identity

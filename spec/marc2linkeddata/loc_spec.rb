@@ -17,19 +17,19 @@ module Marc2LinkedData
 
     describe '#rdf' do
       it 'should be an instance of RDF::Graph' do
-        expect(@loc.rdf.instance_of? RDF::Graph).to be_truthy
+        expect(@loc.rdf).to be_instance_of RDF::Graph
       end
     end
 
     describe '#rdf_valid?' do
       it 'should be true' do
-        expect(@loc.rdf_valid?).to be_truthy
+        expect(@loc.rdf_valid?).to be true
       end
     end
 
-    describe '#same_as_array' do
+    describe '#search_sameAs' do
       it 'should be populated' do
-        expect(@loc.same_as_array.empty?).to be_falsey
+        expect(@loc.search_sameAs).not_to be_empty
       end
     end
 

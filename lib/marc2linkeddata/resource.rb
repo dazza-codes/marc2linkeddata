@@ -65,9 +65,15 @@ module Marc2LinkedData
       iri_types.length > 0
     end
 
+    # @return types [Array<RDF::URI>] Objects of [rdf_uri, RDF.type, ?]
     def iri_types
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> a ?o }")
-      rdf.query(q)
+      q = [rdf_uri, RDF.type, nil]
+      rdf.query(q).map {|s| s.object }
+    end
+
+    # @param uri [RDF::URI|String]
+    def iri_type_match?(uri)
+      iri_types.include? RDF::URI.new(uri)
     end
 
     def rdf_find_object(id)
@@ -107,14 +113,21 @@ module Marc2LinkedData
       url
     end
 
-    def same_as
-      same_as_url = 'http://sameas.org/rdf?uri=' + URI.encode(@iri.to_s)
-      RDF::Graph.load(same_as_url)
+    def sameAs
+      q = [rdf_uri, RDF::OWL.sameAs, nil]
+      rdf.query(q).objects.to_a
     end
 
-    def same_as_array
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://www.w3.org/2002/07/owl#sameAs> ?o }")
-      same_as.query(q).collect {|s| s[:o] }
+    def search_sameAs
+      q = [rdf_uri, RDF::OWL.sameAs, nil]
+      same_as_url = 'http://sameas.org/rdf?uri=' + URI.encode(@iri.to_s)
+      same_as_graph = RDF::Graph.load(same_as_url)
+      same_as_graph.query(q).objects.to_a
+    end
+
+    def seeAlso
+      q = [rdf_uri, RDF::Vocab::RDFS.seeAlso, nil]
+      rdf.query(q).objects.to_a
     end
 
   end

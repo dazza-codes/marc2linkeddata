@@ -19,32 +19,24 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 12 Nov 2015 18:58:30 GMT
-      Server:
-      - Apache/2.2.3 (CentOS)
-      X-Powered-By:
-      - PHP/5.3.3
+      - Fri, 03 Feb 2017 00:10:02 GMT
       Set-Cookie:
-      - SESScb57e534dd37122735ab075a3ab350ca=jv1d43e9d2ll4k6ahvidp6tfb1; expires=Sat,
-        05-Dec-2015 22:31:50 GMT; path=/; domain=.isni.org
+      - SESScb57e534dd37122735ab075a3ab350ca=gkkm4hs0sn16k0fucl8en48kd7; expires=Sun,
+        26-Feb-2017 03:43:22 GMT; Max-Age=2000000; path=/; domain=.isni.org
       Expires:
       - Sun, 19 Nov 1978 05:00:00 GMT
       Last-Modified:
-      - Thu, 12 Nov 2015 18:58:30 GMT
+      - Fri, 03 Feb 2017 00:10:02 GMT
       Cache-Control:
       - post-check=0, pre-check=0
       - store, no-cache, must-revalidate
-      Vary:
-      - Accept-Encoding
-      Content-Encoding:
-      - gzip
-      Content-Length:
-      - '20'
       Content-Type:
       - text/html; charset=utf-8
+      Hosted-By:
+      - kaliop.com
     body:
       encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Thu, 12 Nov 2015 18:58:31 GMT
+  recorded_at: Fri, 03 Feb 2017 00:10:02 GMT
 recorded_with: VCR 3.0.0

@@ -251,8 +251,9 @@ module Marc2LinkedData
       fields
     end
 
+    # 008 - Fixed-Length Data Elements
+    # http://www.loc.gov/marc/authority/concise/ad008.html
     def parse_008
-      # http://www.loc.gov/marc/authority/concise/ad008.html
       field = get_fields('008').first
       field008 = field.value
       languages = []
@@ -302,8 +303,9 @@ module Marc2LinkedData
       }
     end
 
+    # 100 - Heading-Personal Name
+    # http://www.loc.gov/marc/authority/concise/ad100.html
     def field100
-      # http://www.loc.gov/marc/authority/concise/ad100.html
       # [#<MARC::Subfield:0x007f009d6a74e0 @code="a", @value="Abe, Eiichi,">,
       #     #<MARC::Subfield:0x007f009d6a7440 @code="d", @value="1927-">,
       #     #<MARC::Subfield:0x007f009d6a73a0 @code="t", @value="Hoppu dais\xC5\xAB.">,
@@ -337,8 +339,9 @@ module Marc2LinkedData
       end
     end
 
+    # 110 - Heading-Corporate Name
+    # http://www.loc.gov/marc/authority/concise/ad110.html
     def field110
-      # http://www.loc.gov/marc/authority/concise/ad110.html
       begin
         # 110 is a corporate name
         return @field110 unless @field110.nil?
@@ -360,14 +363,14 @@ module Marc2LinkedData
       end
     end
 
+    # 111 - Heading-Meeting Name
+    # http://www.loc.gov/marc/authority/concise/ad111.html
     def field111
-      # http://www.loc.gov/marc/authority/concise/ad111.html
       # #<MARC::Subfield:0x007f43a50fd1e8 @code="a", @value="Joseph Priestley Symposium">,
       # #<MARC::Subfield:0x007f43a50fd148 @code="d", @value="(1974 :">,
       # #<MARC::Subfield:0x007f43a50fd0a8 @code="c", @value="Wilkes-Barre, Pa.)">],
       # @tag="111">,
       begin
-        # 111 is a meeting name
         return @field111 unless @field111.nil?
         field = get_fields('111').first
         name = field.subfields.select {|f| f.code == 'a' }.first.value rescue ''
@@ -390,8 +393,9 @@ module Marc2LinkedData
       end
     end
 
+    # 130 - Heading-Uniform Title
+    # http://www.loc.gov/marc/authority/concise/ad130.html
     def field130
-      # http://www.loc.gov/marc/authority/concise/ad151.html
       # e.g. http://id.loc.gov/authorities/names/n79119331
       # #<MARC::DataField:0x007f7f6bffe708
       # @indicator1=" ",
@@ -400,7 +404,6 @@ module Marc2LinkedData
       # @tag="130">,
       # plus a lot of 400 fields
       begin
-        # 130 is a uniform title
         return @field130 unless @field130.nil?
         field = get_fields('130').first
         title = field.subfields.collect {|f| f.value if f.code == 'a'}.first rescue ''
@@ -417,11 +420,11 @@ module Marc2LinkedData
       end
     end
 
+    # 151 - Heading-Geographic Name
+    # http://www.loc.gov/marc/authority/concise/ad151.html
     def field151
-      # http://www.loc.gov/marc/authority/concise/ad151.html
       # e.g. http://id.loc.gov/authorities/names/n79045127
       begin
-        # 151 is a geographic name
         return @field151 unless @field151.nil?
         field = get_fields('151').first
         name = field.subfields.collect {|f| f.value if f.code == 'a' }.first rescue ''
@@ -692,7 +695,7 @@ module Marc2LinkedData
           graph_insert_seeAlso(oclc_auth.rdf_uri, creative_work.rdf_uri)
           graph_insert_seeAlso(creative_work.rdf_uri, oclc_auth.rdf_uri)
           creative_work.iri_types.each do |type|
-            graph_insert_type(creative_work.rdf_uri, type[:o])
+            graph_insert_type(creative_work.rdf_uri, type)
           end
           if creative_work.name
             predicates = [
@@ -704,8 +707,8 @@ module Marc2LinkedData
               graph_insert(creative_work.rdf_uri, p, creative_work.name)
             end
           end
-          creative_work.isbn.each do |isbn|
-            p = RDF::Vocab::SCHEMA.workExample
+          creative_work.isbns.each do |isbn|
+            p = RDF::Vocab::SCHEMA.isbn
             graph_insert(creative_work.rdf_uri, p, isbn)
           end
           creative_work.fast.each do |fast|
@@ -766,6 +769,12 @@ module Marc2LinkedData
       else
         graph_type_document(@loc.rdf_uri)
         graph_insert_closeMatch(@lib.rdf_uri, @loc.rdf_uri)
+        @loc.sameAs.each do |same_as|
+          graph_insert_sameAs(@loc.rdf_uri, same_as)
+        end
+        @loc.seeAlso.each do |see_also|
+          graph_insert_seeAlso(@loc.rdf_uri, see_also)
+        end
       end
       # might require LOC to get ISNI.
       @viaf = Viaf.new get_iri4viaf rescue nil
@@ -777,7 +786,12 @@ module Marc2LinkedData
         graph_insert_foafFocus(@lib.rdf_uri, @viaf.uri_entity)
         graph_insert_closeMatch(@lib.rdf_uri, @viaf.uri_record)
         graph_insert_closeMatch(entity.rdf_uri, @viaf.uri_entity)
-        # Try to find all the VIAF entity sameAs URIs ???
+        @viaf.sameAs.each do |same_as|
+          graph_insert_sameAs(@viaf.rdf_uri, same_as)
+        end
+        @viaf.seeAlso.each do |see_also|
+          graph_insert_seeAlso(@viaf.rdf_uri, see_also)
+        end
       end
       # might require VIAF to get ISNI.
       @isni = Isni.new get_iri4isni rescue nil

@@ -1,0 +1,36 @@
+
+What works can be found in a MARC record?
+•	The work that is described by that record
+•	Works within that work 
+•	Related works
+
+MARC fields that identify “a work described by the record”:
+•	130
+•	1xx and 240
+•	1xx and 245
+•	245 if no 1xx at all
+•	245 $a if no 1xx at all
+•	246
+
+MARC fields that identify “works within a work”:
+•	505
+•	700-711 with second indicator “2” and $t
+•	730 and 740 with second indicator “2”
+
+MARC fields that identify related works:
+•	247
+•	400, 410, 411, 440
+•	490 and 80x-83x
+•	500, 501, 525, 510, 533, 534, 547, 555, 580, 581
+•	600-611 with $t, and 630
+•	690 (Is a collection a work?)
+•	700-711 with $t but second indicator not “2”
+•	730 and 740 with second indicator not “2”
+•	76x-78x
+•	79x
+•	And perhaps accompanying materials (300 $e) 
+
+Should the converter create any instance for:
+•	Works within the work?
+•	Related works?
+

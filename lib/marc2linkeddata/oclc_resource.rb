@@ -27,7 +27,7 @@ module Marc2LinkedData
     end
 
     def book?
-      iri_types.filter {|s| s[:o] == 'http://schema.org/Book' }.length > 0
+      iri_type_match? RDF::Vocab::SCHEMA.Book
     end
 
     def creator?(uri)
@@ -43,7 +43,7 @@ module Marc2LinkedData
     end
 
     def media_object?
-      iri_types.filter {|s| s[:o] == 'http://schema.org/MediaObject' }.length > 0
+      iri_type_match? RDF::Vocab::SCHEMA.MediaObject
     end
 
     def about
@@ -52,29 +52,31 @@ module Marc2LinkedData
     end
 
     def creators
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/creator> ?o }")
-      rdf.query(q).collect {|s| s[:o] }
+      q = [rdf_uri, RDF::Vocab::SCHEMA.creator, nil]
+      rdf.query(q).objects.to_a
     end
 
     def contributors
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/contributor> ?o }")
-      rdf.query(q).collect {|s| s[:o] }
+      q = [rdf_uri, RDF::Vocab::SCHEMA.contributor, nil]
+      rdf.query(q).objects.to_a
     end
 
     def editors
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/editor> ?o }")
-      rdf.query(q).collect {|s| s[:o] }
+      q = [rdf_uri, RDF::Vocab::SCHEMA.editor, nil]
+      rdf.query(q).objects.to_a
     end
 
     def publishers
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/publisher> ?o }")
-      rdf.query(q).collect {|s| s[:o] }
+      q = [rdf_uri, RDF::Vocab::SCHEMA.publisher, nil]
+      rdf.query(q).objects.to_a
     end
 
+    # @return ISBNs [Array<RDF::URI>]
     def isbns
-      q = SPARQL.parse("SELECT * WHERE { <#{@iri}> <http://schema.org/isbn> ?o }")
-      rdf.query(q).collect {|s| s[:o] }
+      q = [rdf_uri, RDF::Vocab::SCHEMA.isbn, nil]
+      rdf.query(q).objects.to_a
     end
+
   end
 
 end

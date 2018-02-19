@@ -21,14 +21,6 @@ module Marc2LinkedData
       end
     end
 
-    # @return isbn [Array<RDF::URI>]
-    # @example:
-    #   [#<RDF::URI:0x3fc7c49f4e3c URI:http://worldcat.org/isbn/9780444700384>]
-    def isbn
-      q = [rdf_uri, RDF::Vocab::SCHEMA.workExample, nil]
-      rdf.query(q).objects.select {|o| o.to_s.include?('isbn') }
-    end
-
     # @return name [String]
     def name
       @name ||= begin
